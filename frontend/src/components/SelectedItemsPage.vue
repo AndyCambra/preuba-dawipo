@@ -1,26 +1,26 @@
 <template>
-    <div class="container">
-      <h1>Tus empresas seleccionadas</h1>
-      <p>Agregá tu número de cliente</p>
-      <div v-if="selectedItems.length">
-        <ul>
-          <li v-for="(item, index) in selectedItems" :key="index">
-            {{ item }}
-            <label>Número de cliente</label>
-            <input type="number" v-model="apiKey[index]" placeholder="api key">
-          </li>
-        </ul>
-        <button @click="proceedToNextPage">Ir al Dashboard</button>        
+  <div class="container">
+    <h1>Tus empresas seleccionadas</h1>
+    <p>Agregá tu número de cliente</p>
+    <div v-if="selectedItems.length">
+      <div v-for="(item, index) in selectedItems" :key="index">
+        <div >
+          {{ item }}
+          <p>Número de cliente</p>
+          <input type="number" v-model="userKey[index]" placeholder="api key">
+        </div>
       </div>
-      
-      <div v-else>
-        <p>No items selected</p>
-      </div>
-      <BackResponse :data="data" />
+      <button @click="proceedToNextPage">Ir al Dashboard</button>        
     </div>
-  </template>
-  
-  <script>
+    
+    <div v-else>
+      <p>No items selected</p>
+    </div>
+    <BackResponse :data="data" />
+  </div>
+</template>
+
+<script>
 import { ref, onMounted, getCurrentInstance } from 'vue';
 import axios from "axios";
 import BackResponse from './Componentes de prueba/BackResponse.vue';
@@ -35,6 +35,7 @@ export default {
   data() {
     return {
       selectedItems: this.$route.query.droppedItems || [], 
+      userKey: [],
       apiKey: []
     };
   },
@@ -47,7 +48,7 @@ export default {
     const fetchData = async () => {
       try {
         const response = await axios.post(URL_BACK, selectedItems);                        
-        console.log(response);
+        console.log(response.data);
         data.value = response.data;          
       } catch (err) {
         error.value = err;
@@ -63,8 +64,23 @@ export default {
       error,
     };
   },
+  methods: {
+    proceedToNextPage() {
+      // Aquí puedes acceder al valor del input a través de userKey
+      console.log(this.userKey); // Imprime el valor del userKey en la consola
+      // Luego puedes hacer cualquier cosa que necesites con ese valor, como pasarla a otra página
+      this.$router.push({ 
+        name: 'UserDashboard',
+        query: { 
+          droppedItems: this.droppedItems,
+          userKey: this.userKey // Pasar el userKey como parte de la ruta
+        }
+      });
+    },
+  }
 };
-</script>  
+</script>
+
   
 <style scoped>
 .container {

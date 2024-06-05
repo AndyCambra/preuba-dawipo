@@ -3,33 +3,24 @@
     <h1>Elegí las empresas con las que trabajás</h1>
     <p>Seleccioná y arrastrá los elementos a la zona de soltar.</p>
     <div class="drag-section">
-
-    <div class="drag-container">
-      <div
-        class="drag-el"
-        draggable="true"
-        @dragstart="startDrag($event, 'Pokemon')"
-      >
-        Pokemon
+      <div class="drag-container">
+        <div
+          v-for="(item, index) in availableItems"
+          :key="index"
+          :class="{ 'drag-el': true, 'disabled': droppedItems.includes(item) }"
+          @dragstart="startDrag($event, item)"
+          :draggable="!droppedItems.includes(item)"
+        >
+          {{ item }}
+        </div>
       </div>
-
-      <div
-        class="drag-el"
-        draggable="true"
-        @dragstart="startDrag($event, 'Nasa')"
-      >
-        Nasa
-      </div>
-    </div>
-    
-
-    <div class="drop-area" @dragover.prevent @drop="onDrop">
-      <h2>Soltar acá</h2>
-      <div v-for="(item, index) in droppedItems" :key="index">
-        <p>{{ item }}</p>
+      <div class="drop-area" @dragover.prevent @drop="onDrop">
+        <h2>Soltar acá</h2>
+        <div v-for="(item, index) in droppedItems" :key="index">
+          <p>{{ item }}</p>
+        </div>
       </div>
     </div>
-  </div>
     <button @click="proceedToNextPage">Continuar</button>
   </div>
 </template>
@@ -39,7 +30,8 @@ export default {
   name: 'HomePage',
   data() {
     return {
-      droppedItems: [] // Array to store dropped items
+      droppedItems: [], // Array to store dropped items,
+      availableItems: ['Pokemon', 'Nasa'] // Elementos disponibles para arrastrar
     };
   },
   methods: {
@@ -54,6 +46,19 @@ export default {
     },
     handleDrop(api) {
       this.droppedItems.push(api); // Add the dropped item to the array
+      switch(api) {
+        case 'Pokemon':
+        console.log("https://pokeapi.co/api/v2/generation/");
+        break;
+      case 'Nasa':
+        console.log("https://api.nasa.gov/neo/rest/v1/feed?start_date=START_DATE&end_date=END_DATE&api_key=jq4TlPsf4MsUY09OZgkpYR9naPUTCrMATQdJfsXJ");
+        break;
+    default:
+      console.log("URL predeterminada");
+    }
+    },
+    isDisabled(item) {
+      return this.droppedItems.includes(item); // Verificar si el elemento está en droppedItems
     },
     proceedToNextPage() {
       this.$router.push({ 
