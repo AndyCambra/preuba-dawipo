@@ -63,7 +63,7 @@ export default {
     proceedToNextPage() {
       this.$router.push({ 
         name: 'SelectedItemsPage',
-        query: { droppedItems: this.droppedItems }
+        query: { droppedItems: this.droppedItems },
       });
     },
   },

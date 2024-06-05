@@ -4,28 +4,29 @@
     <p>Agregá tu número de cliente</p>
     <div v-if="selectedItems.length">
       <div v-for="(item, index) in selectedItems" :key="index">
-        <div >
+        <div>
           {{ item }}
           <p>Número de cliente</p>
-          <input type="number" v-model="userKey[index]" placeholder="api key">
+          <input type="text" v-model="userKeys[index]" placeholder="api key">
         </div>
       </div>
-      <button @click="proceedToNextPage">Ir al Dashboard</button>        
+      <button @click="sendData">Enviar Datos</button>
+      <button @click="proceedToNextPage" :disabled="!data">Ir al Dashboard</button>
     </div>
-    
     <div v-else>
       <p>No items selected</p>
     </div>
-    <BackResponse :data="data" />
+
+    <!-- Mostrar BackResponse si hay data -->
+    <BackResponse v-if="data" :data="data" />
   </div>
 </template>
 
 <script>
-import { ref, onMounted, getCurrentInstance } from 'vue';
-import axios from "axios";
+import axios from 'axios';
 import BackResponse from './Componentes de prueba/BackResponse.vue';
 
-const URL_BACK = "http://localhost:3000";
+const URL_BACK = 'http://localhost:3000';
 
 export default {
   name: 'SelectedItemsPage',
@@ -34,60 +35,54 @@ export default {
   },
   data() {
     return {
-      selectedItems: this.$route.query.droppedItems || [], 
-      userKey: [],
-      apiKey: []
-    };
-  },
-  setup() {
-    const { proxy } = getCurrentInstance();
-    const data = ref([]);
-    const error = ref(null);
-    const selectedItems = proxy.$route.query.droppedItems || [];
-
-    const fetchData = async () => {
-      try {
-        const response = await axios.post(URL_BACK, selectedItems);                        
-        console.log(response.data);
-        data.value = response.data;          
-      } catch (err) {
-        error.value = err;
-      }
-    };  
-
-    onMounted(() => {
-      fetchData();
-    });
-
-    return {
-      data,
-      error,
+      selectedItems: this.$route.query.droppedItems || [],
+      userKeys: [],
+      data: null,
+      error: null,
     };
   },
   methods: {
-    proceedToNextPage() {
-      // Aquí puedes acceder al valor del input a través de userKey
-      console.log(this.userKey); // Imprime el valor del userKey en la consola
-      // Luego puedes hacer cualquier cosa que necesites con ese valor, como pasarla a otra página
-      this.$router.push({ 
-        name: 'UserDashboard',
-        query: { 
-          droppedItems: this.droppedItems,
-          userKey: this.userKey // Pasar el userKey como parte de la ruta
-        }
-      });
+    async sendData() {
+      console.log(this.userKeys); // Imprime el valor de userKeys en la consola
+
+      // Crear el payload combinando selectedItems y userKeys
+      const combinedData = this.selectedItems.map((item, index) => ({
+        item,
+        userKey: this.userKeys[index] || '', // Usa una cadena vacía si no hay userKey
+      }));
+
+      try {
+        // Realizar la solicitud POST
+        const response = await axios.post(URL_BACK, combinedData);
+        console.log(response.data);
+        this.data = response.data;
+      } catch (err) {
+        this.error = err;
+        console.error(err);
+      }
     },
-  }
+    proceedToNextPage() {
+      // Navegar a la siguiente página solo si se han enviado los datos correctamente
+      if (this.data) {
+        this.$router.push({
+          name: 'UserDashboard',
+          query: {
+            droppedItems: this.selectedItems,
+            userKeys: this.userKeys, // Pasar userKeys como parte de la ruta
+          },
+        });
+      }
+    },
+  },
 };
 </script>
 
-  
 <style scoped>
 .container {
   display: flex;
   flex-direction: column;
   align-items: left;
-  margin-left: 24px;    
+  margin-left: 24px;
 }
 
 ul {
