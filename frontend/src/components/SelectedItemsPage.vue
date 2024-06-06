@@ -5,7 +5,8 @@
     <div v-if="selectedItems.length">
       <div v-for="(item, index) in selectedItems" :key="index">
         <div>
-          {{ item }} <button @click="deleteData(index)">Borrar</button>
+          {{ item }} <button @click="deleteItem(index)">Delete Item</button>
+          <button @click="deleteData(item)">Delete DB Instance</button>
           <p>Número de cliente</p>
           <input type="text" v-model="userKeys[index]" placeholder="api key" />
         </div>
@@ -47,31 +48,13 @@ export default {
   },
   methods: {
     async sendData() {
-      console.log(this.userKeys); // Imprime el valor de userKeys en la consola
-
-      // Crear el payload combinando selectedItems y userKeys
       const combinedData = this.selectedItems.map((name, index) => ({
         name,
-        apiKey: this.userKeys[index] || "", // Usa una cadena vacía si no hay userKey
+        apiKey: this.userKeys[index] || "", 
       }));
-      try {
-        // Realizar la solicitud POST
-        const response = await axios.post(URL_BACK_SERVICES, combinedData);
-        console.log(response.data);
-        this.data = response.data;
-      } catch (err) {
-        this.error = err;
-        console.error(err);
-      }
-    },    
-    async deleteData(index) {
-      try {
-        //Eliminar elemento del array selectedItems
-        this.selectedItems.splice(index, 1);
 
-        //Realizar la solicitud DELETE
-        const response = await axios.delete(`${URL_BACK_SERVICES}/delete/${index}`);
-        console.log(response.data);
+      try {        
+        const response = await axios.post(URL_BACK_SERVICES, combinedData);        
         this.data = response.data;
       } catch (err) {
         this.error = err;
@@ -79,15 +62,28 @@ export default {
       }
     },
     async getData() {      
-    try {              
-      const response = await axios.get(URL_BACK_SERVICES);
-      console.log(response.data);
-      this.data = response.data;
-    } catch (err) {
-      this.error = err;
-      console.error(err);
-    }
-  },
+      try {              
+        const response = await axios.get(URL_BACK_SERVICES);        
+        this.data = response.data;
+      } catch (err) {
+        this.error = err;
+        console.error(err);
+      }
+    },    
+    async deleteData(item) {
+      const name = item;
+            
+      try {
+        const response = await axios.delete(`${URL_BACK_SERVICES}/${name}`);        
+        this.data = response.data;
+      } catch (err) {
+        this.error = err;
+        
+      }
+    },
+    async deleteItem(index) {      
+        this.selectedItems.splice(index, 1);      
+    },
     proceedToNextPage() {
       // Navegar a la siguiente página solo si se han enviado los datos correctamente
       if (this.data) {

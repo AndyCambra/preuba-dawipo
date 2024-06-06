@@ -3,7 +3,7 @@ const { postService, getServices, putService, deleteService } = require("../hand
 
 servicesRouter.post("/", postService);
 servicesRouter.get("/", getServices);
-servicesRouter.put("/", putService);
-servicesRouter.delete("/", deleteService);
+servicesRouter.put("/:name/:newApiKey", putService);
+servicesRouter.delete("/:name", deleteService);
 
 module.exports = servicesRouter;

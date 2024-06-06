@@ -1,7 +1,7 @@
 const { _deleteService } = require("../controllers/_deleteService");
 
 const deleteService = async (req, res) => {
-  const { name } = req.body;
+  const { name } = req.params;  
 
   try {
     await _deleteService(name);
