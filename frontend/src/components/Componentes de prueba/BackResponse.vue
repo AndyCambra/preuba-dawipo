@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <br>
+    <br />
     <p><strong>Back Response: </strong></p>
     <pre>{{ formattedData }}</pre>
   </div>
