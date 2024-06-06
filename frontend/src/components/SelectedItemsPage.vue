@@ -10,15 +10,17 @@
           <input type="text" v-model="userKeys[index]" placeholder="api key" />
         </div>
       </div>
-      <button @click="sendData">Enviar Datos</button>
+      <br>
+      <button @click="sendData">Enviar Datos </button>
+      <button @click="getData">Show Data </button>
       <button @click="proceedToNextPage" :disabled="!data">
         Ir al Dashboard
-      </button>
-    </div>
-    <div v-else>
-      <p>No items selected</p>
-    </div>
-
+        </button>
+        </div>
+        <div v-else>
+          <p>No items selected</p>
+          </div>
+    
     <!-- Mostrar BackResponse si hay data -->
     <BackResponse v-if="data" :data="data" />
   </div>
@@ -48,9 +50,9 @@ export default {
       console.log(this.userKeys); // Imprime el valor de userKeys en la consola
 
       // Crear el payload combinando selectedItems y userKeys
-      const combinedData = this.selectedItems.map((item, index) => ({
-        item,
-        userKey: this.userKeys[index] || "", // Usa una cadena vacía si no hay userKey
+      const combinedData = this.selectedItems.map((name, index) => ({
+        name,
+        apiKey: this.userKeys[index] || "", // Usa una cadena vacía si no hay userKey
       }));
       try {
         // Realizar la solicitud POST
@@ -61,7 +63,7 @@ export default {
         this.error = err;
         console.error(err);
       }
-    },
+    },    
     async deleteData(index) {
       try {
         //Eliminar elemento del array selectedItems
@@ -76,6 +78,16 @@ export default {
         console.error(err);
       }
     },
+    async getData() {      
+    try {              
+      const response = await axios.get(URL_BACK_SERVICES);
+      console.log(response.data);
+      this.data = response.data;
+    } catch (err) {
+      this.error = err;
+      console.error(err);
+    }
+  },
     proceedToNextPage() {
       // Navegar a la siguiente página solo si se han enviado los datos correctamente
       if (this.data) {
@@ -111,5 +123,9 @@ li {
   border: 1px solid #ccc;
   margin: 5px 0;
   width: 200px;
+}
+
+button {  
+  margin-right: 5px;
 }
 </style>
