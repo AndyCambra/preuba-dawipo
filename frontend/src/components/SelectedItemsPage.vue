@@ -5,13 +5,15 @@
     <div v-if="selectedItems.length">
       <div v-for="(item, index) in selectedItems" :key="index">
         <div>
-          {{ item }}
+          {{ item }} <button @click="deleteData(index)">Borrar</button>
           <p>Número de cliente</p>
-          <input type="text" v-model="userKeys[index]" placeholder="api key">
+          <input type="text" v-model="userKeys[index]" placeholder="api key" />
         </div>
       </div>
       <button @click="sendData">Enviar Datos</button>
-      <button @click="proceedToNextPage" :disabled="!data">Ir al Dashboard</button>
+      <button @click="proceedToNextPage" :disabled="!data">
+        Ir al Dashboard
+      </button>
     </div>
     <div v-else>
       <p>No items selected</p>
@@ -23,13 +25,13 @@
 </template>
 
 <script>
-import axios from 'axios';
-import BackResponse from './Componentes de prueba/BackResponse.vue';
+import axios from "axios";
+import BackResponse from "./Componentes de prueba/BackResponse.vue";
 
-const URL_BACK = 'http://localhost:3000';
+const URL_BACK = "http://localhost:3000";
 
 export default {
-  name: 'SelectedItemsPage',
+  name: "SelectedItemsPage",
   components: {
     BackResponse,
   },
@@ -48,12 +50,25 @@ export default {
       // Crear el payload combinando selectedItems y userKeys
       const combinedData = this.selectedItems.map((item, index) => ({
         item,
-        userKey: this.userKeys[index] || '', // Usa una cadena vacía si no hay userKey
+        userKey: this.userKeys[index] || "", // Usa una cadena vacía si no hay userKey
       }));
-
       try {
         // Realizar la solicitud POST
         const response = await axios.post(URL_BACK, combinedData);
+        console.log(response.data);
+        this.data = response.data;
+      } catch (err) {
+        this.error = err;
+        console.error(err);
+      }
+    },
+    async deleteData(index) {
+      try {
+        //Eliminar elemento del array selectedItems
+        this.selectedItems.splice(index, 1);
+
+        //Realizar la solicitud DELETE
+        const response = await axios.delete(`${URL_BACK}/data/delete/${index}`);
         console.log(response.data);
         this.data = response.data;
       } catch (err) {
@@ -65,7 +80,7 @@ export default {
       // Navegar a la siguiente página solo si se han enviado los datos correctamente
       if (this.data) {
         this.$router.push({
-          name: 'UserDashboard',
+          name: "UserDashboard",
           query: {
             droppedItems: this.selectedItems,
             userKeys: this.userKeys, // Pasar userKeys como parte de la ruta
@@ -76,7 +91,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 .container {
   display: flex;

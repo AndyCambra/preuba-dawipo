@@ -7,7 +7,7 @@
         <div
           v-for="(item, index) in availableItems"
           :key="index"
-          :class="{ 'drag-el': true, 'disabled': droppedItems.includes(item) }"
+          :class="{ 'drag-el': true, disabled: droppedItems.includes(item) }"
           @dragstart="startDrag($event, item)"
           :draggable="!droppedItems.includes(item)"
         >
@@ -27,42 +27,44 @@
 
 <script>
 export default {
-  name: 'HomePage',
+  name: "HomePage",
   data() {
     return {
       droppedItems: [], // Array to store dropped items,
-      availableItems: ['Pokemon', 'Nasa'] // Elementos disponibles para arrastrar
+      availableItems: ["Pokemon", "Nasa"], // Elementos disponibles para arrastrar
     };
   },
   methods: {
     startDrag(event, api) {
       // Iniciar el arrastre y pasar el tipo de API
-      event.dataTransfer.setData('text/plain', api);
+      event.dataTransfer.setData("text/plain", api);
     },
     onDrop(event) {
       event.preventDefault();
-      const api = event.dataTransfer.getData('text/plain');
+      const api = event.dataTransfer.getData("text/plain");
       this.handleDrop(api);
     },
     handleDrop(api) {
       this.droppedItems.push(api); // Add the dropped item to the array
-      switch(api) {
-        case 'Pokemon':
-        console.log("https://pokeapi.co/api/v2/generation/");
-        break;
-      case 'Nasa':
-        console.log("https://api.nasa.gov/neo/rest/v1/feed?start_date=START_DATE&end_date=END_DATE&api_key=jq4TlPsf4MsUY09OZgkpYR9naPUTCrMATQdJfsXJ");
-        break;
-    default:
-      console.log("URL predeterminada");
-    }
+      switch (api) {
+        case "Pokemon":
+          console.log("https://pokeapi.co/api/v2/generation/");
+          break;
+        case "Nasa":
+          console.log(
+            "https://api.nasa.gov/neo/rest/v1/feed?start_date=START_DATE&end_date=END_DATE&api_key=jq4TlPsf4MsUY09OZgkpYR9naPUTCrMATQdJfsXJ",
+          );
+          break;
+        default:
+          console.log("URL predeterminada");
+      }
     },
     isDisabled(item) {
       return this.droppedItems.includes(item); // Verificar si el elemento está en droppedItems
     },
     proceedToNextPage() {
-      this.$router.push({ 
-        name: 'SelectedItemsPage',
+      this.$router.push({
+        name: "SelectedItemsPage",
         query: { droppedItems: this.droppedItems },
       });
     },
@@ -77,17 +79,15 @@ export default {
   align-items: left;
   margin-left: 20px;
 }
-.drag-section{
+.drag-section {
   display: flex;
-
-
 }
 
 .drag-container {
   display: flex;
   flex-direction: column;
   width: 25%;
- justify-content: center;
+  justify-content: center;
 }
 
 .drag-el {

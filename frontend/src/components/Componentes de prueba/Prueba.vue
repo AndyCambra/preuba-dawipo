@@ -1,31 +1,26 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 
 <template>
-    <div>
-        <h1>{{ message }}</h1>
-        <button @click="changeMessage">Cambiar</button>
-    </div>
+  <div>
+    <h1>{{ message }}</h1>
+    <button @click="changeMessage">Cambiar</button>
+  </div>
 </template>
 
 <script>
-import {mapState, mapMutations} from 'vuex';
-export default{
-    computed:{
-        ...mapState(['message'])
+import { mapState, mapMutations } from "vuex";
+export default {
+  computed: {
+    ...mapState(["message"]),
+  },
+  methods: {
+    ...mapMutations(["setMessage"]),
+    changeMessage() {
+      this.setMessage("Hola a todos prueba");
     },
-    methods: {
-        ...mapMutations(['setMessage']),
-        changeMessage() {
-            this.setMessage('Hola a todos prueba')
-        }
-    }
-}
+  },
+};
 </script>
-
-
-
-
-
 
 <!-- <template>
     <div>

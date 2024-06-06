@@ -1,23 +1,20 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import HomePage from '../components/HomePage.vue';
-import SelectedItemsPage from '../components/SelectedItemsPage.vue';
-import Dashboard from '../components/UserDashboard.vue'
+import { createRouter, createWebHistory } from "vue-router";
+import HomePage from "../components/HomePage.vue";
+import SelectedItemsPage from "../components/SelectedItemsPage.vue";
+import Dashboard from "../components/UserDashboard.vue";
 
 const routes = [
   {
-    path: '/',
-    name: 'HomePage',
+    path: "/",
+    name: "HomePage",
     component: HomePage,
   },
   {
-    path: '/selected-items',
-    name: 'SelectedItemsPage',
+    path: "/selected-items",
+    name: "SelectedItemsPage",
     component: SelectedItemsPage,
   },
-  { path:'/dashboard',
-    name:'UserDashboard',
-    component: Dashboard
-  }
+  { path: "/dashboard", name: "UserDashboard", component: Dashboard },
   // Puedes añadir más rutas aquí
 ];
 
