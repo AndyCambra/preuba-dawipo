@@ -1,14 +1,19 @@
 const { _postService } = require("../controllers/_postService");
 
-const postService = async (req, res) => {
-  const { name, apiKey } = req.body;
+const postService = async (req, res) => {  
+  const services = req.body; 
 
   try {
-    const newService = await _postService(name, apiKey);
+    const newServices = [];
+    for (const service of services) {
+      const { name, apiKey } = service;
+      const newService = await _postService(name, apiKey);
+      newServices.push(newService);
+    }
 
     res.status(201).json({
-      message: "The service instance was created successfully",
-      service: newService,
+      message: "The service instances were created successfully",
+      services: newServices,
     });
   } 
   catch (error) {

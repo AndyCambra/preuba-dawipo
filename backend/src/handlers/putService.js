@@ -1,7 +1,7 @@
 const { _putService } = require("../controllers/_putService");
 
 const putService = async (req, res) => {
-  const { name, newApiKey } = req.body;
+  const { name, newApiKey } = req.params;
 
   try {
     const updatedService = await _putService(name, newApiKey);
