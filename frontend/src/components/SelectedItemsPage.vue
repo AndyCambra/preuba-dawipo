@@ -28,7 +28,7 @@
 import axios from "axios";
 import BackResponse from "./Componentes de prueba/BackResponse.vue";
 
-const URL_BACK = "http://localhost:3000";
+const URL_BACK_SERVICES = "http://localhost:3001/services";
 
 export default {
   name: "SelectedItemsPage",
@@ -54,7 +54,7 @@ export default {
       }));
       try {
         // Realizar la solicitud POST
-        const response = await axios.post(URL_BACK, combinedData);
+        const response = await axios.post(URL_BACK_SERVICES, combinedData);
         console.log(response.data);
         this.data = response.data;
       } catch (err) {
@@ -68,7 +68,7 @@ export default {
         this.selectedItems.splice(index, 1);
 
         //Realizar la solicitud DELETE
-        const response = await axios.delete(`${URL_BACK}/data/delete/${index}`);
+        const response = await axios.delete(`${URL_BACK_SERVICES}/delete/${index}`);
         console.log(response.data);
         this.data = response.data;
       } catch (err) {
