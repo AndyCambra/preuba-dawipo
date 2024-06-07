@@ -1,4 +1,4 @@
-const { _putService } = require("../controllers/_putService");
+const { _putService } = require("../../controllers");
 
 const putService = async (req, res) => {
   const { name, newApiKey } = req.params;

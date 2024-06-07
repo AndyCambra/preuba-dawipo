@@ -1,14 +1,14 @@
 const {
-  _getExternalApiByName,
-} = require("../controllers/_getExternalApiByName");
+  _getServiceByName,
+} = require("../../controllers");
 const axios = require("axios");
 
 const fetchDataFromExternalApi = async (req, res) => {
-  const { serviceName, apiKey } = req.body;
+  const { name, apiKey } = req.body;  
 
   try {
     // Retrieve the external API details from the database
-    const externalApi = await _getExternalApiByName(serviceName);
+    const externalApi = await _getServiceByName(name);
     if (!externalApi) {
       return res.status(404).json({ message: "API not found" });
     }

@@ -1,13 +1,14 @@
-const { _postService } = require("../controllers/_postService");
+const { _postService } = require("../../controllers");
 
 const postService = async (req, res) => {  
-  const services = req.body; 
+  const services = req.body;   
 
   try {
     const newServices = [];
+    
     for (const service of services) {
-      const { name, apiKey } = service;
-      const newService = await _postService(name, apiKey);
+      const { name, apiUrl, apiKey } = service;
+      const newService = await _postService(name, apiUrl, apiKey);
       newServices.push(newService);
     }
 

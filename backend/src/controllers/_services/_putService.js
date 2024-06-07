@@ -1,7 +1,7 @@
-const { Service } = require("../db");
+const { Service } = require("../../db");
 
 const _putService = async (name, newApiKey) => {
-  const findService = await Service.findOne({ where: { name: name }});
+  const findService = await Service.findOne({ where: { name: name } });
 
   if(!findService){
     throw new Error("That service does not exist");
