@@ -1,7 +1,6 @@
-const { Service } = require("../db");
+const { Service } = require("../../db");
 
-const _getServices = async () => {
-  
+const _getServices = async () => {  
   const allServices = await Service.findAll();
 
   if(allServices.length === 0){
