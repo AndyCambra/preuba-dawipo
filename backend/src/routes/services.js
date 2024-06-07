@@ -1,9 +1,21 @@
 const servicesRouter = require("express").Router();
-const { postService, getServices, putService, deleteService } = require("../handlers");
+const { 
+  postService, 
+  getServices, 
+  getServiceByName, 
+  putService, 
+  deleteService,  
+  fetchDataFromExternalApi
+} = require("../handlers");
+
+servicesRouter.get("/:name", getServiceByName);
+servicesRouter.get("/", getServices);
 
 servicesRouter.post("/", postService);
-servicesRouter.get("/", getServices);
+servicesRouter.post("/fetchData", fetchDataFromExternalApi);
+
 servicesRouter.put("/:name/:newApiKey", putService);
+
 servicesRouter.delete("/:name", deleteService);
 
 module.exports = servicesRouter;

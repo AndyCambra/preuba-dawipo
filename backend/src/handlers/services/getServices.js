@@ -1,4 +1,4 @@
-const { _getServices } = require("../controllers/_getServices");
+const { _getServices } = require("../../controllers");
 
 const getServices = async (req, res) => {  
 
