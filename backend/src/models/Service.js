@@ -15,7 +15,7 @@ module.exports = (sequelize) => {
       },
       apiUrl: {
         type: DataTypes.STRING,
-        allowNull: false, // Temporarily allow null
+        allowNull: true, // Temporarily allow null
       },
       apiKey: {
         type: DataTypes.STRING,
