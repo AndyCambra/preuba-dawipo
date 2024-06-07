@@ -1,21 +1,23 @@
 <template>
   <div class="container">
-    <h1>Tus empresas seleccionadas</h1>
-    <p>Agregá tu número de cliente</p>
+    <h1>Your selected services</h1>
+    <p>Add your customer number</p>
     <div v-if="selectedItems.length">
       <div v-for="(item, index) in selectedItems" :key="index">
         <div>
           {{ item }} <button @click="deleteItem(index)">Delete Item</button>
           <button @click="deleteData(item)">Delete DB Instance</button>
-          <p>Número de cliente</p>
+          <button @click="fetchAPIData(item)">Get API Response</button>
+          <p>Client number</p>
+          <input type="text" v-model="apiUrls[index]" placeholder="api url" /><br><br>
           <input type="text" v-model="userKeys[index]" placeholder="api key" />
         </div>
       </div>
       <br>
-      <button @click="sendData">Enviar Datos </button>
+      <button @click="sendData">Send Data </button>
       <button @click="getData">Show Data </button>
       <button @click="proceedToNextPage" :disabled="!data">
-        Ir al Dashboard
+        Go to Dashboard
         </button>
         </div>
         <div v-else>
@@ -41,6 +43,7 @@ export default {
   data() {
     return {
       selectedItems: this.$route.query.droppedItems || [],
+      apiUrls: [],
       userKeys: [],
       data: null,
       error: null,
@@ -50,6 +53,7 @@ export default {
     async sendData() {
       const combinedData = this.selectedItems.map((name, index) => ({
         name,
+        apiUrl: this.apiUrls[index] || "",
         apiKey: this.userKeys[index] || "", 
       }));
 
@@ -60,7 +64,7 @@ export default {
         this.error = err;
         console.error(err);
       }
-    },
+    },    
     async getData() {      
       try {              
         const response = await axios.get(URL_BACK_SERVICES);        
@@ -69,7 +73,17 @@ export default {
         this.error = err;
         console.error(err);
       }
-    },    
+    },   
+    async fetchAPIData(item) {      
+
+      try {        
+        const response = await axios.post(`${URL_BACK_SERVICES}/fetchData`, { name: item });        
+        this.data = response.data;
+      } catch (err) {
+        this.error = err;
+        console.error(err);
+      }
+    }, 
     async deleteData(item) {
       const name = item;
             
