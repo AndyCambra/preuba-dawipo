@@ -1,11 +1,11 @@
 const servicesRouter = require("express").Router();
-const { 
-  postService, 
-  getServices, 
-  getServiceByName, 
-  putService, 
-  deleteService,  
-  fetchDataFromExternalApi
+const {
+  postService,
+  getServices,
+  getServiceByName,
+  putService,
+  deleteService,
+  fetchDataFromExternalApi,
 } = require("../handlers");
 
 servicesRouter.get("/:name", getServiceByName);
@@ -14,7 +14,7 @@ servicesRouter.get("/", getServices);
 servicesRouter.post("/", postService);
 servicesRouter.post("/fetchData", fetchDataFromExternalApi);
 
-servicesRouter.put("/:name/:newApiKey", putService);
+servicesRouter.put("/:name", putService); // Ensure this route is defined
 
 servicesRouter.delete("/:name", deleteService);
 
