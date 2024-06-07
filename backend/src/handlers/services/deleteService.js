@@ -1,4 +1,4 @@
-const { _deleteService } = require("../controllers/_deleteService");
+const { _deleteService } = require("../../controllers");
 
 const deleteService = async (req, res) => {
   const { name } = req.params;  
