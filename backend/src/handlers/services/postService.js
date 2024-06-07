@@ -1,11 +1,11 @@
 const { _postService } = require("../../controllers");
 
-const postService = async (req, res) => {  
-  const services = req.body;   
+const postService = async (req, res) => {
+  const services = Array.isArray(req.body) ? req.body : [req.body]; // Ensure services is an array
 
   try {
     const newServices = [];
-    
+
     for (const service of services) {
       const { name, apiUrl, apiKey } = service;
       const newService = await _postService(name, apiUrl, apiKey);
@@ -16,11 +16,10 @@ const postService = async (req, res) => {
       message: "The service instances were created successfully",
       services: newServices,
     });
-  } 
-  catch (error) {
+  } catch (error) {
     res.status(400).json({
-      error: true,      
-      message: error.message || 'Unknown error',
+      error: true,
+      message: error.message || "Unknown error",
     });
   }
 };
