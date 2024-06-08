@@ -1,7 +1,7 @@
 const { _postService } = require("../../controllers");
 
 const postService = async (req, res) => {
-  const services = Array.isArray(req.body) ? req.body : [req.body];
+  const services = Array.isArray(req.body) ? req.body : [req.body];  
 
   try {
     const newServices = [];
