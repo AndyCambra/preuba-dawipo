@@ -1,7 +1,8 @@
 <template>
   <div class="container">
-    <h1>Elegí las empresas con las que trabajás</h1>
-    <p>Seleccioná y arrastrá los elementos a la zona de soltar.</p>
+    <h1>Choose the services you want to work with</h1>
+    <p>Select and drag the items to the drop zone.</p>
+    <div><button @click="navigateToSettingServices">Setting Services</button></div>
     <div class="drag-section">
       <div class="drag-container">
         <div
@@ -15,23 +16,53 @@
         </div>
       </div>
       <div class="drop-area" @dragover.prevent @drop="onDrop">
-        <h2>Soltar acá</h2>
+        <h2>Drop here</h2>
         <div v-for="(item, index) in droppedItems" :key="index">
           <p>{{ item }}</p>
         </div>
       </div>
     </div>
-    <button @click="proceedToNextPage">Continuar</button>
+    <button @click="proceedToNextPage">Continue</button>
   </div>
 </template>
 
 <script>
+import { ref, onMounted } from "vue";
+import axios from "axios";
+
+const URL_BACK_SERVICES = "http://localhost:3001/services";
+
 export default {
   name: "HomePage",
-  data() {
+  setup() {
+    const services = ref([]);
+    const droppedItems = ref([]);
+    const availableItems = ref([]);
+
+    const getData = async () => {      
+      try {              
+        const response = await axios.get(URL_BACK_SERVICES);        
+        const data = await response.data;
+        services.value = data.service.map(item => item.name); 
+        availableItems.value = data.service.map(item => item.name);
+        return response.data;
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    onMounted(() => {
+      getData();
+    });
+
     return {
-      droppedItems: [], // Array to store dropped items,
-      availableItems: ["Pokemon", "Nasa"], // Elementos disponibles para arrastrar
+      services,      
+      droppedItems,
+      availableItems,
+    };
+  },
+  data() {
+    return {      
     };
   },
   methods: {
@@ -67,6 +98,9 @@ export default {
         name: "SelectedItemsPage",
         query: { droppedItems: this.droppedItems },
       });
+    },
+    navigateToSettingServices() {
+      this.$router.push('/setting-services');
     },
   },
 };
