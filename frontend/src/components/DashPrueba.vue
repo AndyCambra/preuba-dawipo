@@ -52,7 +52,7 @@ export default defineComponent({
       droppedItems: [], // Array to store dropped items
       dataModel: [
         {
-          name: "Zapatillas",
+          name: "Neumaticos",
           originCountry: "Argentina",
           finalCountry: "Mexico",
           departureDate: "20/9/24",
