@@ -1,22 +1,27 @@
 const { _putService } = require("../../controllers");
 
 const putService = async (req, res) => {
-  const { name } = req.params; // Extract name from URL params
-  const { apiUrl, apiKey } = req.body; // Extract fields from request body
+  const services = Array.isArray(req.body) ? req.body : [req.body];   
 
   try {
-    const updatedService = await _putService(name, { apiUrl, apiKey });
+    const updatedServices = [];
+
+    for (const service of services) {
+      const { name, apiUrl, apiKey } = service;      
+      const updatedService = await _putService(name, { apiUrl, apiKey });
+      updatedServices.push(updatedService);
+    }   
 
     res.status(200).json({
       message: "The service instance was updated successfully",
-      service: updatedService,
+      services: updatedServices,
     });
   } catch (error) {
     res.status(400).json({
       error: true,
       message: error.message || "Unknown error",
     });
-  }
+  }  
 };
 
 module.exports = {
