@@ -3,29 +3,35 @@
     <h1>Your selected services</h1>
     <p>Add your customer number</p>
     <div v-if="selectedItems.length">
-      <div v-for="(item, index) in selectedItems" :key="index">
+      <div class="service-box" v-for="(item, index) in selectedItems" :key="index">
         <div>
-          {{ item }} <button @click="deleteItem(index)">Delete Item</button>
-          <button @click="deleteData(item)">Delete DB Instance</button>
-          <button @click="fetchAPIData(item)">Get API Response</button>
-          <p>Client number</p>
-          <input type="text" v-model="apiUrls[index]" placeholder="api url" /><br><br>
+          {{ item }} 
+          <br>
           <input type="text" v-model="userKeys[index]" placeholder="api key" />
+          <button @click="deleteItem(index)">Delete Item</button>     
+          <button @click="deleteData(item)">Delete DB Instance</button>     
+          <button @click="fetchAPIData(item)">Get API Response</button>                    
         </div>
       </div>
       <br>
       <button @click="sendData">Send Data </button>
-      <button @click="getData">Show Data </button>
-      <button @click="proceedToNextPage" :disabled="!data">
-        Go to Dashboard
-        </button>
+      </div>
+      
+      <div v-else>
+        <p>No items selected</p>
         </div>
-        <div v-else>
-          <p>No items selected</p>
-          </div>
-    
-    <!-- Mostrar BackResponse si hay data -->
-    <BackResponse v-if="data" :data="data" />
+        
+        <div>
+          <button @click="getData">Show Data </button>
+          <button @click="navigateToHome">
+            Go back Home
+           </button>
+          <button @click="proceedToNextPage" :disabled="!data">          
+            Go to Dashboard      
+          </button>              
+
+    </div>    
+    <BackResponse v-if="data || error" :data="data" :error="error" />
   </div>
 </template>
 
@@ -42,23 +48,22 @@ export default {
   },
   data() {
     return {
-      selectedItems: this.$route.query.droppedItems || [],
-      apiUrls: [],
+      selectedItems: this.$route.query.droppedItems || [],      
       userKeys: [],
       data: null,
       error: null,
     };
   },
-  methods: {
+  methods: {    
     async sendData() {
-      const combinedData = this.selectedItems.map((name, index) => ({
-        name,
-        apiUrl: this.apiUrls[index] || "",
+      const data = this.selectedItems.map((name, index) => ({
+        name,        
         apiKey: this.userKeys[index] || "", 
-      }));
+      }));      
 
-      try {        
-        const response = await axios.post(URL_BACK_SERVICES, combinedData);        
+      try { 
+        const response = await axios.put(`${URL_BACK_SERVICES}/update`, data);   
+        console.log(response.data);       
         this.data = response.data;
       } catch (err) {
         this.error = err;
@@ -77,7 +82,7 @@ export default {
     async fetchAPIData(item) {      
 
       try {        
-        const response = await axios.post(`${URL_BACK_SERVICES}/fetchData`, { name: item });        
+        const response = await axios.post(`${URL_BACK_SERVICES}/fetchAPIData`, { name: item });        
         this.data = response.data;
       } catch (err) {
         this.error = err;
@@ -110,6 +115,9 @@ export default {
         });
       }
     },
+    navigateToHome() {
+      this.$router.push('/');
+    },
   },
 };
 </script>
@@ -135,7 +143,12 @@ li {
   width: 200px;
 }
 
-button {  
+.service-box {
+  padding-bottom: 15px;
+}
+
+button, input {  
   margin-right: 5px;
+  margin-bottom: 5px;
 }
 </style>
