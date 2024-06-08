@@ -8,6 +8,8 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "ag-grid-community": "^31.3.2",
+    "ag-grid-vue3": "^31.3.2",
     "axios": "^1.7.2",
     "core-js": "^3.8.3",
     "prettier": "^3.3.1",
