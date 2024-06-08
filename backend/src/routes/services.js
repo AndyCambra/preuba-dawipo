@@ -12,9 +12,9 @@ servicesRouter.get("/:name", getServiceByName);
 servicesRouter.get("/", getServices);
 
 servicesRouter.post("/", postService);
-servicesRouter.post("/fetchData", fetchDataFromExternalApi);
+servicesRouter.post("/fetchAPIData", fetchDataFromExternalApi);
 
-servicesRouter.put("/:name", putService); // Ensure this route is defined
+servicesRouter.put("/update", putService);
 
 servicesRouter.delete("/:name", deleteService);
 
