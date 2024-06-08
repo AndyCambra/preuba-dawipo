@@ -1,12 +1,15 @@
 const { Service } = require("../../db");
 
-const _putService = async (name, updateData) => {
+const _putService = async (name, updateData) => {  
   const findService = await Service.findOne({ where: { name } });
+  const { apiUrl, apiKey } = updateData;
 
   if (!findService) {
     throw new Error("That service does not exist");
   } else {
-    Object.assign(findService, updateData); // Update fields
+    apiUrl !== null && (findService.apiUrl = apiUrl);
+    apiKey !== null && (findService.apiKey = apiKey);
+
     await findService.save();
     return findService;
   }
