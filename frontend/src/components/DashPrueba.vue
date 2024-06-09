@@ -41,6 +41,7 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import { AgGridVue } from 'ag-grid-vue3';
+import  axios  from 'axios'
 
 export default defineComponent({
   name: 'DashPrueba',
@@ -53,42 +54,18 @@ export default defineComponent({
       dataModel: [
         {
           name: "Neumaticos",
-          originCountry: "Argentina",
-          finalCountry: "Mexico",
-          departureDate: "20/9/24",
-          arrivalDate: "24/11/24",
-          status: "Processing",
-          provider: "Esxxxe",
           courier: "DHL"
         },
         {
           name: "Remeras",
-          originCountry: "USA",
-          finalCountry: "Chile",
-          departureDate: "2/8/24",
-          arrivalDate: "11/10/24",
-          status: "Processing",
-          provider: "Nike",
           courier: "DHL"
         },
         {
           name: "Computadoras",
-          originCountry: "Italia",
-          finalCountry: "Francia",
-          departureDate: "2/6/24",
-          arrivalDate: "11/10/24",
-          status: "Travelling",
-          provider: "Adidas",
           courier: "UPS"
         },
         {
           name: "Celulares",
-          originCountry: "España",
-          finalCountry: "Colombia",
-          departureDate: "2/6/24",
-          arrivalDate: "26/10/24",
-          status: "Travelling",
-          provider: "Samsung",
           courier: "UPS"
         },
       ],
@@ -134,11 +111,18 @@ export default defineComponent({
       const item = JSON.parse(event.dataTransfer.getData("text/plain"));
       this.handleDrop(item);
     },
-    handleDrop(item) {
-      // Agregar el ítem soltado a droppedItems
-      this.droppedItems.push({ ...item });
-      // Usar Vue.set para que Vue detecte los cambios correctamente
-      this.droppedItems = this.droppedItems.slice();
+    async handleDrop(item) {
+      try {
+        const response = await axios.get(`http://localhost:3001/products/${item.name}`);
+
+        // Agregar el ítem soltado a droppedItems
+        this.droppedItems.push({ ...item, ...response.data });
+
+    // Usar Vue.set para que Vue detecte los cambios correctamente
+        this.droppedItems = this.droppedItems.slice();
+      } catch (error) {
+        console.error('Error al realizar la solicitud HTTP:', error);
+      }
     },
     itemIsDropped(item) {
       // Verificar si el ítem ya está en droppedItems
