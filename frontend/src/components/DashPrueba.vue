@@ -125,8 +125,8 @@ export default defineComponent({
       this.loading = true; // Start loading
       try {
         const response = await axios.get(`http://localhost:3001/products/${item.name}`);
-
-        // Agregar el ítem soltado a droppedItems
+      
+      // Agregar el ítem soltado a droppedItems
         this.droppedItems.push({ ...item, ...response.data });
 
         // Usar Vue.set para que Vue detecte los cambios correctamente
