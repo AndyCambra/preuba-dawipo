@@ -40,7 +40,7 @@ fs.readdirSync(path.join(__dirname, '/models'))
 //Inject the connection (sequelize) to all the models         
 modelDefiners.forEach((model) => model(sequelize));
 
-const { User, Service } = sequelize.models;
+const { User, Service, Product } = sequelize.models;
 
 User.belongsToMany(Service, { through: 'user_services' });
 Service.belongsToMany(User, { through: 'user_services' });
