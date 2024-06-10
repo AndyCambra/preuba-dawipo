@@ -2,6 +2,8 @@
   <div class="container">
     <h1>Choose the services you want to work with</h1>
     <p>Select and drag the items to the drop zone.</p>
+    <div><button @click="navigateToDashPrueba">Go to "dash-prueba"</button></div>
+    <div><button @click="navigateToDashTest">Go to "dash-test"</button></div>
     <div><button @click="navigateToSettingServices">Setting Services</button></div>
     <div class="drag-section">
       <div class="drag-container">
@@ -101,6 +103,12 @@ export default {
     },
     navigateToSettingServices() {
       this.$router.push('/setting-services');
+    },
+    navigateToDashPrueba() {
+      this.$router.push('/dash-prueba');
+    },
+    navigateToDashTest() {
+      this.$router.push('/dash-test');
     },
   },
 };
