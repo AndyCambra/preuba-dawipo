@@ -4,6 +4,7 @@ import SelectedItemsPage from "../components/SelectedItemsPage.vue";
 import SettingServicesPage from "../components/SettingServicesPage.vue";
 import Dashboard from "../components/UserDashboard.vue";
 import DashPrueba from "../components/DashPrueba.vue"
+import DashTest from "../components/DashTest.vue"
 
 const routes = [
   {
@@ -23,6 +24,7 @@ const routes = [
   },
   { path: "/dashboard", name: "UserDashboard", component: Dashboard },
   { path: "/dash-prueba", name: "DashPrueba", component: DashPrueba },
+  { path: "/dash-test", name: "DashTest", component: DashTest },
   // Puedes añadir más rutas aquí
 ];
 
