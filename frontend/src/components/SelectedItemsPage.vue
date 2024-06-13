@@ -1,9 +1,9 @@
 <template>
   <div class="container">
-    <h1>Your selected services</h1>
+    <h1>Your selected integrations</h1>
     <p>Add your customer number</p>
     <div v-if="selectedItems.length">
-      <div class="service-box" v-for="(item, index) in selectedItems" :key="index">
+      <div class="integration-box" v-for="(item, index) in selectedItems" :key="index">
         <div>
           {{ item }} 
           <br>
@@ -39,7 +39,7 @@
 import axios from "axios";
 import BackResponse from "./Componentes de prueba/BackResponse.vue";
 
-const URL_BACK_SERVICES = "http://localhost:3001/services";
+const URL_BACK_INTEGRATIONS = "http://localhost:3001/integrations";
 
 export default {
   name: "SelectedItemsPage",
@@ -62,7 +62,7 @@ export default {
       }));      
 
       try { 
-        const response = await axios.put(`${URL_BACK_SERVICES}/update`, data);   
+        const response = await axios.put(`${URL_BACK_INTEGRATIONS}/update`, data);   
         console.log(response.data);       
         this.data = response.data;
       } catch (err) {
@@ -72,7 +72,7 @@ export default {
     },    
     async getData() {      
       try {              
-        const response = await axios.get(URL_BACK_SERVICES);        
+        const response = await axios.get(URL_BACK_INTEGRATIONS);        
         this.data = response.data;
       } catch (err) {
         this.error = err;
@@ -82,7 +82,7 @@ export default {
     async fetchAPIData(item) {      
 
       try {        
-        const response = await axios.post(`${URL_BACK_SERVICES}/fetchAPIData`, { name: item });        
+        const response = await axios.post(`${URL_BACK_INTEGRATIONS}/fetchAPIData`, { name: item });        
         this.data = response.data;
       } catch (err) {
         this.error = err;
@@ -93,7 +93,7 @@ export default {
       const name = item;
             
       try {
-        const response = await axios.delete(`${URL_BACK_SERVICES}/${name}`);        
+        const response = await axios.delete(`${URL_BACK_INTEGRATIONS}/${name}`);        
         this.data = response.data;
       } catch (err) {
         this.error = err;
@@ -143,7 +143,7 @@ li {
   width: 200px;
 }
 
-.service-box {
+.integration-box {
   padding-bottom: 15px;
 }
 

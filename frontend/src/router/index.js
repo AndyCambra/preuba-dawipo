@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomePage from "../components/HomePage.vue";
 import SelectedItemsPage from "../components/SelectedItemsPage.vue";
-import SettingServicesPage from "../components/SettingServicesPage.vue";
+import SettingIntegrationsPage from "../components/SettingIntegrationsPage.vue";
 import DashPrueba from "../components/DashPrueba.vue"
 import DashTest from "../components/DashTest.vue"
 
@@ -17,9 +17,9 @@ const routes = [
     component: SelectedItemsPage,
   },
   {
-    path: "/setting-services",
-    name: "SettingServicesPage",
-    component: SettingServicesPage,
+    path: "/setting-integrations",
+    name: "SettingIntegrationsPage",
+    component: SettingIntegrationsPage,
   },
   { path: "/dash-prueba", name: "DashPrueba", component: DashPrueba },
   { path: "/dash-test", name: "DashTest", component: DashTest },
