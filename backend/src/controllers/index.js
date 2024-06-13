@@ -1,8 +1,8 @@
-const { _postService } = require("./_services/_postService");
-const { _getServices } = require("./_services/_getServices");
-const { _getServiceByName } = require("./_services/_getServiceByName");
-const { _putService } = require("./_services/_putService");
-const { _deleteService } = require("./_services/_deleteService");
+const { _postIntegration } = require("./_integrations/_postIntegration");
+const { _getIntegrations } = require("./_integrations/_getIntegrations");
+const { _getIntegrationsByName } = require("./_integrations/_getIntegrationByName");
+const { _putIntegration } = require("./_integrations/_putIntegration");
+const { _deleteIntegration } = require("./_integrations/_deleteIntegration");
 
 const { _postProduct } = require("./_products/_postProduct");
 const { _getProducts } = require("./_products/_getProducts");
@@ -11,11 +11,11 @@ const { _putProduct } = require("./_products/_putProduct");
 const { _deleteProduct } = require("./_products/_deleteProduct");
 
 module.exports = {
-  _postService,
-  _getServices,
-  _getServiceByName,
-  _putService,
-  _deleteService,
+  _postIntegration,
+  _getIntegrations,
+  _getIntegrationsByName,
+  _putIntegration,
+  _deleteIntegration,
 
   _postProduct,
   _getProducts,

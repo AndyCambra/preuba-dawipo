@@ -1,10 +1,10 @@
 <template>
   <div class="container">
-    <h1>Choose the services you want to work with</h1>
+    <h1>Choose the integrations you want to work with</h1>
     <p>Select and drag the items to the drop zone.</p>
     <div><button @click="navigateToDashPrueba">Go to "dash-prueba"</button></div>
     <div><button @click="navigateToDashTest">Go to "dash-test"</button></div>
-    <div><button @click="navigateToSettingServices">Setting Services</button></div>
+    <div><button @click="navigateToSettingIntegrations">Setting Integrations</button></div>
     <div class="drag-section">
       <div class="drag-container">
         <div
@@ -32,21 +32,21 @@
 import { ref, onMounted } from "vue";
 import axios from "axios";
 
-const URL_BACK_SERVICES = "http://localhost:3001/services";
+const URL_BACK_INTEGRATIONS = "http://localhost:3001/integrations";
 
 export default {
   name: "HomePage",
   setup() {
-    const services = ref([]);
+    const integrations = ref([]);
     const droppedItems = ref([]);
     const availableItems = ref([]);
 
     const getData = async () => {      
       try {              
-        const response = await axios.get(URL_BACK_SERVICES);        
+        const response = await axios.get(URL_BACK_INTEGRATIONS);        
         const data = await response.data;
-        services.value = data.service.map(item => item.name); 
-        availableItems.value = data.service.map(item => item.name);
+        integrations.value = data.integration.map(item => item.name); 
+        availableItems.value = data.integration.map(item => item.name);
         return response.data;
       } catch (err) {
         console.error(err);
@@ -58,7 +58,7 @@ export default {
     });
 
     return {
-      services,      
+      integrations,      
       droppedItems,
       availableItems,
     };
@@ -101,8 +101,8 @@ export default {
         query: { droppedItems: this.droppedItems },
       });
     },
-    navigateToSettingServices() {
-      this.$router.push('/setting-services');
+    navigateToSettingIntegrations() {
+      this.$router.push('/setting-integrations');
     },
     navigateToDashPrueba() {
       this.$router.push('/dash-prueba');
