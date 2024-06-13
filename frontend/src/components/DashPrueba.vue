@@ -1,3 +1,93 @@
+<script setup>
+import { ref, computed } from 'vue';
+import { AgGridVue } from 'ag-grid-vue3';
+import axios from 'axios';
+
+const droppedItems = ref([]); // Array to store dropped items
+const loading = ref(false);
+const selectedItems = ref([]);
+
+const dataModel = ref([
+  { name: "Neumaticos", courier: "DHL" },
+  { name: "Remeras", courier: "DHL" },
+  { name: "Computadoras", courier: "UPS" },
+  { name: "Celulares", courier: "UPS" },
+]);
+const columnDefs = [
+  { field: "Seleccionar", maxWidth: 140, checkboxSelection: true, headerCheckboxSelection: true },
+  { headerName: "Transportista", field: "courier", sortable: true, filter: true },
+  { headerName: "Nombre", field: "name", sortable: true, filter: true },
+  { headerName: "País de origen", field: "originCountry", sortable: true, filter: true },
+  { headerName: "País de destino", field: "finalCountry", sortable: true, filter: true },
+  { headerName: "Fecha de salida", field: "departureDate", sortable: true, filter: true },
+  { headerName: "Fecha de llegada", field: "arrivalDate", sortable: true, filter: true },
+  { headerName: "Estado", field: "status", sortable: true, filter: true },
+  { headerName: "Proveedor", field: "provider", sortable: true, filter: true },
+];
+const defaultColDef = {
+  flex: 1,
+  minWidth: 100,
+  resizable: true
+};
+
+
+const groupedItems = computed(() => {
+  return dataModel.value.reduce((groups, item) => {
+    const group = groups[item.courier] || [];
+    group.push(item);
+    groups[item.courier] = group;
+    return groups;
+  }, {});
+});
+
+const selectedCount = computed(() => {
+  return selectedItems.value.length;
+});
+
+const startDrag = (event, item) => {
+  event.dataTransfer.setData("text/plain", JSON.stringify(item));
+};
+
+const onDrop = (event) => {
+  event.preventDefault();
+  const item = JSON.parse(event.dataTransfer.getData("text/plain"));
+  handleDrop(item);
+};
+
+const handleDrop = async (item) => {
+  loading.value = true;
+  try {
+    const response = await axios.get(`http://localhost:3001/products/${item.name}`);
+    droppedItems.value.push({ ...item, ...response.data });
+    droppedItems.value = droppedItems.value.slice();
+  } catch (error) {
+    console.error('Error al realizar la solicitud HTTP:', error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const itemIsDropped = (item) => {
+  return droppedItems.value.some(droppedItem => droppedItem.name === item.name && droppedItem.courier === item.courier);
+};
+
+const removeItems = () => {
+  droppedItems.value = droppedItems.value.filter(item => !selectedItems.value.includes(item));
+  selectedItems.value = [];
+};
+
+const onSelectionChanged = (event) => {
+  selectedItems.value = event.api.getSelectedRows();
+};
+
+const rowSelection = ref('multiple');
+const gridApi = ref(null);
+
+const onGridReady = (params) => {
+  gridApi.value = params.api;
+};
+</script>
+
 <template>
   <div class="container">
     <h1>Dashboard</h1>
@@ -45,126 +135,6 @@
     </div>
   </div>
 </template>
-
-<script>
-import { defineComponent, ref } from 'vue';
-import { AgGridVue } from 'ag-grid-vue3';
-import  axios  from 'axios'
-
-export default defineComponent({
-  name: 'DashPrueba',
-  components: {
-    AgGridVue,
-  },
-  data() {
-    return {
-      droppedItems: [], // Array to store dropped items
-      loading: false,
-      dataModel: [
-        {
-          name: "Neumaticos",
-          courier: "DHL"
-        },
-        {
-          name: "Remeras",
-          courier: "DHL"
-        },
-        {
-          name: "Computadoras",
-          courier: "UPS"
-        },
-        {
-          name: "Celulares",
-          courier: "UPS"
-        },
-      ],
-      columnDefs: [
-        { field: "Seleccionar", maxWidth: 140, checkboxSelection: true, headerCheckboxSelection: true },
-        { headerName: "Transportista", field: "courier", sortable: true, filter: true },
-        { headerName: "Nombre", field: "name", sortable: true, filter: true },
-        { headerName: "País de origen", field: "originCountry", sortable: true, filter: true },
-        { headerName: "País de destino", field: "finalCountry", sortable: true, filter: true },
-        { headerName: "Fecha de salida", field: "departureDate", sortable: true, filter: true },
-        { headerName: "Fecha de llegada", field: "arrivalDate", sortable: true, filter: true },
-        { headerName: "Estado", field: "status", sortable: true, filter: true },
-        { headerName: "Proveedor", field: "provider", sortable: true, filter: true },
-      ],
-      defaultColDef: {
-        flex: 1,
-        minWidth: 100,
-        resizable: true
-      },
-      selectedItems: []
-    };
-  },
-  computed: {
-    groupedItems() {
-      return this.dataModel.reduce((groups, item) => {
-        const group = groups[item.courier] || [];
-        group.push(item);
-        groups[item.courier] = group;
-        return groups;
-      }, {});
-    },
-    selectedCount() {
-      return this.selectedItems.length;
-    }
-  },
-  methods: {
-    startDrag(event, item) {
-      // Iniciar el arrastre y pasar el objeto del item
-      event.dataTransfer.setData("text/plain", JSON.stringify(item));
-    },
-    onDrop(event) {
-      event.preventDefault();
-      const item = JSON.parse(event.dataTransfer.getData("text/plain"));
-      this.handleDrop(item);
-    },
-    async handleDrop(item) {
-      this.loading= true;
-      try {
-        const response = await axios.get(`http://localhost:3001/products/${item.name}`);
-
-        // Agregar el ítem soltado a droppedItems
-        this.droppedItems.push({ ...item, ...response.data });
-
-    // Usar Vue.set para que Vue detecte los cambios correctamente
-        this.droppedItems = this.droppedItems.slice();
-      } catch (error) {
-        console.error('Error al realizar la solicitud HTTP:', error);
-      } finally{
-        this.loading= false
-      }
-    },
-    itemIsDropped(item) {
-      // Verificar si el ítem ya está en droppedItems
-      return this.droppedItems.some(droppedItem => droppedItem.name === item.name && droppedItem.courier === item.courier);
-    },
-    removeItems() {
-      // Eliminar las filas seleccionadas de droppedItems
-      this.droppedItems = this.droppedItems.filter(item => !this.selectedItems.includes(item));
-      this.selectedItems = []; // Limpiar la selección después de eliminar
-    },
-    onSelectionChanged(event) {
-      this.selectedItems = event.api.getSelectedRows();
-    }
-  },
-  setup() {
-    const rowSelection = ref('multiple');
-    const gridApi = ref(null);
-
-    const onGridReady = (params) => {
-      gridApi.value = params.api;
-    };
-
-    return {
-      gridApi,
-      onGridReady,
-      rowSelection
-    };
-  }
-});
-</script>
 
 <style>
 /* Puedes añadir estilos personalizados aquí */
