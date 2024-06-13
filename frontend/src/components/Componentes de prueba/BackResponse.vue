@@ -1,3 +1,21 @@
+<script setup>
+import { computed } from 'vue';
+import { defineProps } from 'vue';
+
+// Definir las propiedades del componente
+const props = defineProps({
+  data: {
+    type: Object,
+    required: true,
+  },
+});
+
+// Computed para formatear los datos
+const formattedData = computed(() => {
+  return JSON.stringify(props.data, null, 2);
+});
+</script>
+
 <template>
   <div class="container">
     <br />
@@ -6,21 +24,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    data: {
-      type: Object,
-      required: true,
-    },
-  },
-  computed: {
-    formattedData() {
-      return JSON.stringify(this.data, null, 2);
-    },
-  },
-};
-</script>
 
 <style scoped>
 pre {
