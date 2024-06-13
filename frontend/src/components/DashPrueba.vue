@@ -9,9 +9,7 @@ const selectedItems = ref([]);
 
 const dataModel = ref([
   { name: "Neumaticos", courier: "DHL" },
-  { name: "Remeras", courier: "DHL" },
-  { name: "Computadoras", courier: "UPS" },
-  { name: "Celulares", courier: "UPS" },
+  { name: "Remeras", courier: "DHL" }
 ]);
 const columnDefs = [
   { field: "Seleccionar", maxWidth: 140, checkboxSelection: true, headerCheckboxSelection: true },
