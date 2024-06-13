@@ -1,3 +1,66 @@
+<script setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import axios from 'axios';
+import BackResponse from './Componentes de prueba/BackResponse.vue';
+
+const URL_BACK_INTEGRATIONS = 'http://localhost:3001/integrations';
+
+const name = ref('');
+const apiUrl = ref('');
+const data = ref(null);
+const error = ref(null);
+const router = useRouter();
+
+const sendData = async () => {
+  const payload = { name: name.value, apiUrl: apiUrl.value };
+  try {
+    const response = await axios.post(URL_BACK_INTEGRATIONS, payload);
+    data.value = response.data;
+  } catch (err) {
+    error.value = err;
+    console.error(err);
+  }
+};
+
+const getData = async () => {
+  try {
+    const response = await axios.get(URL_BACK_INTEGRATIONS);
+    data.value = response.data;
+  } catch (err) {
+    error.value = err;
+    console.error(err);
+  }
+};
+
+/* const fetchAPIData = async (item) => {
+  try {
+    const response = await axios.post(`${URL_BACK_INTEGRATIONS}/fetchAPIData`, { name: item });
+    data.value = response.data;
+  } catch (err) {
+    error.value = err;
+    console.error(err);
+  }
+};
+
+const deleteData = async (item) => {
+  try {
+    const response = await axios.delete(`${URL_BACK_INTEGRATIONS}/${item.name}`);
+    data.value = response.data;
+  } catch (err) {
+    error.value = err;
+    console.error(err);
+  }
+}; */
+
+/* const deleteItem = (index) => {
+  selectedItems.value.splice(index, 1);
+};
+ */
+const navigateToHome = () => {
+  router.push('/');
+};
+</script>
 <template>
   <div class="container">
     <h1>Add your Integration</h1>    
@@ -19,75 +82,8 @@
   </div>
 </template>
 
-<script>
-import axios from "axios";
-import BackResponse from "./Componentes de prueba/BackResponse.vue";
 
-const URL_BACK_INTEGRATIONS = "http://localhost:3001/integrations";
 
-export default {
-  name: "SettingIntegrationsPage",
-  components: {
-    BackResponse,
-  },
-  data() {
-    return {   
-      name: "",
-      apiUrl: "",      
-      data: null,
-      error: null,
-    };
-  },
-  methods: {
-    async sendData() {      
-      const data = { name: this.name, apiUrl: this.apiUrl };       
-      try {        
-        const response = await axios.post(`${URL_BACK_INTEGRATIONS}`, data);        
-        this.data = response.data;
-      } catch (err) {
-        this.error = err;
-        console.error(err);
-      }
-    },    
-    async getData() {      
-      try {              
-        const response = await axios.get(URL_BACK_INTEGRATIONS);        
-        this.data = response.data;
-      } catch (err) {
-        this.error = err;
-        console.error(err);
-      }
-    },   
-    async fetchAPIData(item) {      
-
-      try {        
-        const response = await axios.post(`${URL_BACK_INTEGRATIONS}/fetchAPIData`, { name: item });        
-        this.data = response.data;
-      } catch (err) {
-        this.error = err;
-        console.error(err);
-      }
-    }, 
-    async deleteData(item) {
-      const name = item.name;
-            
-      try {
-        const response = await axios.delete(`${URL_BACK_INTEGRATIONS}/${name}`);        
-        this.data = response.data;
-      } catch (err) {
-        this.error = err;
-        
-      }
-    },
-    async deleteItem(index) {      
-        this.selectedItems.splice(index, 1);      
-    },
-    navigateToHome() {
-      this.$router.push('/');
-    },
-  },
-};
-</script>
 <style scoped>
 .container {
   display: flex;
