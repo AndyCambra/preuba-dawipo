@@ -1,3 +1,86 @@
+<script setup>
+import { ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import axios from 'axios';
+import BackResponse from './Componentes de prueba/BackResponse.vue';
+
+const URL_BACK_INTEGRATIONS = 'http://localhost:3001/integrations';
+
+const route = useRoute();
+const router = useRouter();
+
+const selectedItems = ref(route.query.droppedItems ? JSON.parse(route.query.droppedItems) : []);
+const userKeys = ref([]);
+const data = ref(null);
+const error = ref(null);
+
+const sendData = async () => {
+  const payload = selectedItems.value.map((name, index) => ({
+    name,
+    apiKey: userKeys.value[index] || '',
+  }));
+
+  try {
+    const response = await axios.put(`${URL_BACK_INTEGRATIONS}/update`, payload);
+    console.log(response.data);
+    data.value = response.data;
+  } catch (err) {
+    error.value = err;
+    console.error(err);
+  }
+};
+
+const getData = async () => {
+  try {
+    const response = await axios.get(URL_BACK_INTEGRATIONS);
+    data.value = response.data;
+  } catch (err) {
+    error.value = err;
+    console.error(err);
+  }
+};
+
+const fetchAPIData = async (item) => {
+  try {
+    const response = await axios.post(`${URL_BACK_INTEGRATIONS}/fetchAPIData`, { name: item });
+    data.value = response.data;
+  } catch (err) {
+    error.value = err;
+    console.error(err);
+  }
+};
+
+const deleteData = async (item) => {
+  try {
+    const response = await axios.delete(`${URL_BACK_INTEGRATIONS}/${item}`);
+    data.value = response.data;
+  } catch (err) {
+    error.value = err;
+    console.error(err);
+  }
+};
+
+const deleteItem = (index) => {
+  selectedItems.value.splice(index, 1);
+};
+
+const proceedToNextPage = () => {
+  if (data.value) {
+    router.push({
+      name: 'UserDashboard',
+      query: {
+        droppedItems: JSON.stringify(selectedItems.value),
+        userKeys: JSON.stringify(userKeys.value),
+      },
+    });
+  }
+};
+
+const navigateToHome = () => {
+  router.push('/');
+};
+</script>
+
 <template>
   <div class="container">
     <h1>Your selected integrations</h1>
@@ -35,92 +118,7 @@
   </div>
 </template>
 
-<script>
-import axios from "axios";
-import BackResponse from "./Componentes de prueba/BackResponse.vue";
 
-const URL_BACK_INTEGRATIONS = "http://localhost:3001/integrations";
-
-export default {
-  name: "SelectedItemsPage",
-  components: {
-    BackResponse,
-  },
-  data() {
-    return {
-      selectedItems: this.$route.query.droppedItems || [],      
-      userKeys: [],
-      data: null,
-      error: null,
-    };
-  },
-  methods: {    
-    async sendData() {
-      const data = this.selectedItems.map((name, index) => ({
-        name,        
-        apiKey: this.userKeys[index] || "", 
-      }));      
-
-      try { 
-        const response = await axios.put(`${URL_BACK_INTEGRATIONS}/update`, data);   
-        console.log(response.data);       
-        this.data = response.data;
-      } catch (err) {
-        this.error = err;
-        console.error(err);
-      }
-    },    
-    async getData() {      
-      try {              
-        const response = await axios.get(URL_BACK_INTEGRATIONS);        
-        this.data = response.data;
-      } catch (err) {
-        this.error = err;
-        console.error(err);
-      }
-    },   
-    async fetchAPIData(item) {      
-
-      try {        
-        const response = await axios.post(`${URL_BACK_INTEGRATIONS}/fetchAPIData`, { name: item });        
-        this.data = response.data;
-      } catch (err) {
-        this.error = err;
-        console.error(err);
-      }
-    }, 
-    async deleteData(item) {
-      const name = item;
-            
-      try {
-        const response = await axios.delete(`${URL_BACK_INTEGRATIONS}/${name}`);        
-        this.data = response.data;
-      } catch (err) {
-        this.error = err;
-        
-      }
-    },
-    async deleteItem(index) {      
-        this.selectedItems.splice(index, 1);      
-    },
-    proceedToNextPage() {
-      // Navegar a la siguiente página solo si se han enviado los datos correctamente
-      if (this.data) {
-        this.$router.push({
-          name: "UserDashboard",
-          query: {
-            droppedItems: this.selectedItems,
-            userKeys: this.userKeys, // Pasar userKeys como parte de la ruta
-          },
-        });
-      }
-    },
-    navigateToHome() {
-      this.$router.push('/');
-    },
-  },
-};
-</script>
 <style scoped>
 .container {
   display: flex;
