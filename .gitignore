@@ -25,3 +25,4 @@ backend/.env
 
 # Ignore trained model
 ia/fine-tuned-t5/
+.safetensors
