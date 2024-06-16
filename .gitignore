@@ -22,3 +22,6 @@ pnpm-debug.log*
 *.sln
 *.sw?
 backend/.env
+
+# Ignore safetensors files
+*.safetensors
