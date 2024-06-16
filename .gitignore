@@ -23,5 +23,5 @@ pnpm-debug.log*
 *.sw?
 backend/.env
 
-# Ignore safetensors files
-*.safetensors
+# Ignore trained model
+ia/fine-tuned-t5/
