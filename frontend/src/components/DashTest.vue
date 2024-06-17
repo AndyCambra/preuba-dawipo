@@ -1,18 +1,48 @@
 <script setup>
-import { ref, onMounted, watch, reactive, computed } from 'vue';
-import { AgGridVue } from 'ag-grid-vue3';
+import { ref, onMounted, watch, reactive, computed } from "vue";
+import { AgGridVue } from "ag-grid-vue3";
 import axios from "axios";
 
 const URL_BACK_PRODUCTS = "http://localhost:3001/products";
 
 const columnDefs = [
-  { field: "Seleccionar", maxWidth: 140, checkboxSelection: true, headerCheckboxSelection: true },
-  { headerName: "Transportista", field: "courier", sortable: true, filter: true },
+  {
+    field: "Seleccionar",
+    maxWidth: 140,
+    checkboxSelection: true,
+    headerCheckboxSelection: true,
+  },
+  {
+    headerName: "Transportista",
+    field: "courier",
+    sortable: true,
+    filter: true,
+  },
   { headerName: "Nombre", field: "name", sortable: true, filter: true },
-  { headerName: "País de origen", field: "originCountry", sortable: true, filter: true },
-  { headerName: "País de destino", field: "finalCountry", sortable: true, filter: true },
-  { headerName: "Fecha de salida", field: "departureDate", sortable: true, filter: true },
-  { headerName: "Fecha de llegada", field: "arrivalDate", sortable: true, filter: true },
+  {
+    headerName: "País de origen",
+    field: "originCountry",
+    sortable: true,
+    filter: true,
+  },
+  {
+    headerName: "País de destino",
+    field: "finalCountry",
+    sortable: true,
+    filter: true,
+  },
+  {
+    headerName: "Fecha de salida",
+    field: "departureDate",
+    sortable: true,
+    filter: true,
+  },
+  {
+    headerName: "Fecha de llegada",
+    field: "arrivalDate",
+    sortable: true,
+    filter: true,
+  },
   { headerName: "Estado", field: "status", sortable: true, filter: true },
   { headerName: "Proveedor", field: "provider", sortable: true, filter: true },
 ];
@@ -20,37 +50,43 @@ const columnDefs = [
 const defaultColDef = {
   flex: 1,
   minWidth: 100,
-  resizable: true
+  resizable: true,
 };
 
-const rowSelection = ref('multiple');
+const rowSelection = ref("multiple");
 
 const dataModel = ref([]);
 const droppedItems = ref([]);
 const selectedItems = ref([]);
 const groupedItems = reactive({});
 
+const loading = ref(false);
+const gridApi = ref(null);
+
 const getData = async () => {
   try {
     const response = await axios.get(URL_BACK_PRODUCTS);
-    const data = response.data;            
-    dataModel.value = data.products; 
+    const data = response.data;
+    dataModel.value = data.products;
     droppedItems.value = data.products;
-    console.log(data);            
+    console.log(data);
   } catch (err) {
     console.error(err);
   }
 };
 
 onMounted(() => {
-  getData().then(() => {            
-    Object.assign(groupedItems, dataModel.value.reduce((groups, item) => {
-      if (!item) return groups;
-      const group = groups[item.courier] || [];
-      group.push(item);
-      groups[item.courier] = group;
-      return groups;
-    }, {}));
+  getData().then(() => {
+    Object.assign(
+      groupedItems,
+      dataModel.value.reduce((groups, item) => {
+        if (!item) return groups;
+        const group = groups[item.courier] || [];
+        group.push(item);
+        groups[item.courier] = group;
+        return groups;
+      }, {})
+    );
   });
 });
 
@@ -70,12 +106,27 @@ const handleDrop = (item) => {
 };
 
 const itemIsDropped = (item) => {
-  return droppedItems.value.some(droppedItem => droppedItem.name === item.name && droppedItem.courier === item.courier);          
+  return droppedItems.value.some(
+    (droppedItem) =>
+      droppedItem.name === item.name && droppedItem.courier === item.courier
+  );
 };
 
-const removeItems = () => {
-  droppedItems.value = droppedItems.value.filter(item => !selectedItems.value.includes(item));
-  selectedItems.value = []; 
+const removeItems = async () => {
+  loading.value = true;
+  try {
+    for (const item of selectedItems.value) {
+      await axios.delete(`http://localhost:3001/products/${item.name}`);
+    }
+    droppedItems.value = droppedItems.value.filter(
+      (item) => !selectedItems.value.includes(item)
+    );
+    selectedItems.value = [];
+  } catch (error) {
+    console.error("Error deleting items:", error);
+  } finally {
+    loading.value = false;
+  }
 };
 
 const onSelectionChanged = (event) => {
@@ -87,15 +138,21 @@ const selectedCount = computed(() => {
 });
 
 watch(dataModel, (newValue) => {
-  Object.assign(groupedItems, newValue.reduce((groups, item) => {
-    if (!item) return groups; 
-    const group = groups[item.courier] || [];
-    group.push(item);
-    groups[item.courier] = group;
-    return groups;
-  }, {}));
+  Object.assign(
+    groupedItems,
+    newValue.reduce((groups, item) => {
+      if (!item) return groups;
+      const group = groups[item.courier] || [];
+      group.push(item);
+      groups[item.courier] = group;
+      return groups;
+    }, {})
+  );
 });
 
+const onGridReady = (params) => {
+  gridApi.value = params.api;
+};
 </script>
 
 <template>
@@ -103,8 +160,12 @@ watch(dataModel, (newValue) => {
     <h1>Dashboard</h1>
     <p>Seleccioná y arrastrá los elementos a la zona de soltar.</p>
     <div class="drag-section">
-      <div class="drag-inside">      
-        <div class="drag-container" v-for="(items, courier) in groupedItems" :key="courier">
+      <div class="drag-inside">
+        <div
+          class="drag-container"
+          v-for="(items, courier) in groupedItems"
+          :key="courier"
+        >
           <h3>{{ courier }}</h3>
           <div
             v-for="(item, index) in items"
@@ -120,10 +181,12 @@ watch(dataModel, (newValue) => {
       <div class="drop-area" @dragover.prevent @drop="onDrop">
         <h2>Soltar acá</h2>
         <div v-if="droppedItems.length">
-          <button class="btn-danger" @click="removeItems">Eliminar Seleccionados ({{ selectedCount }})</button>
+          <button class="btn-danger" @click="removeItems">
+            Eliminar Seleccionados ({{ selectedCount }})
+          </button>
           <ag-grid-vue
             class="ag-theme-alpine"
-            style="width: 100%; height: 400px;"
+            style="width: 100%; height: 400px"
             :columnDefs="columnDefs"
             :rowData="droppedItems"
             :defaultColDef="defaultColDef"
@@ -131,17 +194,13 @@ watch(dataModel, (newValue) => {
             @grid-ready="onGridReady"
             @selection-changed="onSelectionChanged"
           ></ag-grid-vue>
-        </div>        
+        </div>
         <p v-else>No items dropped</p>
       </div>
     </div>
-    <button @click="navigateToHome">
-      Go back Home
-    </button>
+    <button @click="navigateToHome">Go back Home</button>
   </div>
 </template>
-
-
 
 <style>
 /* Puedes añadir estilos personalizados aquí */
