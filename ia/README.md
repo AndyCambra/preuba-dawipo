@@ -4,20 +4,79 @@ Primero, asegúrate de tener Python 3.8 o superior instalado. Luego, clona el re
 
 # Crear entorno virtual
 
+```sh
 python -m venv venv
+```
 
 # Activar entorno virtual
 
-source venv/bin/activate
+```sh
+source venv/bin/activate  # En Linux/Mac
+venv\Scripts\activate     # En Windows
+```
 
-# Instala las dependencias
+# Instalar las dependencias
 
+```sh
 pip install -r requirements.txt
+```
 
-# Ejecuta el script de entrenamiento
+## Ejecutar scripts
 
-python train_model.py
+### Entrenamiento del modelo
 
-# Ejecuta la app de flask
+```sh
+python -m ia.train_model
+```
 
-python app.py
+### Ejecutar la aplicación Flask
+
+```sh
+python -m ia.app
+```
+
+### Ejecutar pruebas unitarias
+
+```sh
+python -m ia.tests.test_model
+```
+
+### Ejecutar pruebas en lote
+
+```sh
+python -m ia.tests.batch_test
+```
+
+## Estructura del proyecto
+
+```
+ia/
+├── __init__.py
+├── app.py
+├── data/
+│   ├── training_examples.json
+│   ├── training_validation.json
+├── models/
+│   ├── __init__.py
+│   ├── model.py
+├── routes/
+│   ├── __init__.py
+│   ├── product_routes.py
+├── utils/
+│   ├── __init__.py
+│   ├── format.py
+│   ├── test_utils.py
+├── tests/
+│   ├── __init__.py
+│   ├── test_model.py
+│   ├── batch_test.py
+├── train_model.py
+```
+
+### Descripción de carpetas
+
+- **data/**: Contiene los archivos JSON de datos de entrenamiento y validación.
+- **models/**: Contiene la definición y carga del modelo y tokenizer.
+- **routes/**: Contiene las rutas de la aplicación Flask.
+- **utils/**: Contiene funciones utilitarias para formateo y pruebas.
+- **tests/**: Contiene los scripts de prueba y pruebas en lote.
