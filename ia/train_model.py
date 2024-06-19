@@ -2,79 +2,101 @@ from transformers import T5ForConditionalGeneration, T5Tokenizer
 import torch
 import json
 
-# Cargar ejemplos de entrenamiento desde el archivo modificado
+# Cargar los datos de entrenamiento y validación reformateados
 print("Cargando ejemplos de entrenamiento...")
-with open("training_examples.json", "r") as file:
+with open("ia/data/training_examples.json", "r") as file:
     training_examples = json.load(file)
 
+print("Cargando ejemplos de validación...")
+with open("ia/data/training_validation.json", "r") as file:
+    validation_examples = json.load(file)
+
 print("Cargando modelo y tokenizer...")
-model_name = "t5-small"
+model_name = "t5-base"
 tokenizer = T5Tokenizer.from_pretrained(model_name)
 model = T5ForConditionalGeneration.from_pretrained(model_name)
 
-# Prepara datos de entrenamiento
+# Preparar datos de entrenamiento
 print("Preparando datos de entrenamiento...")
+def get_input_text(example):
+    input_key = list(example["input"].keys())[0]
+    input_value = example["input"][input_key]
+    return f"translate {input_key} : {input_value} to target"
 
-def get_input_text(ex):
-    if 'entrada' in ex:
-        return f"Transform the following data: {json.dumps(ex['entrada'])}"
-    elif 'input_data' in ex:
-        return f"Transform the following data: {json.dumps(ex['input_data'])}"
-    elif 'data_input' in ex:
-        return f"Transform the following data: {json.dumps(ex['data_input'])}"
-    elif 'input' in ex:
-        return f"Transform the following data: {json.dumps(ex['input'])}"
-    elif 'ingreso' in ex:
-        return f"Transform the following data: {json.dumps(ex['ingreso'])}"
-    else:
-        return "Transform the following data: {}"
-
-def get_target_text(ex):
-    if 'salida' in ex:
-        return json.dumps(ex['salida'])
-    elif 'output_data' in ex:
-        return json.dumps(ex['output_data'])
-    elif 'data_output' in ex:
-        return json.dumps(ex['data_output'])
-    elif 'resultado' in ex:
-        return json.dumps(ex['resultado'])
-    elif 'output' in ex:
-        return json.dumps(ex['output'])
-    else:
-        return json.dumps({})
+def get_target_text(example):
+    target_key = list(example["output"].keys())[0]
+    target_value = example["output"][target_key]
+    return f"{target_key} : {target_value}"
 
 input_texts = [get_input_text(ex) for ex in training_examples]
 target_texts = [get_target_text(ex) for ex in training_examples]
 
+print("Input Texts Example: ", input_texts[:3])  # Debugging
+print("Target Texts Example: ", target_texts[:3])  # Debugging
+
 inputs = tokenizer(input_texts, return_tensors="pt", padding=True, truncation=True)
 targets = tokenizer(target_texts, return_tensors="pt", padding=True, truncation=True)
 
-# Fine-tune the model
-print("Preparando datos para el entrenamiento...")
+print("Tokenized Inputs Example: ", inputs.input_ids[:3])  # Debugging
+print("Tokenized Targets Example: ", targets.input_ids[:3])  # Debugging
+
 train_data = torch.utils.data.TensorDataset(inputs.input_ids, targets.input_ids)
 train_loader = torch.utils.data.DataLoader(train_data, batch_size=16, shuffle=True)
 
-optimizer = torch.optim.AdamW(model.parameters(), lr=3e-5)
+# Preparar datos de validación
+print("Preparando datos de validación...")
+val_input_texts = [get_input_text(ex) for ex in validation_examples]
+val_target_texts = [get_target_text(ex) for ex in validation_examples]
+
+val_inputs = tokenizer(val_input_texts, return_tensors="pt", padding=True, truncation=True)
+val_targets = tokenizer(val_target_texts, return_tensors="pt", padding=True, truncation=True)
+
+validation_data = torch.utils.data.TensorDataset(val_inputs.input_ids, val_targets.input_ids)
+val_loader = torch.utils.data.DataLoader(validation_data, batch_size=16, shuffle=False)
+
+# Bucle de entrenamiento y validación con early stopping
+optimizer = torch.optim.AdamW(model.parameters(), lr=5e-5)  # Aumentar la tasa de aprendizaje
+num_epochs = 10  # Aumentar el número de épocas
+patience = 3
+best_val_loss = float('inf')
+patience_counter = 0
 
 print("Iniciando entrenamiento...")
-model.train()
-num_epochs = 10
 for epoch in range(num_epochs):
-    print(f"Epoch {epoch + 1}/{num_epochs}...")
-    total_loss = 0
+    model.train()
+    train_loss = 0
     for batch in train_loader:
         input_ids, target_ids = batch
         outputs = model(input_ids=input_ids, labels=target_ids)
         loss = outputs.loss
-        total_loss += loss.item()
+        train_loss += loss.item()
         loss.backward()
         optimizer.step()
         optimizer.zero_grad()
-    avg_loss = total_loss / len(train_loader)
-    print(f"  Average loss: {avg_loss}")
+    avg_train_loss = train_loss / len(train_loader)
+    print(f"Epoch {epoch+1}: Training loss: {avg_train_loss}")
 
-# Guardar el modelo ajustado
-print("Guardando el modelo ajustado...")
-model.save_pretrained("fine-tuned-t5")
-tokenizer.save_pretrained("fine-tuned-t5")
-print("Entrenamiento completado y modelo guardado.")
+    model.eval()
+    val_loss = 0
+    with torch.no_grad():
+        for batch in val_loader:
+            input_ids, target_ids = batch
+            outputs = model(input_ids=input_ids, labels=target_ids)
+            val_loss += outputs.loss.item()
+    avg_val_loss = val_loss / len(val_loader)
+    print(f"Epoch {epoch+1}: Validation loss: {avg_val_loss}")
+
+    # Early stopping
+    if avg_val_loss < best_val_loss:
+        best_val_loss = avg_val_loss
+        patience_counter = 0
+        # Guardar el mejor modelo
+        model.save_pretrained("best-fine-tuned-t5-base")
+        tokenizer.save_pretrained("best-fine-tuned-t5-base")
+    else:
+        patience_counter += 1
+        if patience_counter >= patience:
+            print("Early stopping triggered")
+            break
+
+print("Entrenamiento completado.")
