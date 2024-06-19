@@ -8,18 +8,16 @@ const postProduct = async (req, res) => {
     const newProducts = [];
 
     for (const product of products) {
-      console.log("Product:", product); // Debugging line
+      console.log("Product:", product);
 
-      // Enviar los datos al modelo de IA para transformarlos
       const response = await axios.post(
         "http://localhost:5000/add_product",
         product
       );
       const transformedProduct = response.data;
 
-      console.log("Transformed Product:", transformedProduct); // Debugging line
-
-      // Crear un nuevo producto en la base de datos utilizando el producto transformado
+      console.log("Transformed Product:", transformedProduct);
+      
       const newProduct = await _postProduct({
         name: transformedProduct.name,
         originCountry: transformedProduct.originCountry,
