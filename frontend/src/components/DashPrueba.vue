@@ -2,10 +2,12 @@
 import { ref, computed } from 'vue';
 import { AgGridVue } from 'ag-grid-vue3';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 const droppedItems = ref([]); // Array to store dropped items
 const loading = ref(false);
 const selectedItems = ref([]);
+const router = useRouter();
 
 const dataModel = ref([
   { name: "Neumaticos", courier: "DHL" },
@@ -84,6 +86,10 @@ const gridApi = ref(null);
 const onGridReady = (params) => {
   gridApi.value = params.api;
 };
+
+const navigateToHome = () => {
+  router.push('/');
+};
 </script>
 
 <template>
@@ -132,10 +138,12 @@ const onGridReady = (params) => {
       </div>
     </div>
   </div>
+  <button @click="navigateToHome">
+      Go to Home
+  </button>
 </template>
 
 <style>
-/* Puedes añadir estilos personalizados aquí */
 .container {
   padding: 20px;
 }

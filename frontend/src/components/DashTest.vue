@@ -2,8 +2,11 @@
 import { ref, onMounted, watch, reactive, computed } from 'vue';
 import { AgGridVue } from 'ag-grid-vue3';
 import axios from "axios";
+import { useRouter } from 'vue-router';
 
 const URL_BACK_PRODUCTS = "http://localhost:3001/products";
+
+const router = useRouter();
 
 const columnDefs = [
   { field: "Seleccionar", maxWidth: 140, checkboxSelection: true, headerCheckboxSelection: true },
@@ -82,6 +85,10 @@ const onSelectionChanged = (event) => {
   selectedItems.value = event.api.getSelectedRows();
 };
 
+const navigateToHome = () => {
+  router.push('/');
+};
+
 const selectedCount = computed(() => {
   return selectedItems.value.length;
 });
@@ -136,7 +143,7 @@ watch(dataModel, (newValue) => {
       </div>
     </div>
     <button @click="navigateToHome">
-      Go back Home
+      Go to Home
     </button>
   </div>
 </template>
@@ -144,7 +151,6 @@ watch(dataModel, (newValue) => {
 
 
 <style>
-/* Puedes añadir estilos personalizados aquí */
 .container {
   padding: 20px;
 }

@@ -11,7 +11,8 @@ const { getProductByName } = require("./products/getProductByName");
 const { putProduct } = require("./products/putProduct");
 const { deleteProduct } = require("./products/deleteProduct");
   
-const { postUser } = require("./users/postUser");
+const { registerUser } = require("./users/registerUser");
+const { loginUser } = require("./users/loginUser");
 const { getUsers } = require("./users/getUsers");
 const { getUserByName } = require("./users/getUserByName");
 const { putUser } = require("./users/putUser");
@@ -31,7 +32,8 @@ module.exports = {
   putProduct,
   deleteProduct,
 
-  postUser,
+  registerUser,
+  loginUser,
   getUsers,
   getUserByName,
   putUser,
