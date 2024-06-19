@@ -1,7 +1,7 @@
 const { validationResult } = require('express-validator');
-const { _postUser } = require("../../controllers");
+const { _registerUser } = require("../../controllers");
 
-const postUser = async (req, res) => {
+const registerUser = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -16,7 +16,7 @@ const postUser = async (req, res) => {
   } = req.body;     
 
   try {          
-    const newUser = await _postUser(
+    const newUser = await _registerUser(
       name,      
       lastName,
       email,
@@ -25,7 +25,7 @@ const postUser = async (req, res) => {
     );      
 
     res.status(201).json({
-      message: "The user was created successfully",
+      message: "The user was registered successfully",
       user: newUser,
     });
   } catch (error) {
@@ -37,5 +37,5 @@ const postUser = async (req, res) => {
 };
 
 module.exports = {
-  postUser,
+  registerUser,
 };

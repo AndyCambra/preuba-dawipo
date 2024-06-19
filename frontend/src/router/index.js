@@ -4,6 +4,8 @@ import SelectedItemsPage from "../components/SelectedItemsPage.vue";
 import SettingIntegrationsPage from "../components/SettingIntegrationsPage.vue";
 import DashPrueba from "../components/DashPrueba.vue"
 import DashTest from "../components/DashTest.vue"
+import RegisterPage from "../components/RegisterPage.vue"
+import LoginPage from "../components/LoginPage.vue"
 
 const routes = [
   {
@@ -23,7 +25,8 @@ const routes = [
   },
   { path: "/dash-prueba", name: "DashPrueba", component: DashPrueba },
   { path: "/dash-test", name: "DashTest", component: DashTest },
-  // Puedes añadir más rutas aquí
+  { path: "/login", name: "LoginPage", component: LoginPage },
+  { path: "/register", name: "RegisterPage", component: RegisterPage },  
 ];
 
 const router = createRouter({

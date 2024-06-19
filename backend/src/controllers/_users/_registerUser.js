@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const { User } = require("../../db");
 
-const _postUser = async (
+const _registerUser = async (
   name,
   lastName,
   email,
@@ -11,7 +11,7 @@ const _postUser = async (
   const findUser = await User.findOne({ where: { name } });
   
   if (findUser) {
-    throw new Error(`${name} has already been created`);
+    throw new Error(`${name} has already been registered`);
   } else {
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -26,5 +26,5 @@ const _postUser = async (
 };
 
 module.exports = {
-  _postUser,
+  _registerUser,
 };
