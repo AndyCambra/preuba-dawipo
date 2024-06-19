@@ -44,8 +44,8 @@ def run_test():
     else:
         print('\nTodas las claves fueron formateadas correctamente.')
 
-    # Ordenar el archivo unformatted_keys.txt por la cantidad de veces que se repite cada clave
-    sort_unformatted_keys()
+    
 
 if __name__ == "__main__":
     run_test()
+    sort_unformatted_keys()
