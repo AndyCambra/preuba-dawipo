@@ -2,7 +2,7 @@ from ia.tests.test_model import run_test
 from ia.utils.test_utils import sort_unformatted_keys
 
 # Número de veces que quieres ejecutar el script
-num_runs = 10
+num_runs = 100
 
 # Ejecutar el script principal varias veces
 for i in range(num_runs):

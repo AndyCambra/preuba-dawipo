@@ -1,5 +1,5 @@
 import json
-from ia.utils.format import format_product
+from ia.utils.format_utils import format_product
 from ia.utils.test_utils import generate_random_test_object, save_unformatted_keys_to_file, sort_unformatted_keys
 
 def run_test():
@@ -34,6 +34,8 @@ def run_test():
     # Identificar las origin_keys que no pudieron ser formateadas correctamente
     unformatted_keys = []
     for key, value in random_test_object.items():
+        if key in target_keys and (formatted_data.get(key) == value or formatted_data.get(key) is None):
+            continue  # Ignorar claves deseadas ya presentes o que tienen valores deseados
         target_key = next((t_key for t_key, t_value in target_keys.items() if formatted_data.get(t_key) == value), None)
         if target_key is None or final_data.get(target_key) is None:
             unformatted_keys.append(key)
@@ -43,8 +45,6 @@ def run_test():
         save_unformatted_keys_to_file(unformatted_keys)
     else:
         print('\nTodas las claves fueron formateadas correctamente.')
-
-    
 
 if __name__ == "__main__":
     run_test()
