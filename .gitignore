@@ -22,3 +22,7 @@ pnpm-debug.log*
 *.sln
 *.sw?
 backend/.env
+
+# Ignore trained model
+ia/best-fine-tuned-t5-base
+.safetensors
