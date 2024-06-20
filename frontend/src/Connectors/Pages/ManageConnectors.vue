@@ -1,41 +1,25 @@
 <script setup>
 import { ref, computed } from 'vue';
-import { AgGridVue } from 'ag-grid-vue3';
-import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { user } from '../../utils/auth'
 import DHL from '../../../public/DHL.png'
 import Maersk from '../../../public/Maersk.png'
 import MSC from '../../../public/MSC.png'
-
+import Otra from '../../../public/Otra.png'
 
 const droppedItems = ref([]); // Array to store dropped items
 const loading = ref(false);
-const selectedItems = ref([]);
 const router = useRouter();
 
 const dataModel = ref([
-  { img: DHL, courier: "DHL Global Fowarding" },
+  { img: DHL, courier: "DHL Global Fowarding"},
   { img: Maersk, courier: "Maersk" },
-  { img: MSC , courier: "Mediterranean Shipping Company" },
+  { img: MSC, courier: "Mediterranean Shipping Company"},
 ]);
-const columnDefs = [
-  { field: "Seleccionar", maxWidth: 140, checkboxSelection: true, headerCheckboxSelection: true },
-  { headerName: "Transportista", field: "courier", sortable: true, filter: true },
-  { headerName: "Nombre", field: "name", sortable: true, filter: true },
-  { headerName: "País de origen", field: "originCountry", sortable: true, filter: true },
-  { headerName: "País de destino", field: "finalCountry", sortable: true, filter: true },
-  { headerName: "Fecha de salida", field: "departureDate", sortable: true, filter: true },
-  { headerName: "Fecha de llegada", field: "arrivalDate", sortable: true, filter: true },
-  { headerName: "Estado", field: "status", sortable: true, filter: true },
-  { headerName: "Proveedor", field: "provider", sortable: true, filter: true },
-];
-const defaultColDef = {
-  flex: 1,
-  minWidth: 100,
-  resizable: true
-};
 
+const dataModelOwn = ref([
+  { img: Otra, courier: "Otra" }
+]);
 
 const groupedItems = computed(() => {
   return dataModel.value.reduce((groups, item) => {
@@ -46,8 +30,13 @@ const groupedItems = computed(() => {
   }, {});
 });
 
-const selectedCount = computed(() => {
-  return selectedItems.value.length;
+const groupedItemsOwn = computed(() => {
+  return dataModelOwn.value.reduce((groups, item) => {
+    const group = groups[item.courier] || [];
+    group.push(item);
+    groups[item.courier] = group;
+    return groups;
+  }, {});
 });
 
 const startDrag = (event, item) => {
@@ -60,43 +49,26 @@ const onDrop = (event) => {
   handleDrop(item);
 };
 
-const handleDrop = async (item) => {
+const handleDrop = (item) => {
   loading.value = true;
-  try {
-    const response = await axios.get(`http://localhost:3001/products/${item.name}`);
-    droppedItems.value.push({ ...item, ...response.data });
-    droppedItems.value = droppedItems.value.slice();
-  } catch (error) {
-    console.error('Error al realizar la solicitud HTTP:', error);
-  } finally {
-    loading.value = false;
-  }
+  droppedItems.value.push(item);
+  droppedItems.value = droppedItems.value.slice();
+  loading.value = false;
 };
 
 const itemIsDropped = (item) => {
-  return droppedItems.value.some(droppedItem => droppedItem.name === item.name && droppedItem.courier === item.courier);
+  return droppedItems.value.some(droppedItem => droppedItem.courier === item.courier && droppedItem.img === item.img);
 };
 
-const removeItems = () => {
-  droppedItems.value = droppedItems.value.filter(item => !selectedItems.value.includes(item));
-  selectedItems.value = [];
-};
-
-const onSelectionChanged = (event) => {
-  selectedItems.value = event.api.getSelectedRows();
-};
-
-const rowSelection = ref('multiple');
-const gridApi = ref(null);
-
-const onGridReady = (params) => {
-  gridApi.value = params.api;
+const removeItem = (item) => {
+  droppedItems.value = droppedItems.value.filter(droppedItem => droppedItem !== item);
 };
 
 const navigateToHome = () => {
   router.push('/');
 };
 </script>
+
 
 <template>
   <div class="container">
@@ -107,69 +79,67 @@ const navigateToHome = () => {
     <div class="drag-section">
       <div>
         <h2>Mis Conexiones</h2>
-      <div class="drag-inside">
-        <div class="drag-container" v-for="(items, courier) in groupedItems" :key="courier">
-          <div
-            v-for="(item, index) in items"
-            :key="index"
-            :class="{ 'drag-el': true, disabled: itemIsDropped(item) }"
-            @dragstart="startDrag($event, item)"
-            :draggable="!itemIsDropped(item)"
-          >
-          <div class="drag-connectors">
-            <img :src="item.img" alt="">
-            <h3>{{ courier }}</h3>
-            {{ item.name }}
-          </div>
-          </div>
-        </div>
-      </div>
-      </div>
-      <div>
-        <h2>Mis Conexiones</h2>
-      <div class="drag-inside">
-        <div class="drag-container" v-for="(items, courier) in groupedItems" :key="courier">
-          <div
-            v-for="(item, index) in items"
-            :key="index"
-            :class="{ 'drag-el': true, disabled: itemIsDropped(item) }"
-            @dragstart="startDrag($event, item)"
-            :draggable="!itemIsDropped(item)"
-          >
-          <div class="">
-            <img src="" alt="">
-            <h3>{{ courier }}</h3>
-            {{ item.name }}
-          </div>
+        <div class="drag-inside">
+          <div class="drag-container" v-for="(items, courier) in groupedItems" :key="courier">
+            <div
+              v-for="(item, index) in items"
+              :key="index"
+              :class="{ 'drag-el': true, disabled: itemIsDropped(item) }"
+              @dragstart="startDrag($event, item)"
+              :draggable="!itemIsDropped(item)"
+            >
+              <div class="drag-connectors">
+                <img :src="item.img" alt="">
+                <h3>{{ courier }}</h3>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+      <div class="drag-connectors-own">
+        <p class="connectors-text">Elegi entre estas conexiones y arrastralas a la zona punteada</p>
+        <div class="drag-inside-own">
+          <div class="drag-container" v-for="(items, courier) in groupedItemsOwn" :key="courier">
+            <div
+              v-for="(item, index) in items"
+              :key="index"
+              :class="{ 'drag-el': true, disabled: itemIsDropped(item) }"
+              @dragstart="startDrag($event, item)"
+              :draggable="!itemIsDropped(item)"
+            >
+              <div class="drag-connectors">
+                <img :src="item.img" alt="">
+                <h3>{{ courier }}</h3>
+              </div>
+            </div>
+          </div>
+          <button>O crea una conexion personalizada</button>
+        </div>
       </div>
-      
-      <div class="drop-area" @dragover.prevent @drop="onDrop">
-        <h2>Soltar acá</h2>
-        <div v-if="droppedItems.length">
-          <button class="btn-danger" @click="removeItems">Eliminar Seleccionados ({{ selectedCount }})</button>
-          <ag-grid-vue
-            class="ag-theme-alpine"
-            style="width: 100%; height: 400px;"
-            :columnDefs="columnDefs"
-            :rowData="droppedItems"
-            :defaultColDef="defaultColDef"
-            :rowSelection="rowSelection"
-            @grid-ready="onGridReady"
-            @selection-changed="onSelectionChanged"
-          ></ag-grid-vue>
+      <div class="drop-container">
+        <p class="connectors-text">Suelta aqui las conexiones seleccionadas.</p>
+        <div class="drop-area" @dragover.prevent @drop="onDrop">
+          <div v-if="droppedItems.length">
+            <div v-for="(item, index) in droppedItems" :key="index" class="dropped-item">
+              <div class="drag-connectors-items">
+                <div class="drop-items">
+                  <img :src="item.img" alt="">
+                  <h3>{{ item.courier }}</h3>
+                </div>
+                <button class="drop-items-delete" @click="removeItem(item)">X</button>
+              </div>
+            </div>
+          </div>
+          <div v-else-if="loading" class="loading">
+            <svg class="pl" width="240" height="240" viewBox="0 0 240 240">
+              <circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 660" stroke-dashoffset="-330" stroke-linecap="round"></circle>
+              <circle class="pl__ring pl__ring--b" cx="120" cy="120" r="35" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 220" stroke-dashoffset="-110" stroke-linecap="round"></circle>
+              <circle class="pl__ring pl__ring--c" cx="85" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+              <circle class="pl__ring pl__ring--d" cx="155" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+            </svg>
+          </div>
+          <p v-else>No items dropped</p>
         </div>
-        <div v-else-if="loading" class="loading">
-          <svg class="pl" width="240" height="240" viewBox="0 0 240 240">
-            <circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 660" stroke-dashoffset="-330" stroke-linecap="round"></circle>
-            <circle class="pl__ring pl__ring--b" cx="120" cy="120" r="35" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 220" stroke-dashoffset="-110" stroke-linecap="round"></circle>
-            <circle class="pl__ring pl__ring--c" cx="85" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
-            <circle class="pl__ring pl__ring--d" cx="155" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
-          </svg>
-        </div>
-        <p v-else>No items dropped</p>
       </div>
     </div>
   </div>
@@ -178,11 +148,12 @@ const navigateToHome = () => {
   </button>
 </template>
 
-
 <style scoped>
 .container {
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
 }
 h1{
   margin: 0;
@@ -198,6 +169,7 @@ h1{
 }
 .drag-section {
   display: flex;
+  align-items: self-start;
   gap: 3rem;
 }
 .drag-inside {
@@ -212,6 +184,25 @@ h1{
 .drag-inside h2 {
   font-weight: 600;
 }
+.drag-inside-own{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 1rem;
+  border: 2px solid gray;
+  border-radius: 25px;
+  min-height: 25rem;
+}
+
+.drag-inside-own button{
+  background-color: transparent;
+  border: 1px solid rgb(0,255,206);
+  border-radius: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 .drag-connectors{
   display: flex;
   align-items: center;
@@ -226,8 +217,40 @@ h1{
   font-size: 1rem;
 }
 .drag-connectors img{
-  width: 3rem;
+  width: 3.5rem;
+  height: 3.5rem;
 }
+.drag-connectors-items{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.drag-connectors-items h3{
+  font-weight: 500;
+  font-size: 0.9rem;
+  max-width: 200px;
+}
+.drag-connectors-own{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.drop-items-delete{
+  font-size: 1.5rem;
+  color: gray;
+  background-color: transparent;
+  border: 1px solid gray;
+  border-radius: 50%;
+  padding: 0.3rem 0.7rem;
+  cursor: pointer;
+  transition: all 250ms;
+}
+.drop-items-delete:hover{
+  color: white;
+  background-color: black;
+}
+
 .drag-el {
   margin-bottom: 10px;
   cursor: move;
@@ -238,11 +261,22 @@ h1{
   opacity: 0.5;
   cursor: not-allowed;
 }
+.connectors-text{
+  width: 20.5rem;
+  text-align: center;
+  align-self: center;
+}
 .drop-area {
   flex-grow: 1;
-  padding: 20px;
-  border: 2px dashed #ccc;
+  border: 2px dashed rgb(0,255,206);
   background-color: #fafafa;
+  border-radius: 15px;
+  min-height: 24.5rem;
+}
+.drop-items{
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
 }
 .btn-danger {
   background-color: red;
