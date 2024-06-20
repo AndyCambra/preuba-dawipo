@@ -4,12 +4,18 @@ import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 import BackResponse from '../../Connectors/Components/BackResponse.vue';
 
-const URL_BACK_INTEGRATIONS = 'http://localhost:3001/integrations';
+const URL_BACK_CONNECTORS = 'http://localhost:3001/connectors';
 
 const route = useRoute();
 const router = useRouter();
 
-const selectedItems = ref(route.query.droppedItems ? JSON.parse(route.query.droppedItems) : []);
+const selectedItems = ref([]);
+try {
+  selectedItems.value = JSON.parse(route.query.droppedItems) || [];
+} catch (e) {
+  console.error('Error parsing droppedItems:', e);
+}
+
 const userKeys = ref([]);
 const data = ref(null);
 const error = ref(null);
@@ -21,7 +27,7 @@ const sendData = async () => {
   }));
 
   try {
-    const response = await axios.put(`${URL_BACK_INTEGRATIONS}/update`, payload);
+    const response = await axios.put(`${URL_BACK_CONNECTORS}/update`, payload);
     console.log(response.data);
     data.value = response.data;
   } catch (err) {
@@ -32,17 +38,7 @@ const sendData = async () => {
 
 const getData = async () => {
   try {
-    const response = await axios.get(URL_BACK_INTEGRATIONS);
-    data.value = response.data;
-  } catch (err) {
-    error.value = err;
-    console.error(err);
-  }
-};
-
-const fetchAPIData = async (item) => {
-  try {
-    const response = await axios.post(`${URL_BACK_INTEGRATIONS}/fetchAPIData`, { name: item });
+    const response = await axios.get(URL_BACK_CONNECTORS);
     data.value = response.data;
   } catch (err) {
     error.value = err;
@@ -52,7 +48,7 @@ const fetchAPIData = async (item) => {
 
 const deleteData = async (item) => {
   try {
-    const response = await axios.delete(`${URL_BACK_INTEGRATIONS}/${item}`);
+    const response = await axios.delete(`${URL_BACK_CONNECTORS}/${item}`);
     data.value = response.data;
   } catch (err) {
     error.value = err;
@@ -67,7 +63,7 @@ const deleteItem = (index) => {
 const proceedToNextPage = () => {
   if (data.value) {
     router.push({
-      name: 'UserDashboard',
+      name: 'DashTest',
       query: {
         droppedItems: JSON.stringify(selectedItems.value),
         userKeys: JSON.stringify(userKeys.value),
@@ -83,7 +79,7 @@ const navigateToHome = () => {
 
 <template>
   <div class="container">
-    <h1>Your selected integrations</h1>
+    <h1>Your selected connectors</h1>
     <p>Add your customer number</p>
     <div v-if="selectedItems.length">
       <div class="integration-box" v-for="(item, index) in selectedItems" :key="index">
@@ -92,8 +88,7 @@ const navigateToHome = () => {
           <br>
           <input type="text" v-model="userKeys[index]" placeholder="api key" />
           <button @click="deleteItem(index)">Delete Item</button>     
-          <button @click="deleteData(item)">Delete DB Instance</button>     
-          <button @click="fetchAPIData(item)">Get API Response</button>                    
+          <button @click="deleteData(item)">Delete DB Instance</button>                                
         </div>
       </div>
       <br>

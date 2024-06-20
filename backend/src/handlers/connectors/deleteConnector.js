@@ -1,13 +1,13 @@
-const { _deleteIntegration } = require("../../controllers");
+const { _deleteConnector } = require("../../controllers");
 
-const deleteIntegration = async (req, res) => {
+const deleteConnector = async (req, res) => {
   const { name } = req.params;  
 
   try {
-    await _deleteIntegration(name);
+    await _deleteConnector(name);
 
     res.status(200).json({
-      message: "The integration instance was deleted successfully",
+      message: "The connector was deleted successfully",
     });
   } 
   catch (error) {
@@ -19,5 +19,5 @@ const deleteIntegration = async (req, res) => {
 };
 
 module.exports = { 
-  deleteIntegration,
+  deleteConnector,
 };
