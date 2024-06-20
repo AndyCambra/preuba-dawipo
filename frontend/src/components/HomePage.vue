@@ -3,19 +3,19 @@ import { ref, onMounted } from "vue";
 import axios from "axios";
 import { useRouter } from 'vue-router';
 
-const URL_BACK_INTEGRATIONS = "http://localhost:3001/integrations";
+const URL_BACK_CONNECTORS = "http://localhost:3001/connectors";
 
-const integrations = ref([]);
+const connectors = ref([]);
 const droppedItems = ref([]);
 const availableItems = ref([]);
 const router = useRouter();
 
 const getData = async () => {
   try {
-    const response = await axios.get(URL_BACK_INTEGRATIONS);
+    const response = await axios.get(URL_BACK_CONNECTORS);
     const data = await response.data;
-    integrations.value = data.integration.map(item => item.name);
-    availableItems.value = data.integration.map(item => item.name);
+    connectors.value = data.connectors.map(item => item.name);
+    availableItems.value = data.connectors.map(item => item.name);
   } catch (err) {
     console.error(err);
   }
@@ -36,14 +36,18 @@ const handleDrop = (api) => {
 };
 
 const proceedToNextPage = () => {
-  router.push({
-    name: "SelectedItemsPage",
-    query: { droppedItems: droppedItems.value },
-  });
+  if (droppedItems.value.length > 0) {
+    router.push({
+      name: "SelectedItemsPage",
+      query: { droppedItems: JSON.stringify(droppedItems.value) },
+    });
+  } else {
+    console.warn("No items dropped");
+  }
 };
 
-const navigateToSettingIntegrations = () => {
-  router.push('/setting-integrations');
+const navigateToSettingconnectors = () => {
+  router.push('/setting-connectors');
 };
 
 const navigateToDashPrueba = () => {
@@ -61,11 +65,11 @@ onMounted(() => {
 
 <template>
   <div class="container">
-    <h1>Choose the integrations you want to work with</h1>
+    <h1>Choose the connectors you want to work with</h1>
     <p>Select and drag the items to the drop zone.</p>
     <div><button @click="navigateToDashPrueba">Go to "dash-prueba"</button></div>
     <div><button @click="navigateToDashTest">Go to "dash-test"</button></div>
-    <div><button @click="navigateToSettingIntegrations">Setting Integrations</button></div>
+    <div><button @click="navigateToSettingconnectors">Setting connectors</button></div>
     <div class="drag-section">
       <div class="drag-container">
         <div
