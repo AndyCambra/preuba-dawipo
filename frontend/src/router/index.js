@@ -1,9 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomePage from "../components/HomePage.vue";
 import SelectedItemsPage from "../components/SelectedItemsPage.vue";
-import SettingServicesPage from "../components/SettingServicesPage.vue";
-import Dashboard from "../components/UserDashboard.vue";
+import SettingIntegrationsPage from "../components/SettingIntegrationsPage.vue";
 import DashPrueba from "../components/DashPrueba.vue"
+import DashTest from "../components/DashTest.vue"
+import RegisterPage from "../components/RegisterPage.vue"
+import LoginPage from "../components/LoginPage.vue"
 
 const routes = [
   {
@@ -17,13 +19,14 @@ const routes = [
     component: SelectedItemsPage,
   },
   {
-    path: "/setting-services",
-    name: "SettingServicesPage",
-    component: SettingServicesPage,
+    path: "/setting-integrations",
+    name: "SettingIntegrationsPage",
+    component: SettingIntegrationsPage,
   },
-  { path: "/dashboard", name: "UserDashboard", component: Dashboard },
   { path: "/dash-prueba", name: "DashPrueba", component: DashPrueba },
-  // Puedes añadir más rutas aquí
+  { path: "/dash-test", name: "DashTest", component: DashTest },
+  { path: "/login", name: "LoginPage", component: LoginPage },
+  { path: "/register", name: "RegisterPage", component: RegisterPage },  
 ];
 
 const router = createRouter({

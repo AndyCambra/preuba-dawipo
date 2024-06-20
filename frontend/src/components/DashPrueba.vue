@@ -1,3 +1,97 @@
+<script setup>
+import { ref, computed } from 'vue';
+import { AgGridVue } from 'ag-grid-vue3';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
+
+const droppedItems = ref([]); // Array to store dropped items
+const loading = ref(false);
+const selectedItems = ref([]);
+const router = useRouter();
+
+const dataModel = ref([
+  { name: "Neumaticos", courier: "DHL" },
+  { name: "Remeras", courier: "DHL" }
+]);
+const columnDefs = [
+  { field: "Seleccionar", maxWidth: 140, checkboxSelection: true, headerCheckboxSelection: true },
+  { headerName: "Transportista", field: "courier", sortable: true, filter: true },
+  { headerName: "Nombre", field: "name", sortable: true, filter: true },
+  { headerName: "País de origen", field: "originCountry", sortable: true, filter: true },
+  { headerName: "País de destino", field: "finalCountry", sortable: true, filter: true },
+  { headerName: "Fecha de salida", field: "departureDate", sortable: true, filter: true },
+  { headerName: "Fecha de llegada", field: "arrivalDate", sortable: true, filter: true },
+  { headerName: "Estado", field: "status", sortable: true, filter: true },
+  { headerName: "Proveedor", field: "provider", sortable: true, filter: true },
+];
+const defaultColDef = {
+  flex: 1,
+  minWidth: 100,
+  resizable: true
+};
+
+
+const groupedItems = computed(() => {
+  return dataModel.value.reduce((groups, item) => {
+    const group = groups[item.courier] || [];
+    group.push(item);
+    groups[item.courier] = group;
+    return groups;
+  }, {});
+});
+
+const selectedCount = computed(() => {
+  return selectedItems.value.length;
+});
+
+const startDrag = (event, item) => {
+  event.dataTransfer.setData("text/plain", JSON.stringify(item));
+};
+
+const onDrop = (event) => {
+  event.preventDefault();
+  const item = JSON.parse(event.dataTransfer.getData("text/plain"));
+  handleDrop(item);
+};
+
+const handleDrop = async (item) => {
+  loading.value = true;
+  try {
+    const response = await axios.get(`http://localhost:3001/products/${item.name}`);
+    droppedItems.value.push({ ...item, ...response.data });
+    droppedItems.value = droppedItems.value.slice();
+  } catch (error) {
+    console.error('Error al realizar la solicitud HTTP:', error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const itemIsDropped = (item) => {
+  return droppedItems.value.some(droppedItem => droppedItem.name === item.name && droppedItem.courier === item.courier);
+};
+
+const removeItems = () => {
+  droppedItems.value = droppedItems.value.filter(item => !selectedItems.value.includes(item));
+  selectedItems.value = [];
+};
+
+const onSelectionChanged = (event) => {
+  selectedItems.value = event.api.getSelectedRows();
+};
+
+const rowSelection = ref('multiple');
+const gridApi = ref(null);
+
+const onGridReady = (params) => {
+  gridApi.value = params.api;
+};
+
+const navigateToHome = () => {
+  router.push('/');
+};
+</script>
+
 <template>
   <div class="container">
     <h1>Dashboard</h1>
@@ -44,131 +138,13 @@
       </div>
     </div>
   </div>
+  <button @click="navigateToHome">
+      Go to Home
+  </button>
 </template>
 
-<script>
-import { defineComponent, ref } from 'vue';
-import { AgGridVue } from 'ag-grid-vue3';
-import axios from 'axios';
-
-
-export default defineComponent({
-  name: 'DashPrueba',
-  components: {
-    AgGridVue,
-  },
-  data() {
-    return {
-      droppedItems: [], // Array to store dropped items
-      loading: false, // Variable to track loading state
-      dataModel: [
-        {
-          name: "Neumaticos",
-          courier: "DHL"
-        },
-        {
-          name: "Remeras",
-          courier: "DHL"
-        },
-        {
-          name: "Computadoras",
-          courier: "UPS"
-        },
-        {
-          name: "Celulares",
-          courier: "UPS"
-        },
-      ],
-      columnDefs: [
-        { field: "Seleccionar", maxWidth: 140, checkboxSelection: true, headerCheckboxSelection: true },
-        { headerName: "Transportista", field: "courier", sortable: true, filter: true },
-        { headerName: "Nombre", field: "name", sortable: true, filter: true },
-        { headerName: "País de origen", field: "originCountry", sortable: true, filter: true },
-        { headerName: "País de destino", field: "finalCountry", sortable: true, filter: true },
-        { headerName: "Fecha de salida", field: "departureDate", sortable: true, filter: true },
-        { headerName: "Fecha de llegada", field: "arrivalDate", sortable: true, filter: true },
-        { headerName: "Estado", field: "status", sortable: true, filter: true },
-        { headerName: "Proveedor", field: "provider", sortable: true, filter: true },
-      ],
-      defaultColDef: {
-        flex: 1,
-        minWidth: 100,
-        resizable: true
-      },
-      selectedItems: []
-    };
-  },
-  computed: {
-    groupedItems() {
-      return this.dataModel.reduce((groups, item) => {
-        const group = groups[item.courier] || [];
-        group.push(item);
-        groups[item.courier] = group;
-        return groups;
-      }, {});
-    },
-    selectedCount() {
-      return this.selectedItems.length;
-    }
-  },
-  methods: {
-    startDrag(event, item) {
-      // Iniciar el arrastre y pasar el objeto del item
-      event.dataTransfer.setData("text/plain", JSON.stringify(item));
-    },
-    onDrop(event) {
-      event.preventDefault();
-      const item = JSON.parse(event.dataTransfer.getData("text/plain"));
-      this.handleDrop(item);
-    },
-    async handleDrop(item) {
-      this.loading = true; // Start loading
-      try {
-        const response = await axios.get(`http://localhost:3001/products/${item.name}`);
-      
-      // Agregar el ítem soltado a droppedItems
-        this.droppedItems.push({ ...item, ...response.data });
-
-        // Usar Vue.set para que Vue detecte los cambios correctamente
-        this.droppedItems = this.droppedItems.slice();
-      } catch (error) {
-        console.error('Error al realizar la solicitud HTTP:', error);
-      } finally {
-        this.loading = false; // End loading
-      }
-    },
-    itemIsDropped(item) {
-      // Verificar si el ítem ya está en droppedItems
-      return this.droppedItems.some(droppedItem => droppedItem.name === item.name && droppedItem.courier === item.courier);
-    },
-    removeItems() {
-      // Eliminar las filas seleccionadas de droppedItems
-      this.droppedItems = this.droppedItems.filter(item => !this.selectedItems.includes(item));
-      this.selectedItems = []; // Limpiar la selección después de eliminar
-    },
-    onSelectionChanged(event) {
-      this.selectedItems = event.api.getSelectedRows();
-    }
-  },
-  setup() {
-    const rowSelection = ref('multiple');
-    const gridApi = ref(null);
-
-    const onGridReady = (params) => {
-      gridApi.value = params.api;
-    };
-
-    return {
-      gridApi,
-      onGridReady,
-      rowSelection
-    };
-  }
-});
-</script>
 
 <style>
-/* Puedes añadir estilos personalizados aquí */
 .container {
   padding: 20px;
 }
@@ -209,215 +185,5 @@ export default defineComponent({
 }
 .btn-danger:hover {
   background-color: darkred;
-}
-
-.loading{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.pl {
-  width: 6em;
-  height: 6em;
-}
-
-.pl__ring {
-  animation: ringA 2s linear infinite;
-}
-
-.pl__ring--a {
-  stroke: #f42f25;
-}
-
-.pl__ring--b {
-  animation-name: ringB;
-  stroke: #f49725;
-}
-
-.pl__ring--c {
-  animation-name: ringC;
-  stroke: #255ff4;
-}
-
-.pl__ring--d {
-  animation-name: ringD;
-  stroke: #f42582;
-}
-
-/* Animations */
-@keyframes ringA {
-  from, 4% {
-    stroke-dasharray: 0 660;
-    stroke-width: 20;
-    stroke-dashoffset: -330;
-  }
-
-  12% {
-    stroke-dasharray: 60 600;
-    stroke-width: 30;
-    stroke-dashoffset: -335;
-  }
-
-  32% {
-    stroke-dasharray: 60 600;
-    stroke-width: 30;
-    stroke-dashoffset: -595;
-  }
-
-  40%, 54% {
-    stroke-dasharray: 0 660;
-    stroke-width: 20;
-    stroke-dashoffset: -660;
-  }
-
-  62% {
-    stroke-dasharray: 60 600;
-    stroke-width: 30;
-    stroke-dashoffset: -665;
-  }
-
-  82% {
-    stroke-dasharray: 60 600;
-    stroke-width: 30;
-    stroke-dashoffset: -925;
-  }
-
-  90%, to {
-    stroke-dasharray: 0 660;
-    stroke-width: 20;
-    stroke-dashoffset: -990;
-  }
-}
-
-@keyframes ringB {
-  from, 12% {
-    stroke-dasharray: 0 220;
-    stroke-width: 20;
-    stroke-dashoffset: -110;
-  }
-
-  20% {
-    stroke-dasharray: 20 200;
-    stroke-width: 30;
-    stroke-dashoffset: -115;
-  }
-
-  40% {
-    stroke-dasharray: 20 200;
-    stroke-width: 30;
-    stroke-dashoffset: -195;
-  }
-
-  48%, 62% {
-    stroke-dasharray: 0 220;
-    stroke-width: 20;
-    stroke-dashoffset: -220;
-  }
-
-  70% {
-    stroke-dasharray: 20 200;
-    stroke-width: 30;
-    stroke-dashoffset: -225;
-  }
-
-  90% {
-    stroke-dasharray: 20 200;
-    stroke-width: 30;
-    stroke-dashoffset: -305;
-  }
-
-  98%, to {
-    stroke-dasharray: 0 220;
-    stroke-width: 20;
-    stroke-dashoffset: -330;
-  }
-}
-
-@keyframes ringC {
-  from {
-    stroke-dasharray: 0 440;
-    stroke-width: 20;
-    stroke-dashoffset: 0;
-  }
-
-  8% {
-    stroke-dasharray: 40 400;
-    stroke-width: 30;
-    stroke-dashoffset: -5;
-  }
-
-  28% {
-    stroke-dasharray: 40 400;
-    stroke-width: 30;
-    stroke-dashoffset: -175;
-  }
-
-  36%, 58% {
-    stroke-dasharray: 0 440;
-    stroke-width: 20;
-    stroke-dashoffset: -220;
-  }
-
-  66% {
-    stroke-dasharray: 40 400;
-    stroke-width: 30;
-    stroke-dashoffset: -225;
-  }
-
-  86% {
-    stroke-dasharray: 40 400;
-    stroke-width: 30;
-    stroke-dashoffset: -395;
-  }
-
-  94%, to {
-    stroke-dasharray: 0 440;
-    stroke-width: 20;
-    stroke-dashoffset: -440;
-  }
-}
-
-@keyframes ringD {
-  from, 8% {
-    stroke-dasharray: 0 440;
-    stroke-width: 20;
-    stroke-dashoffset: 0;
-  }
-
-  16% {
-    stroke-dasharray: 40 400;
-    stroke-width: 30;
-    stroke-dashoffset: -5;
-  }
-
-  36% {
-    stroke-dasharray: 40 400;
-    stroke-width: 30;
-    stroke-dashoffset: -175;
-  }
-
-  44%, 50% {
-    stroke-dasharray: 0 440;
-    stroke-width: 20;
-    stroke-dashoffset: -220;
-  }
-
-  58% {
-    stroke-dasharray: 40 400;
-    stroke-width: 30;
-    stroke-dashoffset: -225;
-  }
-
-  78% {
-    stroke-dasharray: 40 400;
-    stroke-width: 30;
-    stroke-dashoffset: -395;
-  }
-
-  86%, to {
-    stroke-dasharray: 0 440;
-    stroke-width: 20;
-    stroke-dashoffset: -440;
-  }
 }
 </style>

@@ -1,34 +1,34 @@
+const axios = require("axios");
 const { _postProduct } = require("../../controllers");
 
 const postProduct = async (req, res) => {
-  const products = Array.isArray(req.body) ? req.body : [req.body];  
+  const products = Array.isArray(req.body) ? req.body : [req.body];
 
   try {
     const newProducts = [];
 
     for (const product of products) {
-      const { 
-        name, 
-        originCountry, 
-        finalCountry, 
-        departureDate, 
-        arrivalDate, 
-        status, 
-        provider, 
-        courier 
-      } = product;   
+      console.log("Product:", product);
+
+      const response = await axios.post(
+        "http://localhost:5000/add_product",
+        product
+      );
+      const transformedProduct = response.data;
+
+      console.log("Transformed Product:", transformedProduct);
       
-      const newProduct = await _postProduct(
-        {
-          name,
-          originCountry, 
-          finalCountry, 
-          departureDate, 
-          arrivalDate, 
-          status, 
-          provider, 
-          courier 
-        });      
+      const newProduct = await _postProduct({
+        name: transformedProduct.name,
+        originCountry: transformedProduct.originCountry,
+        finalCountry: transformedProduct.finalCountry,
+        departureDate: transformedProduct.departureDate,
+        arrivalDate: transformedProduct.arrivalDate,
+        status: transformedProduct.status,
+        provider: transformedProduct.provider,
+        courier: transformedProduct.courier,
+      });
+
       newProducts.push(newProduct);
     }
 
