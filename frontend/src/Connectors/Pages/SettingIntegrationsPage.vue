@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router';
 import axios from 'axios';
 import BackResponse from '../../Connectors/Components/BackResponse.vue';
 
-const URL_BACK_INTEGRATIONS = 'http://localhost:3001/integrations';
+const URL_BACK_CONNECTORS = 'http://localhost:3001/connectors';
 
 const name = ref('');
 const apiUrl = ref('');
@@ -15,7 +15,7 @@ const router = useRouter();
 const sendData = async () => {
   const payload = { name: name.value, apiUrl: apiUrl.value };
   try {
-    const response = await axios.post(URL_BACK_INTEGRATIONS, payload);
+    const response = await axios.post(URL_BACK_CONNECTORS, payload);
     data.value = response.data;
   } catch (err) {
     error.value = err;
@@ -25,7 +25,7 @@ const sendData = async () => {
 
 const getData = async () => {
   try {
-    const response = await axios.get(URL_BACK_INTEGRATIONS);
+    const response = await axios.get(URL_BACK_CONNECTORS);
     data.value = response.data;
   } catch (err) {
     error.value = err;
@@ -33,19 +33,10 @@ const getData = async () => {
   }
 };
 
-/* const fetchAPIData = async (item) => {
-  try {
-    const response = await axios.post(`${URL_BACK_INTEGRATIONS}/fetchAPIData`, { name: item });
-    data.value = response.data;
-  } catch (err) {
-    error.value = err;
-    console.error(err);
-  }
-};
-
+/*
 const deleteData = async (item) => {
   try {
-    const response = await axios.delete(`${URL_BACK_INTEGRATIONS}/${item.name}`);
+    const response = await axios.delete(`${URL_BACK_CONNECTORS}/${item.name}`);
     data.value = response.data;
   } catch (err) {
     error.value = err;
@@ -57,13 +48,14 @@ const deleteData = async (item) => {
   selectedItems.value.splice(index, 1);
 };
  */
+
 const navigateToHome = () => {
   router.push('/');
 };
 </script>
 <template>
   <div class="container">
-    <h1>Add your Integration</h1>    
+    <h1>Add your Connector</h1>    
     <div>
       <input type="text" v-model="name" placeholder="Name" />
       <input type="text" v-model="apiUrl" placeholder="API url" />
