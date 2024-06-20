@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomePage from "../components/HomePage.vue";
-import SelectedItemsPage from "../components/SelectedItemsPage.vue";
-import SettingIntegrationsPage from "../components/SettingIntegrationsPage.vue";
-import DashPrueba from "../components/DashPrueba.vue"
-import DashTest from "../components/DashTest.vue"
+import SelectedItemsPage from "../Connectors/Pages/SelectedItemsPage.vue";
+import SettingIntegrationsPage from "../Connectors/Pages/SettingIntegrationsPage.vue";
+import DashPrueba from "../Dashboard/Pages/DashPrueba.vue"
+import DashTest from "../Dashboard/Pages/DashTest.vue"
 import RegisterPage from "../components/RegisterPage.vue"
 import LoginPage from "../components/LoginPage.vue"
 

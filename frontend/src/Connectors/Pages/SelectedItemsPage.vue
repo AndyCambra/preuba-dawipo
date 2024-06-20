@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
-import BackResponse from './Componentes de prueba/BackResponse.vue';
+import BackResponse from '../../Connectors/Components/BackResponse.vue';
 
 const URL_BACK_INTEGRATIONS = 'http://localhost:3001/integrations';
 
