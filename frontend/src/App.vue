@@ -1,9 +1,11 @@
 <script setup>
 import { user, isAuthenticated, logout } from './utils/auth';
-import { onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { onMounted, computed } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import Logo from '../public/Logo de Kontroll.png'
 
 const router = useRouter();
+const route = useRoute();
 
 onMounted(() => {
   checkAuth();
@@ -19,26 +21,48 @@ const handleLogout = () => {
   logout();
   router.push('/login');
 };
+const handleDashboard = () => {
+  router.push('/dash-prueba');
+};
+const handleHome = () => {
+  router.push('/');
+};
 
+// Computed property to check if the current route is /dash-prueba
+const isDashPruebaRoute = computed(() => route.path === '/dash-prueba');
 </script>
 
 <template>
   <div id="app">
     <header v-if="isAuthenticated">
       <nav>
-        <span>Welcome, {{ user.name }}</span>
-        <button @click="handleLogout">Logout</button>
+        <img 
+          :src="Logo" 
+          alt="Kontroll"
+          @click="handleHome"
+        >
+        <div class="btns-header">
+          <button 
+            v-if="!isDashPruebaRoute" 
+            class="btn-dashboard" 
+            @click="handleDashboard">
+            Dashboard
+          </button>
+          <button class="btn-logout" @click="handleLogout">Logout</button>
+        </div>
       </nav>
     </header>
     <router-view></router-view>
   </div>
 </template>
 
-<style>
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 header {
-  background-color: #333;
+  background-color: black;
   color: white;
-  padding: 10px 20px;
+  font-family: "Montserrat", sans-serif;
+  padding: 1.5rem;
 }
 
 nav {
@@ -51,18 +75,43 @@ nav span {
   font-weight: bold;
 }
 
-nav button {
-  background-color: #dc3545;
-  color: white;
-  border: none;
+.btn-dashboard {
+  background-color: rgb(0,255,206);
+  border: 1px solid rgb(0,255,206);
+  color: black;
   padding: 8px 16px;
   border-radius: 4px;
   cursor: pointer;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  transition: all 250ms;
 }
 
-nav button:hover {
-  background-color: #c82333;
+.btn-dashboard:hover {
+  background-color: transparent;
+  border: 1px solid rgb(0,255,206);
+  color: white;
+}
+.btn-logout{
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 1.2rem;
+  color: white;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 250ms;
+}
+.btn-logout:hover{
+  color: rgb(0,255,206);
+}
+.btns-header{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+img{
+  cursor: pointer;
 }
 </style>
-
-
