@@ -1,43 +1,14 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { user } from '../../utils/auth'
-import DHL from '../../../public/DHL.png'
-import Maersk from '../../../public/Maersk.png'
-import MSC from '../../../public/MSC.png'
-import Otra from '../../../public/Otra.png'
+import MyConnections from '../Components/MyConnections.vue'
+import MyOwnConnections from '../Components/MyOwnConnections.vue'
+
 
 const droppedItems = ref([]); // Array to store dropped items
 const loading = ref(false);
 const router = useRouter();
-
-const dataModel = ref([
-  { img: DHL, courier: "DHL Global Fowarding"},
-  { img: Maersk, courier: "Maersk" },
-  { img: MSC, courier: "Mediterranean Shipping Company"},
-]);
-
-const dataModelOwn = ref([
-  { img: Otra, courier: "Otra" }
-]);
-
-const groupedItems = computed(() => {
-  return dataModel.value.reduce((groups, item) => {
-    const group = groups[item.courier] || [];
-    group.push(item);
-    groups[item.courier] = group;
-    return groups;
-  }, {});
-});
-
-const groupedItemsOwn = computed(() => {
-  return dataModelOwn.value.reduce((groups, item) => {
-    const group = groups[item.courier] || [];
-    group.push(item);
-    groups[item.courier] = group;
-    return groups;
-  }, {});
-});
 
 const startDrag = (event, item) => {
   event.dataTransfer.setData("text/plain", JSON.stringify(item));
@@ -77,45 +48,8 @@ const navigateToHome = () => {
       <p>Gestionemos tus conectores.</p>
     </div>
     <div class="drag-section">
-      <div>
-        <h2>Mis Conexiones</h2>
-        <div class="drag-inside">
-          <div class="drag-container" v-for="(items, courier) in groupedItems" :key="courier">
-            <div
-              v-for="(item, index) in items"
-              :key="index"
-              :class="{ 'drag-el': true, disabled: itemIsDropped(item) }"
-              @dragstart="startDrag($event, item)"
-              :draggable="!itemIsDropped(item)"
-            >
-              <div class="drag-connectors">
-                <img :src="item.img" alt="">
-                <h3>{{ courier }}</h3>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="drag-connectors-own">
-        <p class="connectors-text">Elegi entre estas conexiones y arrastralas a la zona punteada</p>
-        <div class="drag-inside-own">
-          <div class="drag-container" v-for="(items, courier) in groupedItemsOwn" :key="courier">
-            <div
-              v-for="(item, index) in items"
-              :key="index"
-              :class="{ 'drag-el': true, disabled: itemIsDropped(item) }"
-              @dragstart="startDrag($event, item)"
-              :draggable="!itemIsDropped(item)"
-            >
-              <div class="drag-connectors">
-                <img :src="item.img" alt="">
-                <h3>{{ courier }}</h3>
-              </div>
-            </div>
-          </div>
-          <button>O crea una conexion personalizada</button>
-        </div>
-      </div>
+      <MyConnections :itemIsDropped="itemIsDropped" :startDrag="startDrag" />
+      <MyOwnConnections :itemIsDropped="itemIsDropped" :startDrag="startDrag" />
       <div class="drop-container">
         <p class="connectors-text">Suelta aqui las conexiones seleccionadas.</p>
         <div class="drop-area" @dragover.prevent @drop="onDrop">
@@ -130,18 +64,11 @@ const navigateToHome = () => {
               </div>
             </div>
           </div>
-          <div v-else-if="loading" class="loading">
-            <svg class="pl" width="240" height="240" viewBox="0 0 240 240">
-              <circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 660" stroke-dashoffset="-330" stroke-linecap="round"></circle>
-              <circle class="pl__ring pl__ring--b" cx="120" cy="120" r="35" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 220" stroke-dashoffset="-110" stroke-linecap="round"></circle>
-              <circle class="pl__ring pl__ring--c" cx="85" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
-              <circle class="pl__ring pl__ring--d" cx="155" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
-            </svg>
-          </div>
           <p v-else>No items dropped</p>
         </div>
       </div>
     </div>
+    <button class="btn-continuar" v-if="droppedItems.length">Continuar</button>
   </div>
   <button @click="navigateToHome">
       Go to Home
@@ -184,24 +111,7 @@ h1{
 .drag-inside h2 {
   font-weight: 600;
 }
-.drag-inside-own{
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  padding: 1rem;
-  border: 2px solid gray;
-  border-radius: 25px;
-  min-height: 25rem;
-}
 
-.drag-inside-own button{
-  background-color: transparent;
-  border: 1px solid rgb(0,255,206);
-  border-radius: 15px;
-  font-weight: 600;
-  cursor: pointer;
-}
 
 .drag-connectors{
   display: flex;
@@ -229,11 +139,6 @@ h1{
   font-weight: 500;
   font-size: 0.9rem;
   max-width: 200px;
-}
-.drag-connectors-own{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .drop-items-delete{
@@ -278,15 +183,17 @@ h1{
   gap: 0.5rem;
   align-items: center;
 }
-.btn-danger {
-  background-color: red;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  margin-top: 10px;
+.btn-continuar{
+  background-color: rgb(0,255,206);
+  border: 1px solid rgb(0,255,206);
+  color: black;
+  padding: 8px 16px;
+  border-radius: 4px;
   cursor: pointer;
+  font-weight: 700;
+  font-size: 1.2rem;
+  transition: all 250ms;
+  margin-top: 1rem;
 }
-.btn-danger:hover {
-  background-color: darkred;
-}
+
 </style>
