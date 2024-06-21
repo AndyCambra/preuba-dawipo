@@ -8,6 +8,10 @@ Primero, asegúrate de tener Python 3.8 o superior instalado. Luego, clona el re
 python -m venv venv
 ```
 
+```sh
+cd ia
+```
+
 # Activar entorno virtual
 
 ```sh
@@ -21,7 +25,21 @@ venv\Scripts\activate     # En Windows
 pip install -r requirements.txt
 ```
 
+```sh
+pip install spacy
+python -m spacy download en_core_web_sm
+```
+
 ## Ejecutar scripts
+
+Ejecutar estos comandos en la raíz del proyecto:
+
+### Ejecutar en entorno virtual
+
+```sh
+source ia/venv/bin/activate  # En Linux/Mac
+ia\venv\Scripts\activate     # En Windows
+```
 
 ### Entrenamiento del modelo
 
