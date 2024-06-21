@@ -39,9 +39,10 @@ const register = async () => {
 </script>
 
 <template>
-  <div class="container">
-    <h1>User Registration</h1>
+  <div class="page-container">
+
     <form @submit.prevent="register" class="form">
+      <h1>User Registration</h1>
       <div class="form-group">
         <label for="name">Name:</label>
         <input type="text" v-model="name" required />
@@ -64,26 +65,31 @@ const register = async () => {
 </template>
 
 <style scoped>
-.container {
-  max-width: 400px;
-  margin: 50px auto;
+.page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh; /* Asegura que el contenedor ocupe al menos toda la altura visible */
+  background-color: black; /* Establece el fondo negro */
+  color: #fff; /* Establece el color de texto blanco para toda la página */
   padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
 }
-
 h1 {
   text-align: center;
   margin-bottom: 20px;
 }
-
 .form {
-  display: flex;
-  flex-direction: column;
+  max-width: 400px;
+  width: 100%;
+  padding: 20px;
+  border: 2px solid transparent;
+  border-radius: 20px;
+  box-sizing: border-box;
+  background-image: linear-gradient(black, black), linear-gradient(to right, #00FFCE, transparent);
+  background-origin: border-box;
+  background-clip: padding-box,border-box;
 }
-
 .form-group {
   margin-bottom: 15px;
 }
@@ -100,6 +106,8 @@ input {
   box-sizing: border-box;
   border: 1px solid #ccc;
   border-radius: 4px;
+  color: #fff; /* Cambia el color del texto de los inputs a blanco */
+  background-color: #333; /* Fondo más oscuro para los inputs */
 }
 
 .btn {
@@ -117,3 +125,5 @@ input {
   background-color: #218838;
 }
 </style>
+
+
