@@ -10,14 +10,21 @@ const postProduct = async (req, res) => {
     for (const product of products) {
       console.log("Product:", product);
 
-      const response = await axios.post(
-        "http://localhost:5000/add_product",
-        product
-      );
-      const transformedProduct = response.data;
+      let transformedProduct;
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/add_product",
+          product
+        );
+        transformedProduct = response.data;
+        console.log("Transformed Product:", transformedProduct);
+      } catch (flaskError) {
+        console.error(
+          "Flask server is not available, using original product data."
+        );
+        transformedProduct = product; // Use the original product if Flask server is not available
+      }
 
-      console.log("Transformed Product:", transformedProduct);
-      
       const newProduct = await _postProduct({
         name: transformedProduct.name,
         originCountry: transformedProduct.originCountry,
