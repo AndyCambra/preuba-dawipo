@@ -1,8 +1,11 @@
 <script setup>
 import { ref, defineProps, computed } from 'vue'
+import { useRouter } from 'vue-router';
 import Otra from '../../../public/Otra.png'
 
+const route = useRouter()
 const props = defineProps(['itemIsDropped', 'startDrag'])
+
 const dataModelOwn = ref([
   { img: Otra, courier: "Otra", name: "Otra"}
 ]);
@@ -15,6 +18,11 @@ const groupedItemsOwn = computed(() => {
     return groups;
   }, {});
 });
+
+const navigateToCreateConnector = () =>{
+  route.push('/create-connector')
+}
+
 </script>
 
 <template>
@@ -35,7 +43,7 @@ const groupedItemsOwn = computed(() => {
           </div>
         </div>
       </div>
-      <button>O crea una conexion personalizada</button>
+      <button @click="navigateToCreateConnector">O crea una conexion personalizada</button>
     </div>
   </div>
 </template>

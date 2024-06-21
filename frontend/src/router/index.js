@@ -7,6 +7,8 @@ import DashTest from "../Dashboard/Pages/DashTest.vue"
 import RegisterPage from "../components/RegisterPage.vue"
 import LoginPage from "../components/LoginPage.vue"
 import ManageConnectors from "@/Connectors/Pages/ManageConnectors.vue";
+import CreateConnector from "@/Connectors/Pages/CreateConnector.vue";
+
 
 const routes = [
   {
@@ -29,6 +31,7 @@ const routes = [
   { path: "/login", name: "LoginPage", component: LoginPage },
   { path: "/register", name: "RegisterPage", component: RegisterPage },  
   { path: "/manage-connectors", name: "ManageConnectors", component: ManageConnectors },  
+  { path: "/create-connector", name: "CreateConnector", component: CreateConnector },  
 ];
 
 const router = createRouter({
