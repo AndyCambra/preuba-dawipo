@@ -1,15 +1,15 @@
 const { Product } = require("../../db");
 
-const _putProduct = async (name, updateData) => {  
+const _putProduct = async (name, updateData) => {
   const findProduct = await Product.findOne({ where: { name } });
-  const {     
-    originCountry, 
-    finalCountry, 
-    departureDate, 
-    arrivalDate, 
-    status, 
-    provider, 
-    courier 
+  const {
+    originCountry,
+    finalCountry,
+    departureDate,
+    arrivalDate,
+    status,
+    provider,
+    courier,
   } = updateData;
 
   if (!findProduct) {

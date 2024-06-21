@@ -2,7 +2,7 @@ const { _getConnectorByName } = require("../../controllers");
 
 const getConnectorByName = async (req, res) => {
   const { name } = req.params;
-  
+
   try {
     const connector = await _getConnectorByName(name);
     if (!connector) {

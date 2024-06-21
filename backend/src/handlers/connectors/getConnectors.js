@@ -1,7 +1,6 @@
 const { _getConnectors } = require("../../controllers");
 
-const getConnectors = async (req, res) => {  
-
+const getConnectors = async (req, res) => {
   try {
     const allConnectors = await _getConnectors();
 
@@ -9,15 +8,14 @@ const getConnectors = async (req, res) => {
       message: "The connectors were obtained successfully",
       connectors: allConnectors,
     });
-  } 
-  catch (error) {
+  } catch (error) {
     res.status(400).json({
-      error: true,      
-      message: error.message || 'Unknown error',
+      error: true,
+      message: error.message || "Unknown error",
     });
   }
 };
 
-module.exports = { 
+module.exports = {
   getConnectors,
 };

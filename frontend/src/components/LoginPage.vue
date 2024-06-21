@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
-import { setUser } from '../utils/auth';
+import { setUser } from "../utils/auth";
 
 const email = ref("");
 const password = ref("");
@@ -16,23 +16,23 @@ const login = async () => {
     });
     console.log(response.data);
     window.alert(`Login successful: ${response.data.message}`);
-    
+
     setUser(response.data.user);
-    
+
     router.push("/dash-test");
   } catch (error) {
     console.error(error);
     if (error.response) {
       if (error.response.data.errors) {
         const errors = error.response.data.errors;
-        errors.forEach(err => {
+        errors.forEach((err) => {
           window.alert(`Error in ${err.path}: ${err.msg}`);
         });
       } else if (error.response.data.error) {
         window.alert(`Error: ${error.response.data.message}`);
       }
     } else {
-      window.alert('Error: An unexpected error occurred');
+      window.alert("Error: An unexpected error occurred");
     }
   }
 };
@@ -51,7 +51,10 @@ const login = async () => {
         <input type="password" v-model="password" required />
       </div>
       <button type="submit" class="btn">Login</button>
-      <p>Don't have an account? <router-link to="/register">Register</router-link></p>
+      <p>
+        Don't have an account?
+        <router-link to="/register">Register</router-link>
+      </p>
     </form>
   </div>
 </template>

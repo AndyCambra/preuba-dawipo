@@ -12,12 +12,12 @@ const postProduct = async (req, res) => {
 
       const response = await axios.post(
         "http://localhost:5000/add_product",
-        product
+        product,
       );
       const transformedProduct = response.data;
 
       console.log("Transformed Product:", transformedProduct);
-      
+
       const newProduct = await _postProduct({
         name: transformedProduct.name,
         originCountry: transformedProduct.originCountry,

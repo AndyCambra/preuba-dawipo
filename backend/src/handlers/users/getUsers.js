@@ -1,7 +1,6 @@
 const { _getUsers } = require("../../controllers");
 
-const getUsers = async (req, res) => {  
-
+const getUsers = async (req, res) => {
   try {
     const allUsers = await _getUsers();
 
@@ -9,15 +8,14 @@ const getUsers = async (req, res) => {
       message: "The users have been obtained successfully",
       users: allUsers,
     });
-  } 
-  catch (error) {
+  } catch (error) {
     res.status(400).json({
-      error: true,      
-      message: error.message || 'Unknown error',
+      error: true,
+      message: error.message || "Unknown error",
     });
   }
 };
 
-module.exports = { 
+module.exports = {
   getUsers,
 };

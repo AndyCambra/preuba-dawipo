@@ -9,7 +9,7 @@ const { getProducts } = require("./products/getProducts");
 const { getProductByName } = require("./products/getProductByName");
 const { putProduct } = require("./products/putProduct");
 const { deleteProduct } = require("./products/deleteProduct");
-  
+
 const { registerUser } = require("./users/registerUser");
 const { loginUser } = require("./users/loginUser");
 const { getUsers } = require("./users/getUsers");
@@ -22,7 +22,7 @@ module.exports = {
   getConnectors,
   getConnectorByName,
   putConnector,
-  deleteConnector,  
+  deleteConnector,
 
   postProduct,
   getProducts,

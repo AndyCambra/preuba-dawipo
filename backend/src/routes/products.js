@@ -4,7 +4,7 @@ const {
   getProducts,
   getProductByName,
   putProduct,
-  deleteProduct,  
+  deleteProduct,
 } = require("../handlers");
 
 productsRouter.get("/:name", getProductByName);

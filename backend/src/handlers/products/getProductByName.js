@@ -2,7 +2,7 @@ const { _getProductByName } = require("../../controllers");
 
 const getProductByName = async (req, res) => {
   const { name } = req.params;
-  
+
   try {
     const Product = await _getProductByName(name);
     if (!Product) {

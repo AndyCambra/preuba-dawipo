@@ -1,49 +1,59 @@
 const usersRouter = require("express").Router();
-const { check } = require('express-validator');
+const { check } = require("express-validator");
+const authMiddleware = require("../middleware/auth");
 const {
   getUsers,
   getUserByName,
   registerUser,
   loginUser,
   putUser,
-  deleteUser,  
+  deleteUser,
 } = require("../handlers");
 
-usersRouter.get("/:name", getUserByName);
-usersRouter.get("/", getUsers);
+usersRouter.get("/:name", authMiddleware, getUserByName);
+usersRouter.get("/", authMiddleware, getUsers);
 
 usersRouter.post(
   "/register",
   [
-    check('name', 'Please provide your name').not().isEmpty(),
-    check('lastName', 'Please provide your last name').not().isEmpty(),
-    check('email', 'Please provide a valid email').isEmail(),
-    check('password', 'The password must be at least 8 characters long').isLength({ min: 8 })
+    check("name", "Please provide your name").not().isEmpty(),
+    check("lastName", "Please provide your last name").not().isEmpty(),
+    check("email", "Please provide a valid email").isEmail(),
+    check(
+      "password",
+      "The password must be at least 8 characters long",
+    ).isLength({ min: 8 }),
   ],
-  registerUser
+  registerUser,
 );
 
 usersRouter.post(
   "/login",
   [
-    check('email', 'Please provide a valid email').isEmail(),
-    check('password', 'The password must be at least 8 characters long').isLength({ min: 8 })
+    check("email", "Please provide a valid email").isEmail(),
+    check(
+      "password",
+      "The password must be at least 8 characters long",
+    ).isLength({ min: 8 }),
   ],
-  loginUser
+  loginUser,
 );
-
 
 usersRouter.put(
   "/update",
+  authMiddleware,
   [
-    check('name', 'Please provide your name').not().isEmpty(),
-    check('lastName', 'Please provide your last name').not().isEmpty(),
-    check('email', 'Please provide a valid email').isEmail(),
-    check('password', 'The password must be at least 8 characters long').isLength({ min: 8 })
+    check("name", "Please provide your name").not().isEmpty(),
+    check("lastName", "Please provide your last name").not().isEmpty(),
+    check("email", "Please provide a valid email").isEmail(),
+    check(
+      "password",
+      "The password must be at least 8 characters long",
+    ).isLength({ min: 8 }),
   ],
-  putUser
+  putUser,
 );
 
-usersRouter.delete("/:name", deleteUser);
+usersRouter.delete("/:name", authMiddleware, deleteUser);
 
 module.exports = usersRouter;

@@ -4,7 +4,7 @@ const {
   getConnectors,
   getConnectorByName,
   putConnector,
-  deleteConnector,  
+  deleteConnector,
 } = require("../handlers");
 
 connectorsRouter.get("/:name", getConnectorByName);

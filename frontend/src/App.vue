@@ -1,8 +1,8 @@
 <script setup>
-import { user, isAuthenticated, logout } from './utils/auth';
-import { onMounted, computed } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
-import Logo from '../public/Logo de Kontroll.png'
+import { user, isAuthenticated, logout } from "./utils/auth";
+import { onMounted, computed } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import Logo from "../public/Logo de Kontroll.png";
 
 const router = useRouter();
 const route = useRoute();
@@ -13,39 +13,36 @@ onMounted(() => {
 
 const checkAuth = () => {
   if (!user.value) {
-    router.push('/login');
+    router.push("/login");
   }
 };
 
 const handleLogout = () => {
   logout();
-  router.push('/login');
+  router.push("/login");
 };
 const handleDashboard = () => {
-  router.push('/dash-prueba');
+  router.push("/dash-prueba");
 };
 const handleHome = () => {
-  router.push('/');
+  router.push("/");
 };
 
 // Computed property to check if the current route is /dash-prueba
-const isDashPruebaRoute = computed(() => route.path === '/dash-prueba');
+const isDashPruebaRoute = computed(() => route.path === "/dash-prueba");
 </script>
 
 <template>
   <div id="app">
     <header v-if="isAuthenticated">
       <nav>
-        <img 
-          :src="Logo" 
-          alt="Kontroll"
-          @click="handleHome"
-        >
+        <img :src="Logo" alt="Kontroll" @click="handleHome" />
         <div class="btns-header">
-          <button 
-            v-if="!isDashPruebaRoute" 
-            class="btn-dashboard" 
-            @click="handleDashboard">
+          <button
+            v-if="!isDashPruebaRoute"
+            class="btn-dashboard"
+            @click="handleDashboard"
+          >
             Dashboard
           </button>
           <button class="btn-logout" @click="handleLogout">Logout</button>
@@ -57,7 +54,7 @@ const isDashPruebaRoute = computed(() => route.path === '/dash-prueba');
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 header {
   background-color: black;
   color: white;
@@ -76,8 +73,8 @@ nav span {
 }
 
 .btn-dashboard {
-  background-color: rgb(0,255,206);
-  border: 1px solid rgb(0,255,206);
+  background-color: rgb(0, 255, 206);
+  border: 1px solid rgb(0, 255, 206);
   color: black;
   padding: 8px 16px;
   border-radius: 4px;
@@ -90,10 +87,10 @@ nav span {
 
 .btn-dashboard:hover {
   background-color: transparent;
-  border: 1px solid rgb(0,255,206);
+  border: 1px solid rgb(0, 255, 206);
   color: white;
 }
-.btn-logout{
+.btn-logout {
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
   font-size: 1.2rem;
@@ -103,15 +100,15 @@ nav span {
   cursor: pointer;
   transition: all 250ms;
 }
-.btn-logout:hover{
-  color: rgb(0,255,206);
+.btn-logout:hover {
+  color: rgb(0, 255, 206);
 }
-.btns-header{
+.btns-header {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
-img{
+img {
   cursor: pointer;
 }
 </style>
