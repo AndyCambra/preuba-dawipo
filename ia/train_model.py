@@ -59,7 +59,7 @@ def main():
             best_val_loss = avg_val_loss
             patience_counter = 0
             # Guardar el mejor modelo
-            save_model(model, tokenizer, "best-fine-tuned-t5-base")
+            save_model(model, tokenizer, "ia/models/best-fine-tuned-t5-base")
         else:
             patience_counter += 1
             if patience_counter >= patience:
