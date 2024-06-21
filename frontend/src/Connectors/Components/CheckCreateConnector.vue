@@ -1,4 +1,11 @@
 <script setup>
+import { useRouter } from 'vue-router';
+
+const route = useRouter()
+
+const navigateToDashboard = () =>{
+  route.push('/dash-prueba')
+}
 </script>
 
 <template>
@@ -6,7 +13,7 @@
     <h2>La conexíon ha sido exitosa</h2>
     <div class="btns-check-create">
       <button class="btn-check-fields">Check fields</button>
-      <button class="btn-navigate-to-dashboard">Dashboard</button>
+      <button class="btn-navigate-to-dashboard" @click="navigateToDashboard">Dashboard</button>
     </div>
   </div>
 </template>
