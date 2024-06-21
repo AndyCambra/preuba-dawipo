@@ -1,8 +1,8 @@
-const { _postIntegration } = require("./_integrations/_postIntegration");
-const { _getIntegrations } = require("./_integrations/_getIntegrations");
-const { _getIntegrationByName } = require("./_integrations/_getIntegrationByName");
-const { _putIntegration } = require("./_integrations/_putIntegration");
-const { _deleteIntegration } = require("./_integrations/_deleteIntegration");
+const { _postConnector } = require("./_connectors/_postConnector");
+const { _getConnectors } = require("./_connectors/_getConnectors");
+const { _getConnectorByName } = require("./_connectors/_getConnectorByName");
+const { _putConnector } = require("./_connectors/_putConnector");
+const { _deleteConnector } = require("./_connectors/_deleteConnector");
 
 const { _postProduct } = require("./_products/_postProduct");
 const { _getProducts } = require("./_products/_getProducts");
@@ -18,11 +18,11 @@ const { _putUser } = require("./_users/_putUser");
 const { _deleteUser } = require("./_users/_deleteUser");
 
 module.exports = {
-  _postIntegration,
-  _getIntegrations,
-  _getIntegrationByName,
-  _putIntegration,
-  _deleteIntegration,
+  _postConnector,
+  _getConnectors,
+  _getConnectorByName,
+  _putConnector,
+  _deleteConnector,
 
   _postProduct,
   _getProducts,
