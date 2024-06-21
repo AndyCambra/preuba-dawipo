@@ -3,9 +3,16 @@ import { ref, computed } from 'vue';
 import { AgGridVue } from 'ag-grid-vue3';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+import StadisticSection from '../Components/StadisticSection.vue'
+import { ArrowIcon, PlusIcon } from '../Components/icons';
+import LogoDhl from '../../../public/dhllogo.png'
+import LogoMaersk from '../../../public/MaerskLogo.png'
+import LogoMsc from '../../../public/msclogo.png'
+
 
 const droppedItems = ref([]); // Array to store dropped items
 const loading = ref(false);
+const isBoxOpen = ref(false);
 const selectedItems = ref([]);
 const router = useRouter();
 
@@ -13,6 +20,12 @@ const dataModel = ref([
   { name: "Neumaticos", courier: "DHL" },
   { name: "Remeras", courier: "DHL" }
 ]);
+
+const connectors= ref([
+  {name: 'DHL Global Fowarding', logo: LogoDhl},
+  {name: 'Maersk', logo: LogoMaersk},
+  {name: 'Mediterranean Shipping Company', logo: LogoMsc},
+])
 const columnDefs = [
   { field: "Seleccionar", maxWidth: 140, checkboxSelection: true, headerCheckboxSelection: true },
   { headerName: "Transportista", field: "courier", sortable: true, filter: true },
@@ -90,14 +103,37 @@ const onGridReady = (params) => {
 const navigateToHome = () => {
   router.push('/');
 };
+const boxClass = computed(() => {
+      return isBoxOpen.value ? 'connectors-selected-box' : 'connectors-selected-box-shrink';
+    });
+
+const toggleBoxSize = () => {
+      isBoxOpen.value = !isBoxOpen.value;
+    };
 </script>
 
 <template>
   <div class="container">
-    <h1>Dashboard</h1>
-    <p>Seleccioná y arrastrá los elementos a la zona de soltar.</p>
-    <div class="drag-section">
-      <div class="drag-inside">
+    <StadisticSection />
+   <div class="data-container">
+      <div class="side-section-container">
+        <div :class="boxClass">
+          <div class="icon-box">
+          <div class="icon" v-html="ArrowIcon" @click="toggleBoxSize"></div>
+          <div class="icon-grey" v-html="PlusIcon"></div>
+          </div>
+          <div class="connectors-list" v-for="(item, index) in connectors" :key="index">
+            <div class="connector-item">
+              <img :src= "item.logo" :alt="item.name" class="connector-logo">
+              <p class="connector-name">{{ item.name }}</p>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
         <div class="drag-container" v-for="(items, courier) in groupedItems" :key="courier">
           <h3>{{ courier }}</h3>
           <div
@@ -137,6 +173,7 @@ const navigateToHome = () => {
         <p v-else>No items dropped</p>
       </div>
     </div>
+
   </div>
   <button @click="navigateToHome">
       Go to Home
@@ -148,6 +185,80 @@ const navigateToHome = () => {
 .container {
   padding: 20px;
 }
+.data-container{
+  background-color: blueviolet;
+  display: flex;
+}
+.side-section-container{
+  width: 260px;
+}
+.connectors-selected-box{
+  width: 197px;
+  padding: 8px;
+  border: 2px solid #00FFCE;
+  border-radius: 20px;
+}
+.connectors-selected-box-shrink{
+  width: 48px;
+  padding: 8px;
+  border: 2px solid #00FFCE;
+  border-radius: 20px;
+}
+.icon-box{
+  display: flex;
+  justify-content: space-between;
+  
+}
+.icon{
+  width: 40px;
+  height: 40px;
+  border: 2px solid #00FFCE;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-sizing: border-box;
+
+}
+.icon-grey{
+  width: 40px;
+  height: 40px;
+  border: 2px solid #9b9d9d;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-sizing: border-box;
+
+}
+.connectors-selected-box-shrink .icon-grey {
+  display: none;
+}
+.connector-list{
+  padding: 12px 0;
+}
+.connector-item{
+  display: flex;
+  font-size: 12px;
+  padding: 12px 0;
+  gap: 8px;
+  align-items: center ;
+}
+.connector-name {
+  display: block; 
+}
+.connectors-selected-box-shrink .connector-name {
+  display: none;
+}
+.connector-logo{
+  width: 40px;
+  height: 40px;
+}
+
+
+
 .drag-section {
   display: flex;
 }
