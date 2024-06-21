@@ -3,16 +3,9 @@ import { ref, computed } from 'vue';
 import { AgGridVue } from 'ag-grid-vue3';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
-import StadisticSection from '../Components/StadisticSection.vue'
-import { ArrowIcon, PlusIcon, Close } from '../Components/icons';
-import LogoDhl from '../../../public/dhllogo.png'
-import LogoMaersk from '../../../public/MaerskLogo.png'
-import LogoMsc from '../../../public/msclogo.png'
-
 
 const droppedItems = ref([]); // Array to store dropped items
 const loading = ref(false);
-const isBoxOpen = ref(false);
 const selectedItems = ref([]);
 const router = useRouter();
 
@@ -20,12 +13,6 @@ const dataModel = ref([
   { name: "Neumaticos", courier: "DHL" },
   { name: "Remeras", courier: "DHL" }
 ]);
-
-const connectors= ref([
-  {name: 'DHL Global Fowarding', logo: LogoDhl},
-  {name: 'Maersk', logo: LogoMaersk},
-  {name: 'Mediterranean Shipping Company', logo: LogoMsc},
-])
 const columnDefs = [
   { field: "Seleccionar", maxWidth: 140, checkboxSelection: true, headerCheckboxSelection: true },
   { headerName: "Transportista", field: "courier", sortable: true, filter: true },
@@ -103,43 +90,16 @@ const onGridReady = (params) => {
 const navigateToHome = () => {
   router.push('/');
 };
-const boxClass = computed(() => {
-      return isBoxOpen.value ? 'connectors-selected-box' : 'connectors-selected-box-shrink';
-    });
-const boxClassInverted = computed(() => {
-      return isBoxOpen.value ?  'connectors-selected-box-shrink' : 'connectors-selected-box' ;
-    });
-
-const toggleBoxSize = () => {
-      isBoxOpen.value = !isBoxOpen.value;
-    };
 </script>
 
 <template>
   <div class="container">
-    <StadisticSection />
-   <div class="data-container">
-      <div class="side-section-container">
-        <div :class="boxClass">
-          <div class="icon-box">
-          <div class="icon" v-html="ArrowIcon" @click="toggleBoxSize"></div>
-          <div class="icon-grey" v-html="PlusIcon"  @click="navigateToHome"></div>
-          </div>
-          <div class="connectors-list" v-for="(item, index) in connectors" :key="index">
-            <div class="connector-item">
-              <img :src= "item.logo" :alt="item.name" class="connector-logo">
-              <p class="connector-name">{{ item.name }}</p>
-              <div class="icon-grey-small" v-html="Close"></div>
-            </div>
-          </div>
-        </div>
-
-
-
-
-        <div :class="boxClassInverted">
+    <h1>Dashboard</h1>
+    <p>Seleccioná y arrastrá los elementos a la zona de soltar.</p>
+    <div class="drag-section">
+      <div class="drag-inside">
         <div class="drag-container" v-for="(items, courier) in groupedItems" :key="courier">
-          <h4 class="courrier-name">{{ courier }}</h4>
+          <h3>{{ courier }}</h3>
           <div
             v-for="(item, index) in items"
             :key="index"
@@ -147,18 +107,10 @@ const toggleBoxSize = () => {
             @dragstart="startDrag($event, item)"
             :draggable="!itemIsDropped(item)"
           >
-          <p class="drag-index">{{ index }}</p>
-          <p class="drag-item">{{ item.name }}</p> 
+            {{ item.name }}
           </div>
         </div>
       </div>
-      </div>
-
-
-
-
-
-
       <div class="drop-area" @dragover.prevent @drop="onDrop">
         <h2>Soltar acá</h2>
         <div v-if="droppedItems.length">
@@ -185,7 +137,6 @@ const toggleBoxSize = () => {
         <p v-else>No items dropped</p>
       </div>
     </div>
-
   </div>
   <button @click="navigateToHome">
       Go to Home
@@ -197,107 +148,6 @@ const toggleBoxSize = () => {
 .container {
   padding: 20px;
 }
-.data-container{
- 
-  display: flex;
-  min-height: 60vh;
-  gap: 8px;
-}
-.side-section-container{
-  width: 265px;
-  display: flex;
-  gap: 8px;
-  
-}
-.connectors-selected-box{
-  width: 197px;
-  padding: 8px;
-  border: 2px solid transparent;
-  border-radius: 20px;
-  box-sizing: border-box;
-  background-image: linear-gradient(#fff, #fff), linear-gradient(to right, #00FFCE, transparent);
-  background-origin: border-box;
-  background-clip: padding-box, border-box;
-  
-}
-.connectors-selected-box-shrink{
-  width: 60px;
-  padding: 8px;
-  border: 2px solid transparent;
-  border-radius: 20px;
-  box-sizing: border-box;
-  background-image: linear-gradient(#fff, #fff), linear-gradient(to right, #00FFCE, transparent);
-  background-origin: border-box;
-  background-clip: padding-box, border-box;
-}
-.icon-box{
-  display: flex;
-  justify-content: space-between;
-  
-}
-.icon{
-  width: 40px;
-  height: 40px;
-  border: 2px solid #00FFCE;
-  border-radius: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  box-sizing: border-box;
-
-}
-.connectors-selected-box .icon{
-  transform: rotate(180deg);
-}
-.icon-grey{
-  width: 40px;
-  height: 40px;
-  border: 2px solid #9b9d9d;
-  border-radius: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  box-sizing: border-box;
-
-}
-.icon-grey-small{
-  color: #9b9d9d ;
-}
-.connectors-selected-box-shrink .icon-grey {
-  display: none;
-}
-.connectors-selected-box-shrink .icon-grey-small {
-  display: none;
-}
-.connector-list{
-  padding: 12px 0;
-}
-.connector-item{
-  display: flex;
-  font-size: 12px;
-  padding: 12px 0;
-  gap: 8px;
-  align-items: center ;
-  justify-content: space-between;
-  height: 40px;
-}
-.connector-name {
-  display: block; 
-  flex-grow: 2;
-  font-weight: 500;
-}
-.connectors-selected-box-shrink .connector-name {
-  display: none;
-}
-.connector-logo{
-  width: 40px;
-  height: 40px;
-}
-
-
-
 .drag-section {
   display: flex;
 }
@@ -306,55 +156,24 @@ const toggleBoxSize = () => {
   flex-wrap: wrap;
 }
 .drag-container {
-  padding: 0;
-  margin: 0;
-}
-.courrier-name{
-  margin: 8px 0;
+  margin-right: 20px;
 }
 .drag-el {
-  padding: 0 8px;
-  margin-bottom: 8px;
-  background-color:  rgba(0, 255, 206, 0.20);;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
   cursor: move;
-  border-radius: 8px;
-  display: flex;
-  gap: 12px;
 }
-.drag-index{
-  margin: 8px 4px;
-  font-weight: 700;
-}
-.drag-item{
-  margin: 8px 0;
-  font-weight: 500;
-}
-.connectors-selected-box-shrink .drag-item{
-  display: none;
-}
-.connectors-selected-box-shrink .drag-el{
-  margin: 8px auto;
-  text-align: center;
-}
-.connectors-selected-box-shrink .drag-index{
-  margin: 8px auto;
-  text-align: center;
-}
-
 .drag-el.disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
-
 .drop-area {
   flex-grow: 1;
   padding: 20px;
-  border: 2px solid transparent;
-  border-radius: 20px;
-  box-sizing: border-box;
-  background-image: linear-gradient(#fff, #fff), linear-gradient(to right, #00FFCE, transparent);
-  background-origin: border-box;
-  background-clip: padding-box, border-box;
+  border: 2px dashed #ccc;
+  background-color: #fafafa;
 }
 .btn-danger {
   background-color: red;
