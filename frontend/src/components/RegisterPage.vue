@@ -3,6 +3,7 @@ import { ref } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 import { setUser } from '../utils/auth';
+import Logo from '../../public/Logo de Kontroll.png'
 
 const name = ref("");
 const lastName = ref("");
@@ -36,94 +37,118 @@ const register = async () => {
     }
   }
 };
+
+const navigateToLogin = () =>{
+  router.push("/login");
+}
+
 </script>
 
 <template>
-  <div class="page-container">
-
-    <form @submit.prevent="register" class="form">
-      <h1>User Registration</h1>
-      <div class="form-group">
-        <label for="name">Name:</label>
-        <input type="text" v-model="name" required />
+  <div class="container">
+    <img class="img-register" :src="Logo" alt="Logo de Kontroll">
+    <div class="page-container">
+      <div class="form-container">
+        <div class="form-title">
+          <h1>Register</h1>
+          <p>Enter your email to sign up for this app</p>
       </div>
-      <div class="form-group">
-        <label for="lastName">Last Name:</label>
-        <input type="text" v-model="lastName" required />
+      <form @submit.prevent="register">
+          <input type="text" v-model="name" placeholder="Name" required />
+          <input type="text" v-model="lastName" placeholder="Last Name" required />
+          <input type="email" v-model="email"  placeholder="Email" required/>
+          <input type="password" v-model="password" placeholder="Password" required />
+        <button type="submit" class="btn-register">Register</button>
+      </form>
+      <button @click="navigateToLogin" class="btn-login">Login</button>
       </div>
-      <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" v-model="email" required />
-      </div>
-      <div class="form-group">
-        <label for="password">Password:</label>
-        <input type="password" v-model="password" required />
-      </div>
-      <button type="submit" class="btn">Register</button>
-    </form>
+    </div>
   </div>
 </template>
 
 <style scoped>
+.container {
+  background-color: black;
+  min-height: 95.5vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.img-register{
+  position: absolute;
+  top: 0; 
+  left: 0;
+}
 .page-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh; /* Asegura que el contenedor ocupe al menos toda la altura visible */
-  background-color: black; /* Establece el fondo negro */
-  color: #fff; /* Establece el color de texto blanco para toda la página */
-  padding: 20px;
+  background-color: black;
+  color: #fff;
 }
 h1 {
   text-align: center;
-  margin-bottom: 20px;
+  font-weight: 600;
 }
-.form {
-  max-width: 400px;
+.form-title {
+  color: #00FFCE;
+  text-align: center;
+}
+.form-container {
+  max-width: 30rem;
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  padding: 20px;
+  padding: 1.2rem 2rem;
   border: 2px solid transparent;
   border-radius: 20px;
   box-sizing: border-box;
   background-image: linear-gradient(black, black), linear-gradient(to right, #00FFCE, transparent);
   background-origin: border-box;
-  background-clip: padding-box,border-box;
+  background-clip: padding-box, border-box;
 }
-.form-group {
-  margin-bottom: 15px;
-}
-
-label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
 input {
   width: 100%;
-  padding: 8px;
+  padding: 0.7rem;
   box-sizing: border-box;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  color: #fff; /* Cambia el color del texto de los inputs a blanco */
-  background-color: #333; /* Fondo más oscuro para los inputs */
+  border-radius: 10px;
+  color: gray;
+  background-color: #fff;
+  margin-bottom: 1.3rem;
+  font-size: 1.1rem;
 }
-
-.btn {
-  padding: 10px 15px;
-  border: none;
-  border-radius: 4px;
-  background-color: #28a745;
-  color: #fff;
-  font-size: 16px;
+.btn-register {
+  background-color: rgb(0, 255, 206);
+  border: 1px solid rgb(0, 255, 206);
+  width: 100%;
+  color: black;
+  padding: 8px 16px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-weight: 700;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  transition: all 250ms;
 }
-
-.btn:hover {
-  background-color: #218838;
+.btn-register:hover {
+  background-color: transparent;
+  border: 1px solid rgb(0, 255, 206);
+  color: white;
+}
+.btn-login {
+  margin-top: 1rem;
+  align-self: flex-end;
+  background-color: transparent;
+  color: gray;
+  font-size: 1.2rem;
+  border: none;
+  cursor: pointer;
+  transition: all 250ms;
+}
+.btn-login:hover {
+  color: #00FFCE;
 }
 </style>
-
-
