@@ -1,6 +1,8 @@
 const { _putConnector } = require("../../controllers");
+const handleEConnectorProducts = require("../../helpers/handleEConnectorProducts");
+const knownConnectors = require("../../helpers/knownConnectors");
 
-const putConnector = async (req, res) => {
+const setConnectors = async (req, res) => {
   const connectors = Array.isArray(req.body) ? req.body : [req.body];
 
   try {
@@ -9,11 +11,14 @@ const putConnector = async (req, res) => {
     for (const connector of connectors) {
       const { name, apiUrl, apiKey } = connector;
       const updatedConnector = await _putConnector(name, { apiUrl, apiKey });
+      if(knownConnectors.includes(name.toUpperCase())){
+        await handleEConnectorProducts(name, apiKey);            
+      }
       updatedConnectors.push(updatedConnector);
     }
 
     res.status(200).json({
-      message: "The connector instance was updated successfully",
+      message: "The connector instances were set successfully",
       connectors: updatedConnectors,
     });
   } catch (error) {
@@ -25,5 +30,5 @@ const putConnector = async (req, res) => {
 };
 
 module.exports = {
-  putConnector,
+  setConnectors,
 };

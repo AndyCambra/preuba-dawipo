@@ -3,6 +3,7 @@ const { getConnectors } = require("./connectors/getConnectors");
 const { getConnectorByName } = require("./connectors/getConnectorByName");
 const { putConnector } = require("./connectors/putConnector");
 const { deleteConnector } = require("./connectors/deleteConnector");
+const { setConnectors } = require("./connectors/setConnectors");
 
 const { postProduct } = require("./products/postProduct");
 const { getProducts } = require("./products/getProducts");
@@ -23,6 +24,7 @@ module.exports = {
   getConnectorByName,
   putConnector,
   deleteConnector,
+  setConnectors,
 
   postProduct,
   getProducts,

@@ -1,14 +1,14 @@
 const { _getMSCproducts } = require("../controllers/_getMSCproducts");
 
 const getMSCproducts = async (req, res) => {
-  const apiKey = req.headers['apikey'];
+  const apiKey = req.headers['msc-api-key'];
 
-  if (!apiKey) {
-    return res.status(400).json({
-      error: true,
-      message: "API key is missing from headers",
-    });
-  }
+  // if (!apiKey) {
+  //   return res.status(400).json({
+  //     error: true,
+  //     message: "API key is missing from headers",
+  //   });
+  // }
 
   try {
     const allProducts = await _getMSCproducts();
