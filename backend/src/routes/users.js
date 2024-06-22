@@ -1,6 +1,6 @@
 const usersRouter = require("express").Router();
 const { check } = require("express-validator");
-const authMiddleware = require("../middleware/auth");
+const authMiddleware = require("../middlewares/auth");
 const {
   getUsers,
   getUserByName,
