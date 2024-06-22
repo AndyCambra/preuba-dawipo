@@ -1,6 +1,6 @@
 <script setup>
-import { computed } from 'vue';
-import { defineProps } from 'vue';
+import { computed } from "vue";
+import { defineProps } from "vue";
 
 // Definir las propiedades del componente
 const props = defineProps({
@@ -23,7 +23,6 @@ const formattedData = computed(() => {
     <pre>{{ formattedData }}</pre>
   </div>
 </template>
-
 
 <style scoped>
 pre {

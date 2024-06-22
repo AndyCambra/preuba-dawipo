@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 
 const URL_BACK_CONNECTORS = "http://localhost:3001/connectors";
 
@@ -14,8 +14,8 @@ const getData = async () => {
   try {
     const response = await axios.get(URL_BACK_CONNECTORS);
     const data = await response.data;
-    connectors.value = data.connectors.map(item => item.name);
-    availableItems.value = data.connectors.map(item => item.name);
+    connectors.value = data.connectors.map((item) => item.name);
+    availableItems.value = data.connectors.map((item) => item.name);
   } catch (err) {
     console.error(err);
   }
@@ -47,15 +47,15 @@ const proceedToNextPage = () => {
 };
 
 const navigateToSettingconnectors = () => {
-  router.push('/setting-connectors');
+  router.push("/setting-connectors");
 };
 
 const navigateToDashPrueba = () => {
-  router.push('/dashboard-a');
+router.push('/dashboard-a');
 };
 
 const navigateToDashTest = () => {
-  router.push('/dash-test');
+  router.push("/dash-test");
 };
 
 onMounted(() => {
@@ -67,9 +67,13 @@ onMounted(() => {
   <div class="container">
     <h1>Choose the connectors you want to work with</h1>
     <p>Select and drag the items to the drop zone.</p>
-    <div><button @click="navigateToDashPrueba">Go to "dash-prueba"</button></div>
+    <div>
+      <button @click="navigateToDashPrueba">Go to "dash-prueba"</button>
+    </div>
     <div><button @click="navigateToDashTest">Go to "dash-test"</button></div>
-    <div><button @click="navigateToSettingconnectors">Setting connectors</button></div>
+    <div>
+      <button @click="navigateToSettingconnectors">Setting connectors</button>
+    </div>
     <div class="drag-section">
       <div class="drag-container">
         <div

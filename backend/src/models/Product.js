@@ -16,32 +16,32 @@ module.exports = (sequelize) => {
       originCountry: {
         type: DataTypes.STRING,
         allowNull: true,
-      },      
+      },
       finalCountry: {
         type: DataTypes.STRING,
         allowNull: true,
-      },      
+      },
       departureDate: {
         type: DataTypes.STRING,
         allowNull: true,
-      },      
+      },
       arrivalDate: {
         type: DataTypes.STRING,
         allowNull: true,
-      },      
+      },
       status: {
         type: DataTypes.STRING,
         allowNull: true,
-      },      
+      },
       provider: {
         type: DataTypes.STRING,
         allowNull: true,
-      }, 
+      },
       courier: {
         type: DataTypes.STRING,
         allowNull: true,
-      },      
+      },
     },
-    { freezeTableName: true, timestamps: false }
+    { freezeTableName: true, timestamps: false },
   );
 };

@@ -3,10 +3,10 @@ const { Product } = require("../../db");
 const _deleteProduct = async (name) => {
   const findProduct = await Product.findOne({ where: { name: name } });
 
-  if(!findProduct){
+  if (!findProduct) {
     throw new Error("That product does not exist");
   } else {
-    await Product.destroy({ where: { name: name }});
+    await Product.destroy({ where: { name: name } });
   }
 };
 

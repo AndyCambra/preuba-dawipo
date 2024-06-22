@@ -1,13 +1,13 @@
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import axios from 'axios';
-import BackResponse from '../../Connectors/Components/BackResponse.vue';
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import axios from "axios";
+import BackResponse from "../../Connectors/Components/BackResponse.vue";
 
-const URL_BACK_CONNECTORS = 'http://localhost:3001/connectors';
+const URL_BACK_CONNECTORS = "http://localhost:3001/connectors";
 
-const name = ref('');
-const apiUrl = ref('');
+const name = ref("");
+const apiUrl = ref("");
 const data = ref(null);
 const error = ref(null);
 const router = useRouter();
@@ -50,31 +50,26 @@ const deleteData = async (item) => {
  */
 
 const navigateToHome = () => {
-  router.push('/');
+  router.push("/");
 };
 </script>
 <template>
   <div class="container">
-    <h1>Add your Connector</h1>    
+    <h1>Add your Connector</h1>
     <div>
       <input type="text" v-model="name" placeholder="Name" />
       <input type="text" v-model="apiUrl" placeholder="API url" />
-          
-      <br>
-      </div>     
-      <div>
-      <button @click="sendData">Send Data </button>            
-      <button @click="getData">Show Data </button>
-      <button @click="navigateToHome">
-        Go back Home
-    </button>
 
+      <br />
+    </div>
+    <div>
+      <button @click="sendData">Send Data</button>
+      <button @click="getData">Show Data</button>
+      <button @click="navigateToHome">Go back Home</button>
     </div>
     <BackResponse v-if="data || error" :data="data" :error="error" />
   </div>
 </template>
-
-
 
 <style scoped>
 .container {
@@ -102,7 +97,8 @@ li {
   padding-bottom: 15px;
 }
 
-button, input {  
+button,
+input {
   margin-right: 5px;
   margin-bottom: 5px;
 }

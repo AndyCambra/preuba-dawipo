@@ -1,7 +1,7 @@
 const { _postConnector } = require("../../controllers");
 
 const postConnector = async (req, res) => {
-  const connectors = Array.isArray(req.body) ? req.body : [req.body];  
+  const connectors = Array.isArray(req.body) ? req.body : [req.body];
 
   try {
     const newConnectors = [];

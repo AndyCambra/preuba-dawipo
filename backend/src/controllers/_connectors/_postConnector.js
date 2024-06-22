@@ -1,12 +1,12 @@
 const { Connector } = require("../../db");
 
-const _postConnector = async (name, apiUrl, apiKey) => {  
+const _postConnector = async (name, apiUrl, apiKey) => {
   const findConnector = await Connector.findOne({ where: { name: name } });
 
-  if(findConnector){
+  if (findConnector) {
     throw new Error(`${findConnector} connector has already been created`);
-  }else {    
-    return await Connector.create({name, apiUrl, apiKey});    
+  } else {
+    return await Connector.create({ name, apiUrl, apiKey });
   }
 };
 

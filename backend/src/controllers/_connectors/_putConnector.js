@@ -1,6 +1,6 @@
 const { Connector } = require("../../db");
 
-const _putConnector = async (name, updateData) => {  
+const _putConnector = async (name, updateData) => {
   const findConnector = await Connector.findOne({ where: { name } });
   const { apiUrl, apiKey } = updateData;
 

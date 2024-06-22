@@ -1,4 +1,5 @@
-const { validationResult } = require('express-validator');
+const jwt = require("jsonwebtoken");
+const { validationResult } = require("express-validator");
 const { _loginUser } = require("../../controllers");
 
 const loginUser = async (req, res) => {
@@ -7,14 +8,15 @@ const loginUser = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { email, password } = req.body;     
+  const { email, password } = req.body;
 
-  try {          
-    const user = await _loginUser(email, password);
+  try {
+    const { token, user } = await _loginUser(email, password);
 
     res.status(200).json({
       message: "Login successful",
-      user: user,
+      token,
+      user,
     });
   } catch (error) {
     res.status(400).json({

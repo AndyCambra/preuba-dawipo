@@ -1,15 +1,9 @@
 const bcrypt = require("bcrypt");
 const { User } = require("../../db");
 
-const _registerUser = async (
-  name,
-  lastName,
-  email,
-  password,
-  avatarUrl           
-  ) => {
+const _registerUser = async (name, lastName, email, password, avatarUrl) => {
   const findUser = await User.findOne({ where: { name } });
-  
+
   if (findUser) {
     throw new Error(`${name} has already been registered`);
   } else {

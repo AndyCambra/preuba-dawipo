@@ -21,19 +21,19 @@ const register = async () => {
     });
     console.log(response.data);
     window.alert(`Registration successful: ${response.data.message}`);
-    
+
     setUser(response.data.user);
-    
+
     router.push("/");
   } catch (error) {
     console.error(error);
     if (error.response && error.response.data.errors) {
       const errors = error.response.data.errors;
-      errors.forEach(err => {
+      errors.forEach((err) => {
         window.alert(`Error in ${err.path}: ${err.msg}`);
       });
     } else {
-      window.alert('Error: An unexpected error occurred');
+      window.alert("Error: An unexpected error occurred");
     }
   }
 };

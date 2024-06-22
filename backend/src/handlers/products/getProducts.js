@@ -1,7 +1,6 @@
 const { _getProducts } = require("../../controllers");
 
-const getProducts = async (req, res) => {  
-
+const getProducts = async (req, res) => {
   try {
     const allProducts = await _getProducts();
 
@@ -9,15 +8,14 @@ const getProducts = async (req, res) => {
       message: "The Products were obtained successfully",
       products: allProducts,
     });
-  } 
-  catch (error) {
+  } catch (error) {
     res.status(400).json({
-      error: true,      
-      message: error.message || 'Unknown error',
+      error: true,
+      message: error.message || "Unknown error",
     });
   }
 };
 
-module.exports = { 
+module.exports = {
   getProducts,
 };

@@ -2,7 +2,7 @@ const { _getUserByName } = require("../../controllers");
 
 const getUserByName = async (req, res) => {
   const { name } = req.params;
-  
+
   try {
     const User = await _getUserByName(name);
     if (!User) {

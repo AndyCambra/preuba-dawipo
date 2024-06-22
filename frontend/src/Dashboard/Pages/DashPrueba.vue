@@ -1,8 +1,8 @@
 <script setup>
-import { ref, computed } from 'vue';
-import { AgGridVue } from 'ag-grid-vue3';
-import axios from 'axios';
-import { useRouter } from 'vue-router';
+import { ref, computed } from "vue";
+import { AgGridVue } from "ag-grid-vue3";
+import axios from "axios";
+import { useRouter } from "vue-router";
 
 const droppedItems = ref([]); // Array to store dropped items
 const loading = ref(false);
@@ -11,25 +11,54 @@ const router = useRouter();
 
 const dataModel = ref([
   { name: "Neumaticos", courier: "DHL" },
-  { name: "Remeras", courier: "DHL" }
+  { name: "Remeras", courier: "DHL" },
 ]);
 const columnDefs = [
-  { field: "Seleccionar", maxWidth: 140, checkboxSelection: true, headerCheckboxSelection: true },
-  { headerName: "Transportista", field: "courier", sortable: true, filter: true },
+  {
+    field: "Seleccionar",
+    maxWidth: 140,
+    checkboxSelection: true,
+    headerCheckboxSelection: true,
+  },
+  {
+    headerName: "Transportista",
+    field: "courier",
+    sortable: true,
+    filter: true,
+  },
   { headerName: "Nombre", field: "name", sortable: true, filter: true },
-  { headerName: "País de origen", field: "originCountry", sortable: true, filter: true },
-  { headerName: "País de destino", field: "finalCountry", sortable: true, filter: true },
-  { headerName: "Fecha de salida", field: "departureDate", sortable: true, filter: true },
-  { headerName: "Fecha de llegada", field: "arrivalDate", sortable: true, filter: true },
+  {
+    headerName: "País de origen",
+    field: "originCountry",
+    sortable: true,
+    filter: true,
+  },
+  {
+    headerName: "País de destino",
+    field: "finalCountry",
+    sortable: true,
+    filter: true,
+  },
+  {
+    headerName: "Fecha de salida",
+    field: "departureDate",
+    sortable: true,
+    filter: true,
+  },
+  {
+    headerName: "Fecha de llegada",
+    field: "arrivalDate",
+    sortable: true,
+    filter: true,
+  },
   { headerName: "Estado", field: "status", sortable: true, filter: true },
   { headerName: "Proveedor", field: "provider", sortable: true, filter: true },
 ];
 const defaultColDef = {
   flex: 1,
   minWidth: 100,
-  resizable: true
+  resizable: true,
 };
-
 
 const groupedItems = computed(() => {
   return dataModel.value.reduce((groups, item) => {
@@ -57,22 +86,29 @@ const onDrop = (event) => {
 const handleDrop = async (item) => {
   loading.value = true;
   try {
-    const response = await axios.get(`http://localhost:3001/products/${item.name}`);
+    const response = await axios.get(
+      `http://localhost:3001/products/${item.name}`,
+    );
     droppedItems.value.push({ ...item, ...response.data });
     droppedItems.value = droppedItems.value.slice();
   } catch (error) {
-    console.error('Error al realizar la solicitud HTTP:', error);
+    console.error("Error al realizar la solicitud HTTP:", error);
   } finally {
     loading.value = false;
   }
 };
 
 const itemIsDropped = (item) => {
-  return droppedItems.value.some(droppedItem => droppedItem.name === item.name && droppedItem.courier === item.courier);
+  return droppedItems.value.some(
+    (droppedItem) =>
+      droppedItem.name === item.name && droppedItem.courier === item.courier,
+  );
 };
 
 const removeItems = () => {
-  droppedItems.value = droppedItems.value.filter(item => !selectedItems.value.includes(item));
+  droppedItems.value = droppedItems.value.filter(
+    (item) => !selectedItems.value.includes(item),
+  );
   selectedItems.value = [];
 };
 
@@ -80,7 +116,7 @@ const onSelectionChanged = (event) => {
   selectedItems.value = event.api.getSelectedRows();
 };
 
-const rowSelection = ref('multiple');
+const rowSelection = ref("multiple");
 const gridApi = ref(null);
 
 const onGridReady = (params) => {
@@ -88,7 +124,7 @@ const onGridReady = (params) => {
 };
 
 const navigateToHome = () => {
-  router.push('/');
+  router.push("/");
 };
 </script>
 
@@ -98,7 +134,11 @@ const navigateToHome = () => {
     <p>Seleccioná y arrastrá los elementos a la zona de soltar.</p>
     <div class="drag-section">
       <div class="drag-inside">
-        <div class="drag-container" v-for="(items, courier) in groupedItems" :key="courier">
+        <div
+          class="drag-container"
+          v-for="(items, courier) in groupedItems"
+          :key="courier"
+        >
           <h3>{{ courier }}</h3>
           <div
             v-for="(item, index) in items"
@@ -114,10 +154,12 @@ const navigateToHome = () => {
       <div class="drop-area" @dragover.prevent @drop="onDrop">
         <h2>Soltar acá</h2>
         <div v-if="droppedItems.length">
-          <button class="btn-danger" @click="removeItems">Eliminar Seleccionados ({{ selectedCount }})</button>
+          <button class="btn-danger" @click="removeItems">
+            Eliminar Seleccionados ({{ selectedCount }})
+          </button>
           <ag-grid-vue
             class="ag-theme-alpine"
-            style="width: 100%; height: 400px;"
+            style="width: 100%; height: 400px"
             :columnDefs="columnDefs"
             :rowData="droppedItems"
             :defaultColDef="defaultColDef"
@@ -128,21 +170,60 @@ const navigateToHome = () => {
         </div>
         <div v-else-if="loading" class="loading">
           <svg class="pl" width="240" height="240" viewBox="0 0 240 240">
-            <circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 660" stroke-dashoffset="-330" stroke-linecap="round"></circle>
-            <circle class="pl__ring pl__ring--b" cx="120" cy="120" r="35" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 220" stroke-dashoffset="-110" stroke-linecap="round"></circle>
-            <circle class="pl__ring pl__ring--c" cx="85" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
-            <circle class="pl__ring pl__ring--d" cx="155" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+            <circle
+              class="pl__ring pl__ring--a"
+              cx="120"
+              cy="120"
+              r="105"
+              fill="none"
+              stroke="#000"
+              stroke-width="20"
+              stroke-dasharray="0 660"
+              stroke-dashoffset="-330"
+              stroke-linecap="round"
+            ></circle>
+            <circle
+              class="pl__ring pl__ring--b"
+              cx="120"
+              cy="120"
+              r="35"
+              fill="none"
+              stroke="#000"
+              stroke-width="20"
+              stroke-dasharray="0 220"
+              stroke-dashoffset="-110"
+              stroke-linecap="round"
+            ></circle>
+            <circle
+              class="pl__ring pl__ring--c"
+              cx="85"
+              cy="120"
+              r="70"
+              fill="none"
+              stroke="#000"
+              stroke-width="20"
+              stroke-dasharray="0 440"
+              stroke-linecap="round"
+            ></circle>
+            <circle
+              class="pl__ring pl__ring--d"
+              cx="155"
+              cy="120"
+              r="70"
+              fill="none"
+              stroke="#000"
+              stroke-width="20"
+              stroke-dasharray="0 440"
+              stroke-linecap="round"
+            ></circle>
           </svg>
         </div>
         <p v-else>No items dropped</p>
       </div>
     </div>
   </div>
-  <button @click="navigateToHome">
-      Go to Home
-  </button>
+  <button @click="navigateToHome">Go to Home</button>
 </template>
-
 
 <style>
 .container {

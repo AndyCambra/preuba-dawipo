@@ -1,7 +1,7 @@
 const { _deleteProduct } = require("../../controllers");
 
 const deleteProduct = async (req, res) => {
-  const { name } = req.params;  
+  const { name } = req.params;
 
   try {
     await _deleteProduct(name);
@@ -9,15 +9,14 @@ const deleteProduct = async (req, res) => {
     res.status(200).json({
       message: "The Product instance was deleted successfully",
     });
-  } 
-  catch (error) {
+  } catch (error) {
     res.status(400).json({
       error: true,
-      message: error.message || 'Unknown error',
+      message: error.message || "Unknown error",
     });
   }
 };
 
-module.exports = { 
+module.exports = {
   deleteProduct,
 };

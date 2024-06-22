@@ -1,4 +1,4 @@
-const { validationResult } = require('express-validator');
+const { validationResult } = require("express-validator");
 const { _registerUser } = require("../../controllers");
 
 const registerUser = async (req, res) => {
@@ -7,22 +7,16 @@ const registerUser = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { 
-    name,
-    lastName,
-    email,
-    password,
-    avatarUrl,   
-  } = req.body;     
+  const { name, lastName, email, password, avatarUrl } = req.body;
 
-  try {          
+  try {
     const newUser = await _registerUser(
-      name,      
+      name,
       lastName,
       email,
       password,
-      avatarUrl      
-    );      
+      avatarUrl,
+    );
 
     res.status(201).json({
       message: "The user was registered successfully",
