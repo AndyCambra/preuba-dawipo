@@ -3,4 +3,7 @@ torch
 numpy
 pandas
 json_repair
+nltk
+cython
+sentencepiece
 flask

@@ -2,6 +2,8 @@
 node_modules
 /dist
 
+# Python virtual environment
+venv/
 
 # local env files
 .env.local
@@ -24,5 +26,5 @@ pnpm-debug.log*
 backend/.env
 
 # Ignore trained model
-ia/best-fine-tuned-t5-base
+ia/models/best-fine-tuned-t5-base
 .safetensors

@@ -54,7 +54,9 @@ const isDashPruebaRoute = computed(() => route.path === "/dash-prueba");
 </template>
 
 <style scoped>
+
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
 header {
   background-color: black;
   color: white;
@@ -79,7 +81,6 @@ nav span {
   padding: 8px 16px;
   border-radius: 4px;
   cursor: pointer;
-  font-family: "Montserrat", sans-serif;
   font-weight: 700;
   font-size: 1.2rem;
   transition: all 250ms;
