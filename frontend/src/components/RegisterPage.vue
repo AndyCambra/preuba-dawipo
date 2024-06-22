@@ -41,7 +41,6 @@ const register = async () => {
 const navigateToLogin = () =>{
   router.push("/login");
 }
-
 </script>
 
 <template>

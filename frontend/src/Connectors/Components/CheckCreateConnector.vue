@@ -33,7 +33,6 @@ const navigateToDashboard = () =>{
   font-size: 1.2rem;
   transition: all 250ms;
 }
-
 .btn-check-fields{
   background-color: transparent;
   border: 2px solid rgb(167, 164, 164);
@@ -49,7 +48,6 @@ const navigateToDashboard = () =>{
   background-color: rgb(0,255,206);
   border: 1px solid rgb(0,255,206);
   color: black;
-
 }
 .btn-navigate-to-dashboard:hover {
   background-color: transparent;

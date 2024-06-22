@@ -103,14 +103,12 @@ onMounted(() => {
 .drag-section {
   display: flex;
 }
-
 .drag-container {
   display: flex;
   flex-direction: column;
   width: 25%;
   justify-content: center;
 }
-
 .drag-el {
   padding: 10px;
   margin: 5px;
@@ -120,7 +118,6 @@ onMounted(() => {
   width: 200px;
   text-align: center;
 }
-
 .drop-area {
   margin-top: 20px;
   padding: 20px;
@@ -132,11 +129,9 @@ onMounted(() => {
   justify-content: center;
   align-items: center;
 }
-
 .drop-area p {
   margin: 0;
 }
-
 button {
   margin-top: 20px;
   padding: 10px 20px;

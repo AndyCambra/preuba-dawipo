@@ -22,7 +22,6 @@ const groupedItemsOwn = computed(() => {
 const navigateToCreateConnector = () =>{
   route.push('/create-connector')
 }
-
 </script>
 
 <template>
@@ -47,7 +46,6 @@ const navigateToCreateConnector = () =>{
     </div>
   </div>
 </template>
-
 
 <style scoped>
 .drag-connectors-own{
