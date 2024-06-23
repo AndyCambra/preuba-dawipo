@@ -1,8 +1,14 @@
+import argparse
 from ia.tests.test_model import run_test
 from ia.utils.test_utils import sort_unformatted_keys
 
+# Configurar el analizador de argumentos
+parser = argparse.ArgumentParser(description="Ejecutar pruebas en lote.")
+parser.add_argument('num_runs', type=int, nargs='?', default=10, help='Número de veces que quieres ejecutar el script')
+args = parser.parse_args()
+
 # Número de veces que quieres ejecutar el script
-num_runs = 100
+num_runs = args.num_runs
 
 # Ejecutar el script principal varias veces
 for i in range(num_runs):

@@ -26,5 +26,5 @@ pnpm-debug.log*
 backend/.env
 
 # Ignore trained model
-ia/models/best-fine-tuned-t5-base
+ia/models/fine-tuned-t5-base
 .safetensors
