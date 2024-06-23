@@ -1,54 +1,28 @@
 import logging
-import torch
-from transformers import T5ForConditionalGeneration, T5Tokenizer
-from ia.utils.data_utils import load_data, prepare_data
-from ia.utils.model_utils import train_model, validate_model, save_model, get_device
+from ia.utils.train_utils import train
+from ia.config import TRAINING_FILES, VALIDATION_FILE, MODEL_PATH, LEARNING_RATE, NUM_EPOCHS, BATCH_SIZE, LOG_FORMAT, LOG_LEVEL, PATIENCE
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# Configura el logging con el nivel y formato especificados en la configuración
+logging.basicConfig(level=LOG_LEVEL, format=LOG_FORMAT)
 
 def main():
+    # Inicia el proceso de entrenamiento
     logging.info("Starting training process...")
-
-    # Define file paths
-    training_files = ["ia/data/training_examples.json", "ia/data/training_examples_updated.json"]
-    validation_file = "ia/data/training_validation.json"
-    model_path = "ia/models/fine-tuned-t5-base"
-
-    # Load data
-    training_data, validation_data = load_data(training_files, validation_file)
-
-    # Initialize tokenizer and model
-    tokenizer = T5Tokenizer.from_pretrained("t5-base")
-    model = T5ForConditionalGeneration.from_pretrained("t5-base")
-    device = get_device()
-    model.to(device)
-
-    # Prepare data loaders
-    train_loader = prepare_data(training_data, tokenizer)
-    val_loader = prepare_data(validation_data, tokenizer)
-
-    # Set up optimizer
-    optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4)
-
-    # Training loop
-    num_epochs = 5
-    best_val_loss = float('inf')
-
-    for epoch in range(num_epochs):
-        logging.info(f"Epoch {epoch+1}/{num_epochs}")
-        
-        train_loss = train_model(model, train_loader, optimizer, device)
-        logging.info(f"Training loss: {train_loss:.4f}")
-
-        val_loss = validate_model(model, val_loader, device)
-        logging.info(f"Validation loss: {val_loss:.4f}")
-
-        if val_loss < best_val_loss:
-            best_val_loss = val_loss
-            save_model(model, tokenizer, model_path)
-            logging.info("Model saved")
-
+    
+    # Llama a la función de entrenamiento con los parámetros especificados
+    train(
+        TRAINING_FILES,
+        VALIDATION_FILE,
+        MODEL_PATH,
+        learning_rate=LEARNING_RATE,
+        num_epochs=NUM_EPOCHS,
+        batch_size=BATCH_SIZE,
+        patience=PATIENCE
+    )
+    
+    # Indica que el entrenamiento ha sido completado
     logging.info("Training completed.")
 
+# Ejecuta la función principal si el script se ejecuta directamente
 if __name__ == "__main__":
     main()
