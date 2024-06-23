@@ -1,8 +1,8 @@
-## Setup
+# Setup
 
 First, ensure you have Python 3.8 or higher installed. Then, clone the repository and navigate to the `ia` folder:
 
-# Create a virtual environment
+## Create a virtual environment
 
 ```sh
 python -m venv venv
@@ -12,20 +12,20 @@ python -m venv venv
 cd ia
 ```
 
-# Activate the virtual environment
+## Activate the virtual environment
 
 ```sh
 source venv/bin/activate  # On Linux/Mac
 venv\Scripts\activate     # On Windows
 ```
 
-# Install dependencies
+## Install dependencies
 
 ```sh
 pip install -r requirements.txt
 ```
 
-## Run scripts
+# Run scripts
 
 Run these commands from the root of the project:
 
@@ -68,7 +68,7 @@ python -m ia.tests.batch_test [n]
 # If [n] is not provided, 10 tests will be run by default.
 ```
 
-### Project structure
+# Project structure
 
 ```
 ia/
