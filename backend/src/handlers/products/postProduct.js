@@ -26,7 +26,10 @@ const postProduct = async (req, res) => {
       }
 
       const newProduct = await _postProduct({
-        name: transformedProduct.name,
+        name: transformedProduct.name !== undefined 
+          && transformedProduct.name !== null 
+          ? transformedProduct.name 
+          : `undefined_name_${Date.now()}`,
         originCountry: transformedProduct.originCountry,
         finalCountry: transformedProduct.finalCountry,
         departureDate: transformedProduct.departureDate,
