@@ -1,5 +1,4 @@
 import random
-import json
 from collections import defaultdict
 
 def save_unformatted_keys_to_file(unformatted_keys, file_path="ia/data/unformatted_keys.txt"):

@@ -1,0 +1,14 @@
+sourceLocation: 15
+fechaCompra: 5
+orderStatus: 4
+receiptLocation: 4
+deliveryStatus: 3
+final_destination: 3
+order_status: 3
+delivery_Status: 3
+shipping_Status: 3
+estadoActual: 2
+delivery_date_due: 2
+packageCondition: 1
+nombreEntrega: 1
+expectedDeliveryDate: 1

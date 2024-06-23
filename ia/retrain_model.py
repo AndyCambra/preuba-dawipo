@@ -1,37 +1,37 @@
-import logging
 import torch
 from transformers import T5ForConditionalGeneration, T5Tokenizer
 from ia.utils.data_utils import load_data, prepare_data
 from ia.utils.model_utils import train_model, validate_model, save_model, get_device
+import logging
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-def main():
-    logging.info("Starting training process...")
+def retrain_model():
+    logging.info("Starting incremental training process...")
 
-    # Define file paths
-    training_files = ["ia/data/training_examples.json", "ia/data/training_examples_updated.json"]
+    # File paths
+    training_file = "ia/data/training_examples_updated.json"
     validation_file = "ia/data/training_validation.json"
     model_path = "ia/models/fine-tuned-t5-base"
-
+    
     # Load data
-    training_data, validation_data = load_data(training_files, validation_file)
+    training_data, validation_data = load_data(training_file, validation_file)
 
-    # Initialize tokenizer and model
-    tokenizer = T5Tokenizer.from_pretrained("t5-base")
-    model = T5ForConditionalGeneration.from_pretrained("t5-base")
+    # Load pre-trained model and tokenizer
     device = get_device()
+    model = T5ForConditionalGeneration.from_pretrained(model_path)
+    tokenizer = T5Tokenizer.from_pretrained(model_path)
     model.to(device)
 
     # Prepare data loaders
     train_loader = prepare_data(training_data, tokenizer)
     val_loader = prepare_data(validation_data, tokenizer)
 
-    # Set up optimizer
-    optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4)
+    # Set up optimizer with a lower learning rate for fine-tuning
+    optimizer = torch.optim.AdamW(model.parameters(), lr=5e-5)
 
     # Training loop
-    num_epochs = 5
+    num_epochs = 3  # Fewer epochs for fine-tuning
     best_val_loss = float('inf')
 
     for epoch in range(num_epochs):
@@ -48,7 +48,7 @@ def main():
             save_model(model, tokenizer, model_path)
             logging.info("Model saved")
 
-    logging.info("Training completed.")
+    logging.info("Incremental training completed.")
 
 if __name__ == "__main__":
-    main()
+    retrain_model()
