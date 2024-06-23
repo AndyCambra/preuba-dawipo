@@ -73,7 +73,10 @@ python -m ia.tests.batch_test [n]
 ```
 ia/
 ├── __init__.py
-├── app.py
+├── app.py # Flask application
+├── train_model.py # Train the model from scratch
+├── retrain_model.py # Retrain incrementally the model
+├── config.py # Training configuration
 ├── data/
 │   ├── training_examples.json
 │   ├── training_validation.json
@@ -83,7 +86,7 @@ ia/
 │   ├── model.py
 ├── routes/
 │   ├── __init__.py
-│   ├── product_routes.py
+│   ├── product_routes.py # Product routes
 ├── utils/
 │   ├── __init__.py
 │   ├── format_utils.py
@@ -96,8 +99,7 @@ ia/
 │   ├── __init__.py
 │   ├── test_model.py
 │   ├── batch_test.py
-├── train_model.py
-├── retrain_model.py
+
 
 ### Folder descriptions
 
