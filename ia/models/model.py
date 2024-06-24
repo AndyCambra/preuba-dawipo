@@ -1,5 +1,14 @@
-from transformers import T5ForConditionalGeneration, T5Tokenizer
+import os
+from ia.utils.model_utils import initialize_model
 
-model_path = "ia/models/best-fine-tuned-t5-base"  # Ruta relativa al directorio de trabajo
-model = T5ForConditionalGeneration.from_pretrained(model_path)
-tokenizer = T5Tokenizer.from_pretrained(model_path)
+# Definir la ruta base del proyecto
+base_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# Definir la ruta del modelo
+model_path = os.path.join(base_path, 'ia', 'models', 'fine-tuned-t5-base')
+
+# Inicializar el modelo y el tokenizador
+model, tokenizer = initialize_model(model_path)
+
+# Exportar las variables
+__all__ = ['model', 'tokenizer', 'model_path']

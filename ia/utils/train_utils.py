@@ -1,94 +1,114 @@
-import json
 import logging
-import os
-from ..utils.data_utils import load_data
-from ..utils.synonyms import build_synonym_dict, map_keys
-from ..utils.file_utils import backup_and_reset_unformatted_keys, backup_and_replace_training_json
+import torch
+from typing import List
+from torch.utils.data import DataLoader
+from tqdm import tqdm
+from transformers import T5ForConditionalGeneration
+from ia.utils.data_utils import load_data, prepare_data
+from ia.utils.model_utils import save_model, initialize_model, get_device
 
-# Configurar logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
-# Leer el archivo de claves sin formatear
-def load_unformatted_keys(file_path):
-    with open(file_path, 'r') as file:
-        lines = file.readlines()
-    new_keys = {}
-    for line in lines:
-        key, freq = line.split(':')
-        new_keys[key.strip()] = int(freq.strip())
-    return new_keys
-
-# Actualizar el conjunto de entrenamiento con las nuevas claves mapeadas
-def update_training_data(training_data, mapped_keys):
-    updated = False
-    for entry in training_data:
-        for input_key in list(entry["input"].keys()):
-            if input_key in mapped_keys:
-                new_input_key = mapped_keys[input_key]
-                if new_input_key != input_key:
-                    entry["input"][new_input_key] = entry["input"].pop(input_key)
-                    updated = True
-    return training_data, updated
-
-# Comparar dos archivos JSON y reportar cambios
-def compare_json_files(original_file, updated_file):
-    with open(original_file, 'r') as file1, open(updated_file, 'r') as file2:
-        original_data = json.load(file1)
-        updated_data = json.load(file2)
+# Función para entrenar el modelo
+def train_model(model: T5ForConditionalGeneration, train_loader: DataLoader, optimizer: torch.optim.Optimizer, device: torch.device) -> float:
+    model.train()  # Pone el modelo en modo de entrenamiento
+    total_loss = 0
+    progress_bar = tqdm(train_loader, desc="Training")  # Barra de progreso para el entrenamiento
     
-    if original_data == updated_data:
-        logging.info("No changes detected in the training examples.")
-        return False
-    else:
-        logging.info("Changes detected in the training examples.")
-        return True
+    for batch in progress_bar:
+        input_ids, target_ids = [b.to(device) for b in batch]  # Mueve los datos al dispositivo (GPU o CPU)
+        optimizer.zero_grad()  # Resetea los gradientes del optimizador
+        outputs = model(input_ids=input_ids, labels=target_ids)  # Pasa los datos por el modelo
+        loss = outputs.loss  # Obtiene la pérdida
+        total_loss += loss.item()  # Acumula la pérdida total
+        loss.backward()  # Calcula los gradientes
+        optimizer.step()  # Actualiza los parámetros del modelo
+        progress_bar.set_postfix({"loss": loss.item()})  # Actualiza la barra de progreso con la pérdida actual
+    
+    avg_train_loss = total_loss / len(train_loader)  # Calcula la pérdida promedio
+    return avg_train_loss
 
-def preprocess_data(training_file, validation_file, unformatted_keys_file):
-    # Cargar datos de entrenamiento y validación
-    training_examples, validation_examples = load_data(training_file, validation_file)
+# Función para validar el modelo
+def validate_model(model: T5ForConditionalGeneration, val_loader: DataLoader, device: torch.device) -> float:
+    model.eval()  # Pone el modelo en modo de evaluación
+    total_loss = 0
+    progress_bar = tqdm(val_loader, desc="Validating")  # Barra de progreso para la validación
+    
+    with torch.no_grad():  # Desactiva el cálculo de gradientes
+        for batch in progress_bar:
+            input_ids, target_ids = [b.to(device) for b in batch]  # Mueve los datos al dispositivo
+            outputs = model(input_ids=input_ids, labels=target_ids)  # Pasa los datos por el modelo
+            loss = outputs.loss  # Obtiene la pérdida
+            total_loss += loss.item()  # Acumula la pérdida total
+            progress_bar.set_postfix({"loss": loss.item()})  # Actualiza la barra de progreso con la pérdida actual
+    
+    avg_val_loss = total_loss / len(val_loader)  # Calcula la pérdida promedio
+    return avg_val_loss
 
-    # Cargar el archivo de claves sin formatear
-    new_keys = load_unformatted_keys(unformatted_keys_file)
+# Función principal para entrenar el modelo desde cero
+def train(training_files: List[str], validation_file: str, model_save_path: str, learning_rate: float, num_epochs: int, batch_size: int, patience: int):
+    training_data, validation_data = load_data(training_files, validation_file)  # Carga los datos de entrenamiento y validación
+    model, tokenizer = initialize_model(model_save_path, from_scratch=True)  # Inicializa el modelo desde cero
+    device = get_device()  # Obtiene el dispositivo (GPU o CPU)
+    model.to(device)  # Mueve el modelo al dispositivo
 
-    # Construir el diccionario de sinónimos
-    synonym_dict = build_synonym_dict(training_file)
+    train_loader = prepare_data(training_data, tokenizer, batch_size)  # Prepara los datos de entrenamiento
+    val_loader = prepare_data(validation_data, tokenizer, batch_size)  # Prepara los datos de validación
 
-    # Mapear las claves nuevas a las existentes
-    mapped_keys = map_keys(new_keys, synonym_dict, threshold=0.7)  # Ajustar el umbral
-    logging.info("Mapped keys: %s", mapped_keys)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)  # Inicializa el optimizador
+    best_val_loss = float('inf')  # Inicializa la mejor pérdida de validación
+    epochs_without_improvement = 0  # Contador de épocas sin mejora
 
-    # Actualizar el conjunto de entrenamiento
-    updated_training_data, updated = update_training_data(training_examples, mapped_keys)
+    for epoch in range(num_epochs):
+        logging.info(f"Epoch {epoch+1}/{num_epochs}")  # Log de la época actual
+        
+        train_loss = train_model(model, train_loader, optimizer, device)  # Entrena el modelo
+        logging.info(f"Training loss: {train_loss:.4f}")  # Log de la pérdida de entrenamiento
 
-    if not updated:
-        logging.info("No updates made to the training data.")
-        return training_examples, validation_examples
+        val_loss = validate_model(model, val_loader, device)  # Valida el modelo
+        logging.info(f"Validation loss: {val_loss:.4f}")  # Log de la pérdida de validación
 
-    # Guardar los datos de entrenamiento actualizados temporalmente
-    temp_training_file = "ia/data/training_examples_updated.json"
-    with open(temp_training_file, "w") as file:
-        json.dump(updated_training_data, file)
+        if val_loss < best_val_loss:
+            best_val_loss = val_loss  # Actualiza la mejor pérdida de validación
+            save_model(model, tokenizer, model_save_path)  # Guarda el modelo
+            logging.info("Model saved")  # Log de guardado del modelo
+            epochs_without_improvement = 0  # Resetea el contador de épocas sin mejora
+        else:
+            epochs_without_improvement += 1  # Incrementa el contador de épocas sin mejora
+            if epochs_without_improvement >= patience:
+                logging.info(f"Early stopping triggered after {epoch+1} epochs")  # Log de parada temprana
+                break
 
-    changes_detected = False
-    try:
-        # Comparar archivos JSON y reportar cambios
-        changes_detected = compare_json_files(training_file, temp_training_file)
+    return model, tokenizer
 
-        # Respaldar el archivo de entrenamiento original y reemplazarlo por el nuevo si hay cambios
-        if changes_detected:
-            backup_and_replace_training_json(training_file, temp_training_file)
-            # Respaldo y reseteo del archivo de claves sin formatear solo si hubo cambios
-            backup_and_reset_unformatted_keys(unformatted_keys_file)
-    finally:
-        # Ensure the temporary file is deleted
-        try:
-            if os.path.exists(temp_training_file):
-                os.remove(temp_training_file)
-                logging.info("Deleted the temporary file after processing.")
-            else:
-                logging.warning(f"The temporary file {temp_training_file} does not exist.")
-        except Exception as e:
-            logging.error(f"Failed to delete the temporary file {temp_training_file}: {e}")
+# Función principal para reentrenar el modelo existente
+def retrain(training_files: List[str], validation_file: str, model_save_path: str, learning_rate: float, num_epochs: int, batch_size: int, patience: int):
+    training_data, validation_data = load_data(training_files, validation_file)  # Carga los datos de entrenamiento y validación
+    model, tokenizer = initialize_model(model_save_path)  # Inicializa el modelo desde el directorio especificado
+    device = get_device()  # Obtiene el dispositivo (GPU o CPU)
+    model.to(device)  # Mueve el modelo al dispositivo
 
-    return updated_training_data, validation_examples
+    train_loader = prepare_data(training_data, tokenizer, batch_size)  # Prepara los datos de entrenamiento
+    val_loader = prepare_data(validation_data, tokenizer, batch_size)  # Prepara los datos de validación
 
+    optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)  # Inicializa el optimizador
+    best_val_loss = float('inf')  # Inicializa la mejor pérdida de validación
+    epochs_without_improvement = 0  # Contador de épocas sin mejora
+
+    for epoch in range(num_epochs):
+        logging.info(f"Epoch {epoch+1}/{num_epochs}")  # Log de la época actual
+        
+        train_loss = train_model(model, train_loader, optimizer, device)  # Entrena el modelo
+        logging.info(f"Training loss: {train_loss:.4f}")  # Log de la pérdida de entrenamiento
+
+        val_loss = validate_model(model, val_loader, device)  # Valida el modelo
+        logging.info(f"Validation loss: {val_loss:.4f}")  # Log de la pérdida de validación
+
+        if val_loss < best_val_loss:
+            best_val_loss = val_loss  # Actualiza la mejor pérdida de validación
+            save_model(model, tokenizer, model_save_path)  # Guarda el modelo
+            logging.info("Model saved")  # Log de guardado del modelo
+            epochs_without_improvement = 0  # Resetea el contador de épocas sin mejora
+        else:
+            epochs_without_improvement += 1  # Incrementa el contador de épocas sin mejora
+            if epochs_without_improvement >= patience:
+                logging.info(f"Early stopping triggered after {epoch+1} epochs")  # Log de parada temprana
+                break

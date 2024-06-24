@@ -1,9 +1,6 @@
 transformers
 torch
-numpy
+numpy<2
 pandas
 json_repair
-nltk
-cython
-sentencepiece
 flask

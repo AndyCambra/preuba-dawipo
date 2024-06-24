@@ -1,72 +1,28 @@
-import json
-import torch
-from transformers import T5ForConditionalGeneration, T5Tokenizer
-from ia.utils.data_utils import prepare_data
-from ia.utils.model_utils import train_model, validate_model, save_model
-from ia.utils.train_utils import preprocess_data
 import logging
+from ia.utils.train_utils import train
+from ia.config import TRAINING_FILES, VALIDATION_FILE, MODEL_PATH, LEARNING_RATE, NUM_EPOCHS, BATCH_SIZE, LOG_FORMAT, LOG_LEVEL, PATIENCE
 
-# Configurar logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# Configura el logging con el nivel y formato especificados en la configuración
+logging.basicConfig(level=LOG_LEVEL, format=LOG_FORMAT)
 
 def main():
-    # Definir rutas de archivo
-    training_file = "ia/data/training_examples.json"
-    validation_file = "ia/data/training_validation.json"
-    unformatted_keys_file = "ia/data/unformatted_keys.txt"
+    # Inicia el proceso de entrenamiento
+    logging.info("Starting training process...")
+    
+    # Llama a la función de entrenamiento con los parámetros especificados
+    train(
+        TRAINING_FILES,
+        VALIDATION_FILE,
+        MODEL_PATH,
+        learning_rate=LEARNING_RATE,
+        num_epochs=NUM_EPOCHS,
+        batch_size=BATCH_SIZE,
+        patience=PATIENCE
+    )
+    
+    # Indica que el entrenamiento ha sido completado
+    logging.info("Training completed.")
 
-    # Preguntar si se debe realizar el reentrenamiento en base a sinónimos
-    reentrenar = input("¿Desea realizar el reentrenamiento en base a sinónimos? (s/n): ").strip().lower()
-
-    if reentrenar == 's':
-        # Preprocesar los datos
-        updated_training_data, validation_examples = preprocess_data(training_file, validation_file, unformatted_keys_file)
-
-        # Guardar los datos de entrenamiento actualizados
-        with open("ia/data/training_examples_updated.json", "w") as file:
-            json.dump(updated_training_data, file)
-    else:
-        # Cargar los datos originales sin cambios
-        with open(training_file, 'r') as file:
-            updated_training_data = json.load(file)
-        with open(validation_file, 'r') as file:
-            validation_examples = json.load(file)
-
-    # Preparar datos de entrenamiento y validación
-    tokenizer = T5Tokenizer.from_pretrained("t5-base")
-    train_loader = prepare_data(updated_training_data, tokenizer)
-    val_loader = prepare_data(validation_examples, tokenizer)
-
-    # Fine-Tuning del modelo
-    model = T5ForConditionalGeneration.from_pretrained("t5-base")
-    optimizer = torch.optim.AdamW(model.parameters(), lr=5e-5)
-
-    num_epochs = 4
-    patience = 3
-    best_val_loss = float('inf')
-    patience_counter = 0
-
-    logging.info("Iniciando entrenamiento...")
-    for epoch in range(num_epochs):
-        avg_train_loss = train_model(model, train_loader, optimizer)
-        logging.info(f"Epoch {epoch+1}: Training loss: {avg_train_loss}")
-
-        avg_val_loss = validate_model(model, val_loader)
-        logging.info(f"Epoch {epoch+1}: Validation loss: {avg_val_loss}")
-
-        # Early stopping
-        if avg_val_loss < best_val_loss:
-            best_val_loss = avg_val_loss
-            patience_counter = 0
-            # Guardar el mejor modelo
-            save_model(model, tokenizer, "ia/models/best-fine-tuned-t5-base")
-        else:
-            patience_counter += 1
-            if patience_counter >= patience:
-                logging.info("Early stopping triggered")
-                break
-
-    logging.info("Entrenamiento completado.")
-
+# Ejecuta la función principal si el script se ejecuta directamente
 if __name__ == "__main__":
     main()

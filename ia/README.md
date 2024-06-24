@@ -1,8 +1,8 @@
-## Configuración
+# Setup
 
-Primero, asegúrate de tener Python 3.8 o superior instalado. Luego, clona el repositorio y navega a la carpeta `ia`:
+First, ensure you have Python 3.8 or higher installed. Then, clone the repository and navigate to the `ia` folder:
 
-# Crear entorno virtual
+## Create a virtual environment
 
 ```sh
 python -m venv venv
@@ -12,89 +12,100 @@ python -m venv venv
 cd ia
 ```
 
-# Activar entorno virtual
+## Activate the virtual environment
 
 ```sh
-source venv/bin/activate  # En Linux/Mac
-venv\Scripts\activate     # En Windows
+source venv/bin/activate  # On Linux/Mac
+venv\Scripts\activate     # On Windows
 ```
 
-# Instalar las dependencias
+## Install dependencies
 
 ```sh
 pip install -r requirements.txt
 ```
 
-```sh
-pip install spacy
-python -m spacy download en_core_web_sm
-```
+# Run scripts
 
-## Ejecutar scripts
+Run these commands from the root of the project:
 
-Ejecutar estos comandos en la raíz del proyecto:
-
-### Ejecutar en entorno virtual
+### Activate the virtual environment
 
 ```sh
-source ia/venv/bin/activate  # En Linux/Mac
-ia\venv\Scripts\activate     # En Windows
+source ia/venv/bin/activate  # On Linux/Mac
+ia\venv\Scripts\activate     # On Windows
 ```
 
-### Entrenamiento del modelo
+### Train the model
 
 ```sh
 python -m ia.train_model
 ```
 
-### Ejecutar la aplicación Flask
+### Retrain the model
+
+```sh
+python -m ia.retrain_model
+```
+
+### Run the Flask application
 
 ```sh
 python -m ia.app
 ```
 
-### Ejecutar pruebas unitarias
+### Run unit tests
 
 ```sh
 python -m ia.tests.test_model
 ```
 
-### Ejecutar pruebas en lote
+### Run batch tests
 
 ```sh
-python -m ia.tests.batch_test
+python -m ia.tests.batch_test [n]
+# Where [n] is an optional number specifying how many tests you want to run.
+# If [n] is not provided, 10 tests will be run by default.
 ```
 
-## Estructura del proyecto
+# Project structure
 
 ```
 ia/
 ├── __init__.py
-├── app.py
+├── app.py # Flask application
+├── train_model.py # Train the model from scratch
+├── retrain_model.py # Retrain incrementally the model
+├── config.py # Training configuration
 ├── data/
 │   ├── training_examples.json
 │   ├── training_validation.json
+│   ├── unformatted_keys.txt
 ├── models/
 │   ├── __init__.py
 │   ├── model.py
 ├── routes/
 │   ├── __init__.py
-│   ├── product_routes.py
+│   ├── product_routes.py # Product routes
 ├── utils/
 │   ├── __init__.py
-│   ├── format.py
+│   ├── format_utils.py
 │   ├── test_utils.py
+│   ├── data_utils.py
+│   ├── model_utils.py
+│   ├── file_utils.py
+│   ├── train_utils.py
 ├── tests/
 │   ├── __init__.py
 │   ├── test_model.py
 │   ├── batch_test.py
-├── train_model.py
+
+
+### Folder descriptions
+
+- **data/**: Contains JSON files for training and validation data.
+- **models/**: Contains the model and tokenizer definitions and loading.
+- **routes/**: Contains the Flask application routes.
+- **utils/**: Contains utility functions for formatting and testing.
+- **tests/**: Contains test scripts and batch tests.
 ```
-
-### Descripción de carpetas
-
-- **data/**: Contiene los archivos JSON de datos de entrenamiento y validación.
-- **models/**: Contiene la definición y carga del modelo y tokenizer.
-- **routes/**: Contiene las rutas de la aplicación Flask.
-- **utils/**: Contiene funciones utilitarias para formateo y pruebas.
-- **tests/**: Contiene los scripts de prueba y pruebas en lote.

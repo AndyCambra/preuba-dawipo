@@ -2126,5 +2126,757 @@
     "output": {
       "finalCountry": "Germany"
     }
+  },
+  {
+    "input": {
+      "estadoEnvio": "Delivered"
+    },
+    "output": {
+      "status": "Delivered"
+    }
+  },
+  {
+    "input": {
+      "estado_Envio": "Delivered"
+    },
+    "output": {
+      "status": "Delivered"
+    }
+  },
+  {
+    "input": {
+      "currStatus": "In Transit"
+    },
+    "output": {
+      "status": "In Transit"
+    }
+  },
+  {
+    "input": {
+      "nombreArticulo": "Tablet A"
+    },
+    "output": {
+      "name": "Tablet A"
+    }
+  },
+  {
+    "input": {
+      "nombre_Articulo": "Tablet A"
+    },
+    "output": {
+      "name": "Tablet A"
+    }
+  },
+  {
+    "input": {
+      "descripcionProducto": "Tablet A"
+    },
+    "output": {
+      "name": "Tablet A"
+    }
+  },
+  {
+    "input": {
+      "descripcion_Producto": "Tablet A"
+    },
+    "output": {
+      "name": "Tablet A"
+    }
+  },
+  {
+    "input": {
+      "productName": "Smartphone X"
+    },
+    "output": {
+      "name": "Smartphone X"
+    }
+  },
+  {
+    "input": {
+      "fecha_envio": "01/01/25"
+    },
+    "output": {
+      "departureDate": "01/01/25"
+    }
+  },
+  {
+    "input": {
+      "send_date": "02/02/25"
+    },
+    "output": {
+      "departureDate": "02/02/25"
+    }
+  },
+  {
+    "input": {
+      "dispatch_date": "03/03/25"
+    },
+    "output": {
+      "departureDate": "03/03/25"
+    }
+  },
+  {
+    "input": {
+      "shipment_date": "04/04/25"
+    },
+    "output": {
+      "departureDate": "04/04/25"
+    }
+  },
+  {
+    "input": {
+      "shipping_date": "05/05/25"
+    },
+    "output": {
+      "departureDate": "05/05/25"
+    }
+  },
+  {
+    "input": {
+      "fecha_llegada": "05/01/25"
+    },
+    "output": {
+      "arrivalDate": "05/01/25"
+    }
+  },
+  {
+    "input": {
+      "arrival_date": "07/02/25"
+    },
+    "output": {
+      "arrivalDate": "07/02/25"
+    }
+  },
+  {
+    "input": {
+      "expected_arrival": "08/03/25"
+    },
+    "output": {
+      "arrivalDate": "08/03/25"
+    }
+  },
+  {
+    "input": {
+      "estimated_arrival_date": "09/04/25"
+    },
+    "output": {
+      "arrivalDate": "09/04/25"
+    }
+  },
+  {
+    "input": {
+      "delivery_due_date": "10/05/25"
+    },
+    "output": {
+      "arrivalDate": "10/05/25"
+    }
+  },
+  {
+    "input": {
+      "estado_actual": "En camino"
+    },
+    "output": {
+      "status": "En camino"
+    }
+  },
+  {
+    "input": {
+      "current_status": "Pendiente"
+    },
+    "output": {
+      "status": "Pendiente"
+    }
+  },
+  {
+    "input": {
+      "shipment_status": "Retrasado"
+    },
+    "output": {
+      "status": "Retrasado"
+    }
+  },
+  {
+    "input": {
+      "delivery_status": "Entregado"
+    },
+    "output": {
+      "status": "Entregado"
+    }
+  },
+  {
+    "input": {
+      "order_status": "Cancelado"
+    },
+    "output": {
+      "status": "Cancelado"
+    }
+  },
+  {
+    "input": {
+      "supplier_name": "Provider-27"
+    },
+    "output": {
+      "provider": "Provider-27"
+    }
+  },
+  {
+    "input": {
+      "distribuidor": "Provider-9"
+    },
+    "output": {
+      "provider": "Provider-9"
+    }
+  },
+  {
+    "input": {
+      "nombreDestinatario": "Provider-9"
+    },
+    "output": {
+      "provider": "Provider-9"
+    }
+  },
+  {
+    "input": {
+      "nombre_Destinatario": "Provider-9"
+    },
+    "output": {
+      "provider": "Provider-9"
+    }
+  },
+  {
+    "input": {
+      "nombreEntrega": "Provider-9"
+    },
+    "output": {
+      "provider": "Provider-9"
+    }
+  },
+  {
+    "input": {
+      "destination": "France"
+    },
+    "output": {
+      "finalCountry": "France"
+    }
+  },
+  {
+    "input": {
+      "destination_country": "Canada"
+    },
+    "output": {
+      "finalCountry": "Canada"
+    }
+  },
+  {
+    "input": {
+      "final_destination": "Mexico"
+    },
+    "output": {
+      "finalCountry": "Mexico"
+    }
+  },
+  {
+    "input": {
+      "country_of_arrival": "USA"
+    },
+    "output": {
+      "finalCountry": "USA"
+    }
+  },
+  {
+    "input": {
+      "end_point_country": "Germany"
+    },
+    "output": {
+      "finalCountry": "Germany"
+    }
+  },
+  {
+    "input": {
+      "estadoEnvio": "In Transit"
+    },
+    "output": {
+      "status": "In Transit"
+    }
+  },
+  {
+    "input": {
+      "estado_Envio": "In Transit"
+    },
+    "output": {
+      "status": "In Transit"
+    }
+  },
+  {
+    "input": {
+      "currStatus": "Delivered"
+    },
+    "output": {
+      "status": "Delivered"
+    }
+  },
+  {
+    "input": {
+      "nombreArticulo": "Smartphone X"
+    },
+    "output": {
+      "name": "Smartphone X"
+    }
+  },
+  {
+    "input": {
+      "nombre_Articulo": "Smartphone X"
+    },
+    "output": {
+      "name": "Smartphone X"
+    }
+  },
+  {
+    "input": {
+      "descripcionProducto": "Smartphone X"
+    },
+    "output": {
+      "name": "Smartphone X"
+    }
+  },
+  {
+    "input": {
+      "descripcion_Producto": "Smartphone X"
+    },
+    "output": {
+      "name": "Smartphone X"
+    }
+  },
+  {
+    "input": {
+      "productName": "Tablet A"
+    },
+    "output": {
+      "name": "Tablet A"
+    }
+  },
+  {
+    "input": {
+      "fecha_envio": "06/06/25"
+    },
+    "output": {
+      "departureDate": "06/06/25"
+    }
+  },
+  {
+    "input": {
+      "send_date": "07/07/25"
+    },
+    "output": {
+      "departureDate": "07/07/25"
+    }
+  },
+  {
+    "input": {
+      "dispatch_date": "08/08/25"
+    },
+    "output": {
+      "departureDate": "08/08/25"
+    }
+  },
+  {
+    "input": {
+      "shipment_date": "09/09/25"
+    },
+    "output": {
+      "departureDate": "09/09/25"
+    }
+  },
+  {
+    "input": {
+      "shipping_date": "10/10/25"
+    },
+    "output": {
+      "departureDate": "10/10/25"
+    }
+  },
+  {
+    "input": {
+      "fecha_llegada": "11/11/25"
+    },
+    "output": {
+      "arrivalDate": "11/11/25"
+    }
+  },
+  {
+    "input": {
+      "arrival_date": "12/12/25"
+    },
+    "output": {
+      "arrivalDate": "12/12/25"
+    }
+  },
+  {
+    "input": {
+      "expected_arrival": "13/01/26"
+    },
+    "output": {
+      "arrivalDate": "13/01/26"
+    }
+  },
+  {
+    "input": {
+      "estimated_arrival_date": "14/02/26"
+    },
+    "output": {
+      "arrivalDate": "14/02/26"
+    }
+  },
+  {
+    "input": {
+      "delivery_due_date": "15/03/26"
+    },
+    "output": {
+      "arrivalDate": "15/03/26"
+    }
+  },
+  {
+    "input": {
+      "estado_actual": "Delivered"
+    },
+    "output": {
+      "status": "Delivered"
+    }
+  },
+  {
+    "input": {
+      "current_status": "In Transit"
+    },
+    "output": {
+      "status": "In Transit"
+    }
+  },
+  {
+    "input": {
+      "shipment_status": "Pending"
+    },
+    "output": {
+      "status": "Pending"
+    }
+  },
+  {
+    "input": {
+      "delivery_status": "In Transit"
+    },
+    "output": {
+      "status": "In Transit"
+    }
+  },
+  {
+    "input": {
+      "order_status": "Delivered"
+    },
+    "output": {
+      "status": "Delivered"
+    }
+  },
+  {
+    "input": {
+      "supplier_name": "Provider-9"
+    },
+    "output": {
+      "provider": "Provider-9"
+    }
+  },
+  {
+    "input": {
+      "distribuidor": "Provider-27"
+    },
+    "output": {
+      "provider": "Provider-27"
+    }
+  },
+  {
+    "input": {
+      "nombreDestinatario": "Provider-27"
+    },
+    "output": {
+      "provider": "Provider-27"
+    }
+  },
+  {
+    "input": {
+      "nombre_Destinatario": "Provider-27"
+    },
+    "output": {
+      "provider": "Provider-27"
+    }
+  },
+  {
+    "input": {
+      "nombreEntrega": "Provider-27"
+    },
+    "output": {
+      "provider": "Provider-27"
+    }
+  },
+  {
+    "input": {
+      "destination": "USA"
+    },
+    "output": {
+      "finalCountry": "USA"
+    }
+  },
+  {
+    "input": {
+      "destination_country": "Mexico"
+    },
+    "output": {
+      "finalCountry": "Mexico"
+    }
+  },
+  {
+    "input": {
+      "final_destination": "Canada"
+    },
+    "output": {
+      "finalCountry": "Canada"
+    }
+  },
+  {
+    "input": {
+      "country_of_arrival": "France"
+    },
+    "output": {
+      "finalCountry": "France"
+    }
+  },
+  {
+    "input": {
+      "end_point_country": "Spain"
+    },
+    "output": {
+      "finalCountry": "Spain"
+    }
+  },
+  {
+    "input": {
+      "productIdentifier": "Smart Home Hub"
+    },
+    "output": {
+      "name": "Smart Home Hub"
+    }
+  },
+  {
+    "input": {
+      "itemDescription": "Wireless Earbuds Pro"
+    },
+    "output": {
+      "name": "Wireless Earbuds Pro"
+    }
+  },
+  {
+    "input": {
+      "articleName": "4K Action Camera"
+    },
+    "output": {
+      "name": "4K Action Camera"
+    }
+  },
+  {
+    "input": {
+      "merchandiseLabel": "Smart Doorbell"
+    },
+    "output": {
+      "name": "Smart Doorbell"
+    }
+  },
+  {
+    "input": {
+      "goodsTitle": "Robotic Lawn Mower"
+    },
+    "output": {
+      "name": "Robotic Lawn Mower"
+    }
+  },
+  {
+    "input": {
+      "sourceLocation": "Shenzhen"
+    },
+    "output": {
+      "originCountry": "Shenzhen"
+    }
+  },
+  {
+    "input": {
+      "departurePoint": "Hamburg"
+    },
+    "output": {
+      "originCountry": "Hamburg"
+    }
+  },
+  {
+    "input": {
+      "exportingCity": "Busan"
+    },
+    "output": {
+      "originCountry": "Busan"
+    }
+  },
+  {
+    "input": {
+      "shippingOrigin": "Rotterdam"
+    },
+    "output": {
+      "originCountry": "Rotterdam"
+    }
+  },
+  {
+    "input": {
+      "dispatchLocation": "Dubai"
+    },
+    "output": {
+      "originCountry": "Dubai"
+    }
+  },
+  {
+    "input": {
+      "arrivalPoint": "Los Angeles"
+    },
+    "output": {
+      "finalCountry": "Los Angeles"
+    }
+  },
+  {
+    "input": {
+      "importingCity": "Singapore"
+    },
+    "output": {
+      "finalCountry": "Singapore"
+    }
+  },
+  {
+    "input": {
+      "deliveryDestination": "Melbourne"
+    },
+    "output": {
+      "finalCountry": "Melbourne"
+    }
+  },
+  {
+    "input": {
+      "receiptLocation": "São Paulo"
+    },
+    "output": {
+      "finalCountry": "São Paulo"
+    }
+  },
+  {
+    "input": {
+      "finalDestination": "Mumbai"
+    },
+    "output": {
+      "finalCountry": "Mumbai"
+    }
+  },
+  {
+    "input": {
+      "shipmentInitiationDate": "2024-09-01"
+    },
+    "output": {
+      "departureDate": "2024-09-01"
+    }
+  },
+  {
+    "input": {
+      "dispatchTimestamp": "2024-09-15"
+    },
+    "output": {
+      "departureDate": "2024-09-15"
+    }
+  },
+  {
+    "input": {
+      "sendOffMoment": "30.09.2024"
+    },
+    "output": {
+      "departureDate": "30.09.2024"
+    }
+  },
+  {
+    "input": {
+      "exportDate": "15/10/2024"
+    },
+    "output": {
+      "departureDate": "15/10/2024"
+    }
+  },
+  {
+    "input": {
+      "shippingCommenceDate": "2024/10/31"
+    },
+    "output": {
+      "departureDate": "2024/10/31"
+    }
+  },
+  {
+    "input": {
+      "estimatedArrivalTimestamp": "2024-11-15"
+    },
+    "output": {
+      "arrivalDate": "2024-11-15"
+    }
+  },
+  {
+    "input": {
+      "projectedDeliveryDate": "30.11.2024"
+    },
+    "output": {
+      "arrivalDate": "30.11.2024"
+    }
+  },
+  {
+    "input": {
+      "anticipatedReceiptDay": "15/12/2024"
+    },
+    "output": {
+      "arrivalDate": "15/12/2024"
+    }
+  },
+  {
+    "input": {
+      "expectedImportDate": "2024/12/31"
+    },
+    "output": {
+      "arrivalDate": "2024/12/31"
+    }
+  },
+  {
+    "input": {
+      "scheduledDeliveryMoment": "2025-01-15"
+    },
+    "output": {
+      "arrivalDate": "2025-01-15"
+    }
+  },
+  {
+    "input": {
+      "packageCondition": "En préparation"
+    },
+    "output": {
+      "status": "En préparation"
+    }
+  },
+  {
+    "input": {
+      "shipmentPhase": "Processing"
+    },
+    "output": {
+      "status": "Processing"
+    }
+  },
+  {
+    "input": {
+      "deliveryStatus": "Shipped"
+    },
+    "output": {
+      "status": "Shipped"
+    }
   }
 ]

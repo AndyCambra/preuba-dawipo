@@ -5,12 +5,14 @@ const {
   getConnectorByName,
   putConnector,
   deleteConnector,
+  setEConnectors,
 } = require("../handlers");
 
 connectorsRouter.get("/:name", getConnectorByName);
 connectorsRouter.get("/", getConnectors);
 
 connectorsRouter.post("/", postConnector);
+connectorsRouter.post("/set", setEConnectors);
 
 connectorsRouter.put("/update", putConnector);
 
