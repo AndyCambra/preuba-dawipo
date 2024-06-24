@@ -1,7 +1,7 @@
 <script setup>
-import { logout } from "../utils/auth";
 import { computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
+import { logout } from "../utils/auth";
 import Logo from "../../public/Logo de Kontroll.png";
 
 const router = useRouter();
