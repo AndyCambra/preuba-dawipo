@@ -57,14 +57,7 @@ const login = async () => {
         <input type="password" v-model="password" required placeholder="Contraseña"/>
       </div>
       <button type="submit" class="btn">Login</button>
-<<<<<<< HEAD
-      <p>
-        Don't have an account?
-        <router-link to="/register">Register</router-link>
-      </p>
-=======
       <p class="bottom-line">Don't have an account? <router-link to="/register" class="link">Register</router-link></p>
->>>>>>> b614cf1 (Login styled)
     </form>
   </div>
 </div>
