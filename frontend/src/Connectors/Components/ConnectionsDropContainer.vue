@@ -11,7 +11,7 @@ const props = defineProps({
 <template>
   <div class="drop-container">
     <p class="connectors-text">Suelta aqui las conexiones seleccionadas.</p>
-    <div class="drop-area" @dragover.prevent @drop="props.onDrop">
+    <div class="drop-area-connectors" @dragover.prevent @drop="props.onDrop">
       <div v-if="droppedItems.length">
         <div v-for="(item, index) in props.droppedItems" :key="index" class="dropped-item">
           <div class="drag-connectors-items">
@@ -59,16 +59,16 @@ const props = defineProps({
   color: white;
   background-color: black;
 }
-.drop-area {
+.drop-area-connectors {
   flex-grow: 1;
   border: 2px dashed rgb(0,255,206);
   background-color: #fafafa;
   border-radius: 15px;
-  min-height: 24.5rem;
+  min-height: 26.3rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-
+  padding: 0.3rem;
 }
 .drop-items{
   display: flex;

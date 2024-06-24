@@ -20,7 +20,6 @@ const groupedItems = computed(() => {
     return groups;
   }, {});
 });
-
 </script>
 
 <template>
@@ -32,7 +31,6 @@ const groupedItems = computed(() => {
           v-for="(item, index) in items"
           :key="index"
           :class="{ 'drag-el': true, disabled: props.itemIsDropped(item) }"
-          @dragstart="props.startDrag($event, item)"
           :draggable="!itemIsDropped(item)"
         >
           <div class="drag-connectors">
@@ -77,6 +75,7 @@ const groupedItems = computed(() => {
 }
 
 .drag-el {
+  padding: 0.2rem;
   margin-bottom: 10px;
   cursor: move;
   background-color: white;

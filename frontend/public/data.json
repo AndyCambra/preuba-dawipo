@@ -1,0 +1,23 @@
+[
+    {
+      "courier": "Transportista A",
+      "name": "Neumaticos",
+      "originCountry": "México",
+      "finalCountry": "Estados Unidos",
+      "departureDate": "2024-06-01",
+      "arrivalDate": "2024-06-10",
+      "status": "En tránsito",
+      "provider": "DHL"
+    },
+    {
+      "courier": "Transportista B",
+      "name": "Remeras",
+      "originCountry": "España",
+      "finalCountry": "Francia",
+      "departureDate": "2024-06-02",
+      "arrivalDate": "2024-06-12",
+      "status": "Entregado",
+      "provider": "DHL"
+    }
+  ]
+  

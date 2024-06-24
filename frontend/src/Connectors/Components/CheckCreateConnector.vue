@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router';
 const route = useRouter()
 
 const navigateToDashboard = () =>{
-  route.push('/dash-prueba')
+  route.push('/dashboard')
 }
 </script>
 

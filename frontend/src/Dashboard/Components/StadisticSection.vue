@@ -1,11 +1,23 @@
 <script setup>
 import { Profile, Settings } from './icons'
+import { useRouter } from 'vue-router';
+import { user } from '@/utils/auth';
+
+const route = useRouter()
+
+const navigateToManageConnectors = () =>{
+    route.push('/manage-connectors')
+}
+const navigateToCreateConnectors = () =>{
+    route.push('/create-connector')
+}
+
 </script>
 
 
 <template>
     <div class="container-stats">
-       
+
             <div class="title-box"> <h1 class="title"> Dashboard</h1></div>
             <div class="stats-box">  
             <div class="min-section">
@@ -31,12 +43,12 @@ import { Profile, Settings } from './icons'
             </div>
             <div class="min-section">
                 <p class="stats-name">Usuario</p>
-                <p class="stats-number">User 1</p>
+                <p class="stats-number">{{ user?.name }}</p>
             </div>
             </div> 
             <div class="min-section-last">
-               <div v-html="Profile"></div> 
-               <div v-html="Settings"></div> 
+                <button v-html="Profile" @click="navigateToManageConnectors" class="btn-static-dashboard"></button> 
+                <button v-html="Settings" class="btn-static-dashboard" @click="navigateToCreateConnectors" ></button> 
             </div>
 
     </div>
@@ -87,9 +99,15 @@ import { Profile, Settings } from './icons'
     
 }
 .min-section-last{
+    display: flex;
+    flex-direction: column;
     background-color: rgb(224, 224, 223);
     padding: 4px 8px;
     border-radius: 8px;
-
+}
+.btn-static-dashboard{
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
 }
 </style>

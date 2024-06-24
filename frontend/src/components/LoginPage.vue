@@ -20,7 +20,7 @@ const login = async () => {
 
     setUser(response.data.user);
 
-    router.push("/dash-test");
+    router.push("/dashboard");
   } catch (error) {
     console.error(error);
     if (error.response) {

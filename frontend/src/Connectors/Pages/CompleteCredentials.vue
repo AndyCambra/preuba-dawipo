@@ -1,5 +1,5 @@
 <script setup>
-  import CreateConnectorForm from '../Components/CreateConnectorForm.vue'; 
+  import CompleteCredentialsForm from '../Components/CompleteCredentialsForm.vue'; 
   import { user } from '../../utils/auth.js'
 </script>
 
@@ -7,9 +7,9 @@
   <main class="container-create-connector">
     <div class="create-connector-title">
       <h1>Bienvenido {{ user?.name }}</h1>
-      <p>Crea una conexión personalizada</p>
+      <p>Completa tus credenciales</p>
     </div>
-    <CreateConnectorForm />
+    <CompleteCredentialsForm />
   </main>
 </template>
 

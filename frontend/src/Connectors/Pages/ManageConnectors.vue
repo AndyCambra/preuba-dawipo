@@ -1,11 +1,14 @@
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router'
 import { user } from '../../utils/auth'
 import MyConnections from '../Components/MyConnections.vue'
 import MyOwnConnections from '../Components/MyOwnConnections.vue'
 import ConnectionsDropContainer from '../Components/ConnectionsDropContainer.vue'
 
 const droppedItems = ref([]); // Array to store dropped items
+
+const route = useRouter();
 
 const startDrag = (event, item) => {
   event.dataTransfer.setData("text/plain", JSON.stringify(item));
@@ -29,12 +32,17 @@ const itemIsDropped = (item) => {
 const removeItem = (item) => {
   droppedItems.value = droppedItems.value.filter(droppedItem => droppedItem !== item);
 };
+
+const navigateToCompleteCredentials = () =>{
+  route.push('/complete-credentials')
+}
+
 </script>
 
 <template>
   <div class="container">
     <div class="container-title">
-      <h1>Bienvenido {{ user.name }}</h1>
+      <h1>Bienvenido {{ user?.name }}</h1>
       <p>Gestionemos tus conectores.</p>
     </div>
     <div class="drag-section">
@@ -42,7 +50,7 @@ const removeItem = (item) => {
       <MyOwnConnections :itemIsDropped="itemIsDropped" :startDrag="startDrag" />
       <ConnectionsDropContainer :droppedItems="droppedItems" :onDrop="onDrop" :removeItem="removeItem" />
     </div>
-    <button class="btn-continuar" v-if="droppedItems.length">Continuar</button>
+    <button class="btn-continuar" v-if="droppedItems.length" @click="navigateToCompleteCredentials" >Continuar</button>
   </div>
 </template>
 

@@ -73,6 +73,7 @@ const navigateToCreateConnector = () =>{
   cursor: pointer;
 }
 .drag-el {
+  padding: 0.2rem;
   margin-bottom: 10px;
   cursor: move;
   background-color: white;

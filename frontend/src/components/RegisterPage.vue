@@ -24,7 +24,7 @@ const register = async () => {
 
     setUser(response.data.user);
 
-    router.push("/");
+    router.push("/manage-connectors");
   } catch (error) {
     console.error(error);
     if (error.response && error.response.data.errors) {

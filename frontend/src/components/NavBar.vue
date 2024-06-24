@@ -13,14 +13,14 @@ const handleLogout = () => {
 };
 
 const handleDashboard = () => {
-  router.push("/dash-prueba");
+  router.push("/dashboard");
 };
 
 const handleHome = () => {
-  router.push("/");
+  router.push("/dashboard");
 };
 
-const isDashPruebaRoute = computed(() => route.path === "/dash-prueba");
+const isDashPruebaRoute = computed(() => route.path === "/dashboard");
 </script>
 
 <template>
