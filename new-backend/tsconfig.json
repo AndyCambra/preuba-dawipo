@@ -1,17 +1,16 @@
 {
-    "include": ["src/**/*.ts", "bin/server-init.ts"],
-    "exclude": ["./coverage", "./dist", "__tests__", "jest.config.js"],
-    "compilerOptions": {
-      "target": "es2015",
-      "module": "commonjs",
-      "lib": ["dom", "es6", "dom.iterable", "scripthost", "es2016.array.include"],
-      "sourceMap": true,
-      "outDir": "./build",
-      "removeComments": true,
-      "strict": true,
-      "moduleResolution": "node",
-      "allowSyntheticDefaultImports": true,
-      "esModuleInterop": true
-    }
-  }
-  
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "outDir": "./dist",
+    "baseUrl": "./src"
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
+}

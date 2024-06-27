@@ -6,14 +6,14 @@ export interface UserAttributes {
     password: string;
     avatarUrl?: string | null;
     rol: 'user' | 'admin';
-}  
+};
 
 export interface ConnectorAttributes {
     id: string;
     name: string;
-    apiUrl?: string;
-    apiKey?: string;  
-}
+    apiUrl: string;
+    apiKey: string;
+};
 
 export interface ShipmentAttributes {
     id: string;
@@ -25,5 +25,6 @@ export interface ShipmentAttributes {
     arrivalDate?: string | null;
     status?: string | null;
     provider?: string | null;
-    courier?: string | null;      
-}
+    courier?: string | null;
+};
+  

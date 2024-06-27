@@ -35,12 +35,14 @@ export default class UsersService {
       }
 
       const hashedPassword = await bcrypt.hash(attributes.password, 10);
-      attributes.password = hashedPassword;
-
-      const newUser = await User.create(attributes);
+      const newUser = await User.create({
+        ...attributes,
+        password: hashedPassword,
+      });
+      
       return newUser;
     } catch (error) {
       throw error;
     }
-  };
+  }
 };
