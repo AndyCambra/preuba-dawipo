@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { User } from '../models/user.model';
 import { handleControllerError } from '../utils/error.handlers';
-import AxiosService from '../services/axios.service';
+import AxiosService from '../services/external/axios.service';
 
 const URL = 'https://jsonplaceholder.typicode.com/users';
 

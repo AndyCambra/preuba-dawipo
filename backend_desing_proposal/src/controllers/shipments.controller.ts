@@ -6,8 +6,7 @@ export default class ShipmentsController {
 
   public static getAll = async (_req: Request, res: Response) => {
     try {            
-      const shipments = await Shipment.findAll();      
-      console.log("here")
+      const shipments = await Shipment.findAll();            
       res.json(shipments);
     } catch (error: any) {      
       handleControllerError(error, res);
