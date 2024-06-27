@@ -18,11 +18,12 @@ export interface ConnectorAttributes {
 export interface ShipmentAttributes {
     id: string;
     name: string;
+    trackingNumber?: string | null;
     originCountry?: string | null;
     finalCountry?: string | null;
     departureDate?: string | null;
     arrivalDate?: string | null;
     status?: string | null;
     provider?: string | null;
-    courier?: string | null;  
+    courier?: string | null;      
 }
