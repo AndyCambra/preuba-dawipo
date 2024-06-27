@@ -1,54 +1,45 @@
-import { DataTypes, Model, Sequelize } from 'sequelize';
+import { Table, Column, Model, DataType, PrimaryKey, Default, AllowNull, Unique, BelongsToMany } from 'sequelize-typescript';
+import { Connector } from './connector.model';
+import { UserConnector } from './pivot-tables/user-connector.model';
 import { UserAttributes } from '../types/models.interfaces';
 
+@Table({
+  tableName: 'users',
+  freezeTableName: true,
+  timestamps: false,
+})
 export class User extends Model<UserAttributes> implements UserAttributes {
-  public id!: string;
-  public name!: string;
-  public lastName!: string;
-  public email!: string;
-  public password!: string;
-  public avatarUrl?: string | null;
-  public rol!: 'user' | 'admin';
-}
+  @PrimaryKey
+  @Default(DataType.UUIDV4)
+  @Column(DataType.UUID)
+  id!: string;
 
-export function initialize(sequelize: Sequelize): void {
-  User.init({
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    lastName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    avatarUrl: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    rol: {
-      type: DataTypes.ENUM('user', 'admin'),
-      defaultValue: 'user',
-      allowNull: false,
-    },
-  }, {
-    sequelize,
-    modelName: 'User',
-    tableName: 'users',
-    freezeTableName: true,
-    timestamps: false,
-  });
-}
+  @AllowNull(false)
+  @Column(DataType.STRING)
+  name!: string;
+
+  @AllowNull(false)
+  @Column(DataType.STRING)
+  lastName!: string;
+
+  @AllowNull(false)
+  @Unique
+  @Column(DataType.STRING)
+  email!: string;
+
+  @AllowNull(false)
+  @Column(DataType.STRING)
+  password!: string;
+
+  @AllowNull(true)
+  @Column(DataType.STRING)
+  avatarUrl?: string | null;
+
+  @AllowNull(false)
+  @Default('user')
+  @Column(DataType.ENUM('user', 'admin'))
+  rol!: 'user' | 'admin';
+
+  @BelongsToMany(() => Connector, () => UserConnector)
+  connectors!: Connector[];
+};
