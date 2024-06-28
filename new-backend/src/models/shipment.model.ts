@@ -1,14 +1,26 @@
-import { Table, Column, Model, DataType, PrimaryKey, Default, AllowNull, BelongsToMany } from 'sequelize-typescript';
-import { Connector } from './connector.model';
-import { ConnectorShipment } from './pivot-tables/connector-shipment.model';
-import { ShipmentAttributes } from '../types/models.interfaces';
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+  PrimaryKey,
+  Default,
+  AllowNull,
+  BelongsToMany,
+} from "sequelize-typescript";
+import { Connector } from "./connector.model";
+import { ConnectorShipment } from "./pivot-tables/connector-shipment.model";
+import { ShipmentAttributes } from "../types/models.interfaces";
 
 @Table({
-  tableName: 'shipments',
+  tableName: "shipments",
   freezeTableName: true,
   timestamps: false,
 })
-export class Shipment extends Model<ShipmentAttributes> implements ShipmentAttributes {
+export class Shipment
+  extends Model<ShipmentAttributes>
+  implements ShipmentAttributes
+{
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
@@ -52,4 +64,4 @@ export class Shipment extends Model<ShipmentAttributes> implements ShipmentAttri
 
   @BelongsToMany(() => Connector, () => ConnectorShipment)
   connectors!: Connector[];
-};
+}
