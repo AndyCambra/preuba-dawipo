@@ -1,4 +1,14 @@
-import { Table, Column, Model, DataType, PrimaryKey, Default, AllowNull, Unique, BelongsToMany } from 'sequelize-typescript';
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+  PrimaryKey,
+  Default,
+  AllowNull,
+  Unique,
+  BelongsToMany,
+} from 'sequelize-typescript';
 import { Connector } from './connector.model';
 import { UserConnector } from './pivot-tables/user-connector.model';
 import { UserAttributes } from '../types/models.interfaces';
@@ -42,4 +52,4 @@ export class User extends Model<UserAttributes> implements UserAttributes {
 
   @BelongsToMany(() => Connector, () => UserConnector)
   connectors!: Connector[];
-};
+}

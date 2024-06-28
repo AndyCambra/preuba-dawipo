@@ -1,4 +1,10 @@
-import { Table, Column, Model, DataType, ForeignKey } from 'sequelize-typescript';
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+  ForeignKey,
+} from 'sequelize-typescript';
 import { User } from '../user.model';
 import { Connector } from '../connector.model';
 
@@ -14,4 +20,4 @@ export class UserConnector extends Model<UserConnector> {
   @ForeignKey(() => Connector)
   @Column(DataType.UUID)
   connectorId!: string;
-};
+}

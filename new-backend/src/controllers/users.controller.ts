@@ -1,11 +1,13 @@
 import { Request, Response } from 'express';
 import UsersService from '../services/users.service';
 import { validationResult } from 'express-validator';
-import { sendSuccessResponse, sendErrorResponse } from '../utils/response.handlers';
+import {
+  sendSuccessResponse,
+  sendErrorResponse,
+} from '../utils/response.handlers';
 import { UserAttributes } from '../types/models.interfaces';
 
 export default class UsersController {
-
   public static getAll = async (req: Request, res: Response) => {
     try {
       const users = await UsersService.getAllUsers();
@@ -29,16 +31,30 @@ export default class UsersController {
   public static register = async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return sendErrorResponse(res, { message: errors.array().map(e => e.msg).join(', ') }, 400);
+      return sendErrorResponse(
+        res,
+        {
+          message: errors
+            .array()
+            .map((e) => e.msg)
+            .join(', '),
+        },
+        400,
+      );
     }
 
     const userData: UserAttributes = req.body;
 
     try {
       const newUser = await UsersService.createUser(userData);
-      sendSuccessResponse(res, newUser, "The user was registered successfully", 201);
+      sendSuccessResponse(
+        res,
+        newUser,
+        'The user was registered successfully',
+        201,
+      );
     } catch (error: any) {
       sendErrorResponse(res, error);
     }
   };
-};
+}

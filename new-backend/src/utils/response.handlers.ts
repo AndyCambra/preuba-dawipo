@@ -2,10 +2,7 @@ import axios from 'axios';
 import { Request, Response, NextFunction } from 'express';
 
 // Controller error handling
-export const handleControllerError = (
-  err: any, 
-  res: Response
-): void => {
+export const handleControllerError = (err: any, res: Response): void => {
   res.status(400).json({
     message: axios.isAxiosError(err)
       ? err.response?.statusText
@@ -17,7 +14,7 @@ export const handleControllerError = (
 export const handleNotFound = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): void => {
   console.log('Route not found');
   res.status(404).send(`Route not found for: ${req.path}`);
@@ -29,7 +26,7 @@ export const handleError = (
   err: Error,
   _req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): void | Response => {
   if (res.headersSent) {
     return next(err);
@@ -47,7 +44,7 @@ export const sendSuccessResponse = (
   res: Response,
   data: any,
   message: string = 'Request was successful',
-  statusCode: number = 200
+  statusCode: number = 200,
 ): void => {
   res.status(statusCode).json({
     message,
@@ -59,10 +56,10 @@ export const sendSuccessResponse = (
 export const sendErrorResponse = (
   res: Response,
   error: any,
-  statusCode: number = 400
+  statusCode: number = 400,
 ): void => {
   res.status(statusCode).json({
-    error:   true,
+    error: true,
     message: error.message || 'Unknown error',
   });
 };

@@ -1,12 +1,12 @@
-import { Connector } from "../models/connector.model";
-import { ConnectorAttributes } from "../types/models.interfaces";
+import { Connector } from '../models/connector.model';
+import { ConnectorAttributes } from '../types/models.interfaces';
 
 export default class ConnectorService {
   public static async getAllConnectors() {
     try {
       const allConnectors = await Connector.findAll();
       if (allConnectors.length === 0) {
-        throw new Error("There are no connectors available");
+        throw new Error('There are no connectors available');
       }
       return allConnectors;
     } catch (error) {
@@ -39,7 +39,7 @@ export default class ConnectorService {
   }
 
   public static async createConnector(
-    connectorData: ConnectorAttributes | ConnectorAttributes[]
+    connectorData: ConnectorAttributes | ConnectorAttributes[],
   ): Promise<Connector | Connector[]> {
     try {
       const dataArray = Array.isArray(connectorData)
@@ -47,7 +47,7 @@ export default class ConnectorService {
         : [connectorData];
 
       const createPromises = dataArray.map(async (data) => {
-        return Connector.create(data); // Use data directly
+        return Connector.create(data);
       });
 
       const createdConnectors = await Promise.all(createPromises);
@@ -62,7 +62,7 @@ export default class ConnectorService {
 
   public static async updateConnectorsByName(
     name: string,
-    newData: ConnectorAttributes
+    newData: ConnectorAttributes,
   ) {
     try {
       const [updatedRows] = await Connector.update(newData, {
@@ -80,7 +80,7 @@ export default class ConnectorService {
 
   public static async updateConnectorById(
     id: string,
-    newData: ConnectorAttributes
+    newData: ConnectorAttributes,
   ) {
     try {
       const [updatedRows] = await Connector.update(newData, { where: { id } });

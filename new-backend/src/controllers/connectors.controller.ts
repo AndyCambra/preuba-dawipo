@@ -1,11 +1,13 @@
 import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
-import { sendSuccessResponse, sendErrorResponse } from '../utils/response.handlers';
+import {
+  sendSuccessResponse,
+  sendErrorResponse,
+} from '../utils/response.handlers';
 import { ConnectorAttributes } from '../types/models.interfaces';
 import ConnectorService from '../services/connectors.service';
 
 export default class ConnectorsController {
-
   public static getAll = async (req: Request, res: Response) => {
     try {
       const connectors = await ConnectorService.getAllConnectors();
@@ -20,11 +22,15 @@ export default class ConnectorsController {
 
     try {
       const connector = await ConnectorService.getConnectorByName(name);
-      sendSuccessResponse(res, connector, `Connector with name ${name} retrieved successfully`);
+      sendSuccessResponse(
+        res,
+        connector,
+        `Connector with name ${name} retrieved successfully`,
+      );
     } catch (error: any) {
       sendErrorResponse(res, error);
     }
-  };  
+  };
 
   public static getById = async (req: Request, res: Response) => {
     const connectorId = req.params.id;
@@ -35,19 +41,35 @@ export default class ConnectorsController {
     } catch (error: any) {
       sendErrorResponse(res, error);
     }
-  };  
+  };
 
   public static create = async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return sendErrorResponse(res, { message: errors.array().map(e => e.msg).join(', ') }, 400);
+      return sendErrorResponse(
+        res,
+        {
+          message: errors
+            .array()
+            .map((e) => e.msg)
+            .join(', '),
+        },
+        400,
+      );
     }
 
     const connectorData: ConnectorAttributes = req.body;
 
     try {
-      const newConnector = await ConnectorService.createConnector(connectorData);
-      sendSuccessResponse(res, newConnector, "Connector created successfully", 201);
+      const newConnector = await ConnectorService.createConnector(
+        connectorData,
+      );
+      sendSuccessResponse(
+        res,
+        newConnector,
+        'Connector created successfully',
+        201,
+      );
     } catch (error: any) {
       sendErrorResponse(res, error);
     }
@@ -58,8 +80,15 @@ export default class ConnectorsController {
     const newData: ConnectorAttributes = req.body;
 
     try {
-      const updatedConnectors = await ConnectorService.updateConnectorsByName(name, newData);
-      sendSuccessResponse(res, updatedConnectors, `Connectors with name ${name} updated successfully`);
+      const updatedConnectors = await ConnectorService.updateConnectorsByName(
+        name,
+        newData,
+      );
+      sendSuccessResponse(
+        res,
+        updatedConnectors,
+        `Connectors with name ${name} updated successfully`,
+      );
     } catch (error: any) {
       sendErrorResponse(res, error);
     }
@@ -70,12 +99,19 @@ export default class ConnectorsController {
     const newData: ConnectorAttributes = req.body;
 
     try {
-      const updatedConnector = await ConnectorService.updateConnectorById(connectorId, newData);
-      sendSuccessResponse(res, updatedConnector, `Connector with ID ${connectorId} updated successfully`);
+      const updatedConnector = await ConnectorService.updateConnectorById(
+        connectorId,
+        newData,
+      );
+      sendSuccessResponse(
+        res,
+        updatedConnector,
+        `Connector with ID ${connectorId} updated successfully`,
+      );
     } catch (error: any) {
       sendErrorResponse(res, error);
     }
-  }; 
+  };
 
   public static deleteAll = async (req: Request, res: Response) => {
     try {
@@ -91,20 +127,28 @@ export default class ConnectorsController {
 
     try {
       await ConnectorService.deleteConnectorByName(name);
-      sendSuccessResponse(res, null, `Connectors with name ${name} deleted successfully`);
+      sendSuccessResponse(
+        res,
+        null,
+        `Connectors with name ${name} deleted successfully`,
+      );
     } catch (error: any) {
       sendErrorResponse(res, error);
     }
-  };  
+  };
 
   public static deleteById = async (req: Request, res: Response) => {
     const connectorId = req.params.id;
 
     try {
       await ConnectorService.deleteConnectorById(connectorId);
-      sendSuccessResponse(res, null, `Connector with ID ${connectorId} deleted successfully`);
+      sendSuccessResponse(
+        res,
+        null,
+        `Connector with ID ${connectorId} deleted successfully`,
+      );
     } catch (error: any) {
       sendErrorResponse(res, error);
     }
-  };  
-};
+  };
+}
