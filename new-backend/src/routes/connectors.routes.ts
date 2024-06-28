@@ -4,6 +4,7 @@ import ConnectorsController from '../controllers/connectors.controller';
 const router =
   Express.Router();
 
+//GET
 router.get(
   '/',
   ConnectorsController.getAll,
@@ -17,11 +18,13 @@ router.get(
   ConnectorsController.getById,
 );
 
+//POST
 router.post(
   '/',
   ConnectorsController.create,
 );
 
+//PUT
 router.put(
   '/name/:name',
   ConnectorsController.updateByName,
@@ -35,6 +38,7 @@ router.delete(
   ConnectorsController.deleteAll,
 );
 
+//DELETE
 router.delete(
   '/name/:name',
   ConnectorsController.deleteByName,

@@ -4,6 +4,7 @@ import ShipmentsController from '../controllers/shipments.controller';
 const router =
   Express.Router();
 
+//GET
 router.get(
   '/',
   ShipmentsController.getAll,
@@ -21,11 +22,13 @@ router.get(
   ShipmentsController.getById,
 );
 
+//POST
 router.post(
   '/',
   ShipmentsController.create,
 );
 
+//PUT
 router.put(
   '/name/:name',
   ShipmentsController.updateByName,
@@ -39,6 +42,7 @@ router.put(
   ShipmentsController.updateById,
 );
 
+//DELETE
 router.delete(
   '/all',
   ShipmentsController.deleteAll,

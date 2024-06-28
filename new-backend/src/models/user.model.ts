@@ -28,9 +28,9 @@ export class User extends Model<UserAttributes> implements UserAttributes {
   @Column(DataType.STRING)
   name!: string;
 
-  @AllowNull(false)
+  @AllowNull(true)
   @Column(DataType.STRING)
-  lastName!: string;
+  lastName?: string | null;
 
   @AllowNull(false)
   @Unique

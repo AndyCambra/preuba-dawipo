@@ -8,7 +8,7 @@ type MaybeString = string | null;
 export interface UserAttributes {
   id: string;
   name: string;
-  lastName: MaybeString;
+  lastName?: MaybeString;
   email: string;
   password: string;
   avatarUrl?: MaybeString;
@@ -18,8 +18,8 @@ export interface UserAttributes {
 export interface ConnectorAttributes {
   id: string;
   name: string;
-  apiUrl: MaybeString;
-  apiKey: MaybeString;
+  apiUrl?: MaybeString;
+  apiKey?: MaybeString;
 }
 
 export interface ShipmentAttributes {

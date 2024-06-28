@@ -135,8 +135,23 @@ function createPostmanCollection(): void {
     ],
     Users: [
       { name: 'Get All Users', method: 'GET', path: '/users' },
+      { name: 'Get User by Name', method: 'GET', path: '/users/name/{{name}}' },
       { name: 'Get User by ID', method: 'GET', path: '/users/id/{{id}}' },
       { name: 'Register User', method: 'POST', path: '/users/register' },
+      { name: 'Login User', method: 'POST', path: '/users/login' },
+      {
+        name: 'Update User by Name',
+        method: 'PUT',
+        path: '/users/name/{{name}}',
+      },
+      { name: 'Update User by ID', method: 'PUT', path: '/users/id/{{id}}' },
+      { name: 'Delete All Users', method: 'DELETE', path: '/users/all' },
+      {
+        name: 'Delete User by Name',
+        method: 'DELETE',
+        path: '/users/name/{{name}}',
+      },
+      { name: 'Delete User by ID', method: 'DELETE', path: '/users/id/{{id}}' },
     ],
   };
 
