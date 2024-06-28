@@ -34,7 +34,7 @@ def transform_key_value(key, value):
         return {key: value}
 
 # Formatea los datos de un producto transformando cada par clave-valor
-def format_product(data):
+def format_shipment(data):
     formatted_data = {}
     for key, value in data.items():
         # Transforma cada par clave-valor y actualiza los datos formateados

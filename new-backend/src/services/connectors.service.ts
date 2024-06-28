@@ -1,8 +1,7 @@
-import { Connector } from '../models/connector.model';
-import { ConnectorAttributes } from '../types/models.interfaces';
+import { Connector } from "../models/connector.model";
+import { ConnectorAttributes } from "../types/models.interfaces";
 
 export default class ConnectorService {
-
   public static async getAllConnectors() {
     try {
       const allConnectors = await Connector.findAll();
@@ -13,7 +12,7 @@ export default class ConnectorService {
     } catch (error) {
       throw error;
     }
-  };
+  }
 
   public static async getConnectorByName(name: string) {
     try {
@@ -25,7 +24,7 @@ export default class ConnectorService {
     } catch (error) {
       throw error;
     }
-  };
+  }
 
   public static async getConnectorById(id: string) {
     try {
@@ -37,34 +36,38 @@ export default class ConnectorService {
     } catch (error) {
       throw error;
     }
-  };
+  }
 
-  public static async createConnector(connectorData: ConnectorAttributes | ConnectorAttributes[]): Promise<Connector | Connector[]> {
+  public static async createConnector(
+    connectorData: ConnectorAttributes | ConnectorAttributes[]
+  ): Promise<Connector | Connector[]> {
     try {
-      const dataArray = Array.isArray(connectorData) ? connectorData : [connectorData];
+      const dataArray = Array.isArray(connectorData)
+        ? connectorData
+        : [connectorData];
 
       const createPromises = dataArray.map(async (data) => {
-        const { id } = data;
-        const existingConnector = await Connector.findOne({ where: { id } });
-
-        if (existingConnector) {
-          throw new Error(`Connector with ID ${id} already exists`);
-        }
-
-        return Connector.create(data);
+        return Connector.create(data); // Use data directly
       });
 
       const createdConnectors = await Promise.all(createPromises);
 
-      return Array.isArray(connectorData) ? createdConnectors : createdConnectors[0];
+      return Array.isArray(connectorData)
+        ? createdConnectors
+        : createdConnectors[0];
     } catch (error) {
       throw error;
     }
-  };
+  }
 
-  public static async updateConnectorsByName(name: string, newData: ConnectorAttributes) {
+  public static async updateConnectorsByName(
+    name: string,
+    newData: ConnectorAttributes
+  ) {
     try {
-      const [updatedRows] = await Connector.update(newData, { where: { name } });
+      const [updatedRows] = await Connector.update(newData, {
+        where: { name },
+      });
       if (updatedRows === 0) {
         throw new Error(`No connectors with name ${name} found`);
       }
@@ -73,9 +76,12 @@ export default class ConnectorService {
     } catch (error) {
       throw error;
     }
-  };
+  }
 
-  public static async updateConnectorById(id: string, newData: ConnectorAttributes) {
+  public static async updateConnectorById(
+    id: string,
+    newData: ConnectorAttributes
+  ) {
     try {
       const [updatedRows] = await Connector.update(newData, { where: { id } });
       if (updatedRows === 0) {
@@ -86,7 +92,7 @@ export default class ConnectorService {
     } catch (error) {
       throw error;
     }
-  };
+  }
 
   public static async deleteAllConnectors() {
     try {
@@ -94,7 +100,7 @@ export default class ConnectorService {
     } catch (error) {
       throw error;
     }
-  };
+  }
 
   public static async deleteConnectorByName(name: string) {
     try {
@@ -102,7 +108,7 @@ export default class ConnectorService {
     } catch (error) {
       throw error;
     }
-  }; 
+  }
 
   public static async deleteConnectorById(id: string) {
     try {
@@ -113,5 +119,5 @@ export default class ConnectorService {
     } catch (error) {
       throw error;
     }
-  };  
-};
+  }
+}

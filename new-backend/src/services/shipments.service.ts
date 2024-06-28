@@ -1,8 +1,7 @@
-import { Shipment } from '../models/shipment.model';
-import { ShipmentAttributes } from '../types/models.interfaces';
+import { Shipment } from "../models/shipment.model";
+import { ShipmentAttributes } from "../types/models.interfaces";
 
 export default class ShipmentService {
-
   public static async getAllShipments() {
     try {
       const allShipments = await Shipment.findAll();
@@ -13,7 +12,7 @@ export default class ShipmentService {
     } catch (error) {
       throw error;
     }
-  };
+  }
 
   public static async getShipmentByName(name: string) {
     try {
@@ -25,20 +24,22 @@ export default class ShipmentService {
     } catch (error) {
       throw error;
     }
-  };
+  }
 
   public static async getShipmentByTrackingNumber(trackingNumber: string) {
     try {
       const shipment = await Shipment.findOne({ where: { trackingNumber } });
       if (!shipment) {
-        throw new Error(`Shipment with tracking number ${trackingNumber} not found`);
+        throw new Error(
+          `Shipment with tracking number ${trackingNumber} not found`
+        );
       }
       return shipment;
     } catch (error) {
       throw error;
     }
-  };  
-  
+  }
+
   public static async getShipmentById(id: string) {
     try {
       const shipment = await Shipment.findByPk(id);
@@ -49,18 +50,26 @@ export default class ShipmentService {
     } catch (error) {
       throw error;
     }
-  };
+  }
 
-  public static async createShipment(shipmentData: ShipmentAttributes | ShipmentAttributes[]): Promise<Shipment | Shipment[]> {
+  public static async createShipment(
+    shipmentData: ShipmentAttributes | ShipmentAttributes[]
+  ): Promise<Shipment | Shipment[]> {
     try {
-      const dataArray = Array.isArray(shipmentData) ? shipmentData : [shipmentData];
+      const dataArray = Array.isArray(shipmentData)
+        ? shipmentData
+        : [shipmentData];
 
       const createPromises = dataArray.map(async (data) => {
         const { trackingNumber } = data;
-        const existingShipment = await Shipment.findOne({ where: { trackingNumber } });
+        const existingShipment = await Shipment.findOne({
+          where: { trackingNumber },
+        });
 
         if (existingShipment) {
-          throw new Error(`Shipment with tracking number ${trackingNumber} already exists`);
+          throw new Error(
+            `Shipment with tracking number ${trackingNumber} already exists`
+          );
         }
 
         return Shipment.create(data);
@@ -68,13 +77,18 @@ export default class ShipmentService {
 
       const createdShipments = await Promise.all(createPromises);
 
-      return Array.isArray(shipmentData) ? createdShipments : createdShipments[0];
+      return Array.isArray(shipmentData)
+        ? createdShipments
+        : createdShipments[0];
     } catch (error) {
       throw error;
     }
-  };
+  }
 
-  public static async updateShipmentsByName(name: string, newData: ShipmentAttributes) {
+  public static async updateShipmentsByName(
+    name: string,
+    newData: ShipmentAttributes
+  ) {
     try {
       const [updatedRows] = await Shipment.update(newData, { where: { name } });
       if (updatedRows === 0) {
@@ -85,22 +99,34 @@ export default class ShipmentService {
     } catch (error) {
       throw error;
     }
-  };
+  }
 
-  public static async updateShipmentByTrackingNumber(trackingNumber: string, newData: ShipmentAttributes) {
+  public static async updateShipmentByTrackingNumber(
+    trackingNumber: string,
+    newData: ShipmentAttributes
+  ) {
     try {
-      const [updatedRows] = await Shipment.update(newData, { where: { trackingNumber } });
+      const [updatedRows] = await Shipment.update(newData, {
+        where: { trackingNumber },
+      });
       if (updatedRows === 0) {
-        throw new Error(`Shipment with tracking number ${trackingNumber} not found`);
+        throw new Error(
+          `Shipment with tracking number ${trackingNumber} not found`
+        );
       }
-      const updatedShipment = await Shipment.findOne({ where: { trackingNumber } });
+      const updatedShipment = await Shipment.findOne({
+        where: { trackingNumber },
+      });
       return updatedShipment;
     } catch (error) {
       throw error;
     }
-  };
+  }
 
-  public static async updateShipmentById(id: string, newData: ShipmentAttributes) {
+  public static async updateShipmentById(
+    id: string,
+    newData: ShipmentAttributes
+  ) {
     try {
       const [updatedRows] = await Shipment.update(newData, { where: { id } });
       if (updatedRows === 0) {
@@ -111,7 +137,7 @@ export default class ShipmentService {
     } catch (error) {
       throw error;
     }
-  };
+  }
 
   public static async deleteAllShipments() {
     try {
@@ -119,7 +145,7 @@ export default class ShipmentService {
     } catch (error) {
       throw error;
     }
-  };
+  }
 
   public static async deleteShipmentByName(name: string) {
     try {
@@ -127,7 +153,7 @@ export default class ShipmentService {
     } catch (error) {
       throw error;
     }
-  };
+  }
 
   public static async deleteShipmentByTrackingNumber(trackingNumber: string) {
     try {
@@ -135,7 +161,7 @@ export default class ShipmentService {
     } catch (error) {
       throw error;
     }
-  };
+  }
 
   public static async deleteShipmentById(id: string) {
     try {
@@ -146,5 +172,5 @@ export default class ShipmentService {
     } catch (error) {
       throw error;
     }
-  };  
-};
+  }
+}
