@@ -7,13 +7,13 @@ import {
   Default,
   AllowNull,
   BelongsToMany,
-} from "sequelize-typescript";
-import { Connector } from "./connector.model";
-import { ConnectorShipment } from "./pivot-tables/connector-shipment.model";
-import { ShipmentAttributes } from "../types/models.interfaces";
+} from 'sequelize-typescript';
+import { Connector } from './connector.model';
+import { ConnectorShipment } from './pivot-tables/connector-shipment.model';
+import { ShipmentAttributes } from '../types/models.interfaces';
 
 @Table({
-  tableName: "shipments",
+  tableName: 'shipments',
   freezeTableName: true,
   timestamps: false,
 })

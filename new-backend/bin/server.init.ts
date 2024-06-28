@@ -23,7 +23,10 @@
 import { config as dotenvConfig } from 'dotenv';
 dotenvConfig();
 
-import { authenticateDatabase, synchronizeDatabase } from '../src/config/database/database.config';
+import {
+  authenticateDatabase,
+  synchronizeDatabase,
+} from '../src/config/database/database.config';
 import app from '../src/app';
 
 const PORT = process.env.PORT || 3001;

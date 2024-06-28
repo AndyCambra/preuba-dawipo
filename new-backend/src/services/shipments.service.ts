@@ -1,12 +1,12 @@
-import { Shipment } from "../models/shipment.model";
-import { ShipmentAttributes } from "../types/models.interfaces";
+import { Shipment } from '../models/shipment.model';
+import { ShipmentAttributes } from '../types/models.interfaces';
 
 export default class ShipmentService {
   public static async getAllShipments() {
     try {
       const allShipments = await Shipment.findAll();
       if (allShipments.length === 0) {
-        throw new Error("There are no shipments available");
+        throw new Error('There are no shipments available');
       }
       return allShipments;
     } catch (error) {
@@ -31,7 +31,7 @@ export default class ShipmentService {
       const shipment = await Shipment.findOne({ where: { trackingNumber } });
       if (!shipment) {
         throw new Error(
-          `Shipment with tracking number ${trackingNumber} not found`
+          `Shipment with tracking number ${trackingNumber} not found`,
         );
       }
       return shipment;
@@ -53,7 +53,7 @@ export default class ShipmentService {
   }
 
   public static async createShipment(
-    shipmentData: ShipmentAttributes | ShipmentAttributes[]
+    shipmentData: ShipmentAttributes | ShipmentAttributes[],
   ): Promise<Shipment | Shipment[]> {
     try {
       const dataArray = Array.isArray(shipmentData)
@@ -68,7 +68,7 @@ export default class ShipmentService {
 
         if (existingShipment) {
           throw new Error(
-            `Shipment with tracking number ${trackingNumber} already exists`
+            `Shipment with tracking number ${trackingNumber} already exists`,
           );
         }
 
@@ -87,7 +87,7 @@ export default class ShipmentService {
 
   public static async updateShipmentsByName(
     name: string,
-    newData: ShipmentAttributes
+    newData: ShipmentAttributes,
   ) {
     try {
       const [updatedRows] = await Shipment.update(newData, { where: { name } });
@@ -103,7 +103,7 @@ export default class ShipmentService {
 
   public static async updateShipmentByTrackingNumber(
     trackingNumber: string,
-    newData: ShipmentAttributes
+    newData: ShipmentAttributes,
   ) {
     try {
       const [updatedRows] = await Shipment.update(newData, {
@@ -111,7 +111,7 @@ export default class ShipmentService {
       });
       if (updatedRows === 0) {
         throw new Error(
-          `Shipment with tracking number ${trackingNumber} not found`
+          `Shipment with tracking number ${trackingNumber} not found`,
         );
       }
       const updatedShipment = await Shipment.findOne({
@@ -125,7 +125,7 @@ export default class ShipmentService {
 
   public static async updateShipmentById(
     id: string,
-    newData: ShipmentAttributes
+    newData: ShipmentAttributes,
   ) {
     try {
       const [updatedRows] = await Shipment.update(newData, { where: { id } });

@@ -7,13 +7,13 @@ import {
   Default,
   AllowNull,
   BelongsToMany,
-} from "sequelize-typescript";
-import { User } from "./user.model";
-import { UserConnector } from "./pivot-tables/user-connector.model";
-import { ConnectorAttributes } from "../types/models.interfaces";
+} from 'sequelize-typescript';
+import { User } from './user.model';
+import { UserConnector } from './pivot-tables/user-connector.model';
+import { ConnectorAttributes } from '../types/models.interfaces';
 
 @Table({
-  tableName: "connectors",
+  tableName: 'connectors',
   timestamps: false,
 })
 export class Connector

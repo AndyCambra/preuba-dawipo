@@ -10,8 +10,8 @@ async function authenticateDatabase(): Promise<void> {
 }
 
 async function synchronizeDatabase(): Promise<void> {
-  try {    
-    await sequelize.sync({ force: true });        
+  try {
+    await sequelize.sync({ force: true });
     console.log('Database synchronized successfully.');
   } catch (error) {
     console.error('Database synchronization failed:', error);

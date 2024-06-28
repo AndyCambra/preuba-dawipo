@@ -7,13 +7,13 @@ export default class UsersService {
     try {
       const allUsers = await User.findAll();
       if (allUsers.length === 0) {
-        throw new Error("There are no registered users yet");
+        throw new Error('There are no registered users yet');
       }
       return allUsers;
     } catch (error) {
       throw error;
     }
-  };
+  }
 
   public static async getUserById(id: string) {
     try {
@@ -25,11 +25,13 @@ export default class UsersService {
     } catch (error) {
       throw error;
     }
-  };
+  }
 
   public static async createUser(attributes: UserAttributes) {
     try {
-      const existingUser = await User.findOne({ where: { name: attributes.name } });
+      const existingUser = await User.findOne({
+        where: { name: attributes.name },
+      });
       if (existingUser) {
         throw new Error(`${attributes.name} has already been registered`);
       }
@@ -39,10 +41,10 @@ export default class UsersService {
         ...attributes,
         password: hashedPassword,
       });
-      
+
       return newUser;
     } catch (error) {
       throw error;
     }
   }
-};
+}
