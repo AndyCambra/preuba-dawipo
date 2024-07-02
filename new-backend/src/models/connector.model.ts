@@ -10,16 +10,13 @@ import {
 } from 'sequelize-typescript';
 import { User } from './user.model';
 import { UserConnector } from './pivot-tables/user-connector.model';
-import { ConnectorAttributes } from '../types/models.interfaces';
+import { IConnector } from '../types/models.interfaces';
 
 @Table({
   tableName: 'connectors',
   timestamps: false,
 })
-export class Connector
-  extends Model<ConnectorAttributes>
-  implements ConnectorAttributes
-{
+export class Connector extends Model<IConnector> implements IConnector {
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column(DataType.UUID)

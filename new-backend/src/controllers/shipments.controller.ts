@@ -4,79 +4,76 @@ import {
   sendSuccessResponse,
   sendErrorResponse,
 } from '../utils/response.handlers';
-import { ShipmentAttributes } from '../types/models.interfaces';
+import { IShipment } from '../types/models.interfaces';
 import ShipmentService from '../services/shipments.service';
-import axios from 'axios';
 
 export default class ShipmentsController {
-  public static getAll = async (req: Request, res: Response) => {
+  public static getAll = async (
+    _req: Request,
+    res: Response,
+  ): Promise<void> => {
     try {
-      const shipments = await ShipmentService.getAllShipments();
+      const shipments: IShipment[] = await ShipmentService.getAllShipments();
       sendSuccessResponse(res, shipments, 'Shipments retrieved successfully');
-    } catch (error: any) {
+    } catch (error: unknown) {
       sendErrorResponse(res, error);
     }
   };
 
-  public static async formatAndValidateShipment(
-    shipmentData: ShipmentAttributes,
-  ): Promise<ShipmentAttributes | null> {
-    try {
-      const response = await axios.post(
-        'http://localhost:5000/add_shipment',
-        shipmentData,
-      );
-      return response.data;
-    } catch (error) {
-      console.error('Error in AI formatting and validation:', error);
-      return null;
-    }
-  }
-
-  public static getByName = async (req: Request, res: Response) => {
-    const name = req.params.name;
+  public static getByName = async (
+    req: Request,
+    res: Response,
+  ): Promise<void> => {
+    const name: string = req.params.name;
 
     try {
-      const shipment = await ShipmentService.getShipmentByName(name);
+      const shipment: IShipment = await ShipmentService.getShipmentByName(name);
       sendSuccessResponse(
         res,
         shipment,
         `Shipment with name ${name} retrieved successfully`,
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       sendErrorResponse(res, error);
     }
   };
 
-  public static getByTrackingNumber = async (req: Request, res: Response) => {
-    const trackingNumber = req.params.trackingNumber;
+  public static getByTrackingNumber = async (
+    req: Request,
+    res: Response,
+  ): Promise<void> => {
+    const trackingNumber: string = req.params.trackingNumber;
 
     try {
-      const shipment = await ShipmentService.getShipmentByTrackingNumber(
-        trackingNumber,
-      );
+      const shipment: IShipment =
+        await ShipmentService.getShipmentByTrackingNumber(trackingNumber);
       sendSuccessResponse(
         res,
         shipment,
         'Shipment retrieved successfully by tracking number',
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       sendErrorResponse(res, error);
     }
   };
 
-  public static getById = async (req: Request, res: Response) => {
-    const shipmentId = req.params.id;
+  public static getById = async (
+    req: Request,
+    res: Response,
+  ): Promise<void> => {
+    const shipmentId: string = req.params.id;
 
     try {
-      const shipment = await ShipmentService.getShipmentById(shipmentId);
+      const shipment: IShipment = await ShipmentService.getShipmentById(
+        shipmentId,
+      );
       sendSuccessResponse(res, shipment, 'Shipment retrieved successfully');
-    } catch (error: any) {
+    } catch (error: unknown) {
       sendErrorResponse(res, error);
     }
   };
 
-  public static create = async (req: Request, res: Response) => {
+  public static create = async (req: Request, res: Response): Promise<void> => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return sendErrorResponse(
@@ -91,13 +88,12 @@ export default class ShipmentsController {
       );
     }
 
-    let shipmentData: ShipmentAttributes = req.body;
+    let shipmentData: IShipment = req.body;
 
     try {
       // Attempt to format and validate the shipment data using the AI service
-      const formattedData = await ShipmentsController.formatAndValidateShipment(
-        shipmentData,
-      );
+      const formattedData: IShipment =
+        await ShipmentService.formatAndValidateShipment(shipmentData);
       if (formattedData) {
         shipmentData = formattedData;
       }
@@ -109,45 +105,48 @@ export default class ShipmentsController {
         'Shipment created successfully',
         201,
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       sendErrorResponse(res, error);
     }
   };
 
-  public static updateByName = async (req: Request, res: Response) => {
-    const name = req.params.name;
-    const newData: ShipmentAttributes = req.body;
+  public static updateByName = async (
+    req: Request,
+    res: Response,
+  ): Promise<void> => {
+    const shipmentName: string = req.params.name;
+    const newData: Partial<IShipment> = req.body;
 
     try {
-      const updatedShipments = await ShipmentService.updateShipmentsByName(
-        name,
-        newData,
-      );
+      const updatedShipment: IShipment =
+        await ShipmentService.updateShipmentByName(shipmentName, newData);
+
       sendSuccessResponse(
         res,
-        updatedShipments,
-        `Shipments with name ${name} updated successfully`,
+        updatedShipment,
+        `Shipment with name ${shipmentName} updated successfully`,
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       sendErrorResponse(res, error);
     }
   };
 
-  public static updateById = async (req: Request, res: Response) => {
-    const shipmentId = req.params.id;
-    const newData: ShipmentAttributes = req.body;
+  public static updateById = async (
+    req: Request,
+    res: Response,
+  ): Promise<void> => {
+    const shipmentId: string = req.params.id;
+    const newData: Partial<IShipment> = req.body;
 
     try {
-      const updatedShipment = await ShipmentService.updateShipmentById(
-        shipmentId,
-        newData,
-      );
+      const updatedShipment: IShipment =
+        await ShipmentService.updateShipmentById(shipmentId, newData);
       sendSuccessResponse(
         res,
         updatedShipment,
         `Shipment with ID ${shipmentId} updated successfully`,
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       sendErrorResponse(res, error);
     }
   };
@@ -155,12 +154,12 @@ export default class ShipmentsController {
   public static updateByTrackingNumber = async (
     req: Request,
     res: Response,
-  ) => {
-    const trackingNumber = req.params.trackingNumber;
-    const newData: ShipmentAttributes = req.body;
+  ): Promise<void> => {
+    const trackingNumber: string = req.params.trackingNumber;
+    const newData: Partial<IShipment> = req.body;
 
     try {
-      const updatedShipment =
+      const updatedShipment: IShipment =
         await ShipmentService.updateShipmentByTrackingNumber(
           trackingNumber,
           newData,
@@ -170,22 +169,28 @@ export default class ShipmentsController {
         updatedShipment,
         `Shipment with tracking number ${trackingNumber} updated successfully`,
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       sendErrorResponse(res, error);
     }
   };
 
-  public static deleteAll = async (req: Request, res: Response) => {
+  public static deleteAll = async (
+    _req: Request,
+    res: Response,
+  ): Promise<void> => {
     try {
       await ShipmentService.deleteAllShipments();
       sendSuccessResponse(res, null, 'All shipments deleted successfully');
-    } catch (error: any) {
+    } catch (error: unknown) {
       sendErrorResponse(res, error);
     }
   };
 
-  public static deleteByName = async (req: Request, res: Response) => {
-    const name = req.params.name;
+  public static deleteByName = async (
+    req: Request,
+    res: Response,
+  ): Promise<void> => {
+    const name: string = req.params.name;
 
     try {
       await ShipmentService.deleteShipmentByName(name);
@@ -194,7 +199,7 @@ export default class ShipmentsController {
         null,
         `Shipments with name ${name} deleted successfully`,
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       sendErrorResponse(res, error);
     }
   };
@@ -202,8 +207,8 @@ export default class ShipmentsController {
   public static deleteByTrackingNumber = async (
     req: Request,
     res: Response,
-  ) => {
-    const trackingNumber = req.params.trackingNumber;
+  ): Promise<void> => {
+    const trackingNumber: string = req.params.trackingNumber;
 
     try {
       await ShipmentService.deleteShipmentByTrackingNumber(trackingNumber);
@@ -212,13 +217,16 @@ export default class ShipmentsController {
         null,
         `Shipment with tracking number ${trackingNumber} deleted successfully`,
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       sendErrorResponse(res, error);
     }
   };
 
-  public static deleteById = async (req: Request, res: Response) => {
-    const shipmentId = req.params.id;
+  public static deleteById = async (
+    req: Request,
+    res: Response,
+  ): Promise<void> => {
+    const shipmentId: string = req.params.id;
 
     try {
       await ShipmentService.deleteShipmentById(shipmentId);
@@ -227,7 +235,7 @@ export default class ShipmentsController {
         null,
         `Shipment with ID ${shipmentId} deleted successfully`,
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       sendErrorResponse(res, error);
     }
   };

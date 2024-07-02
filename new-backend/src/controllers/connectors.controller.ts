@@ -1,129 +1,154 @@
 import { Request, Response } from 'express';
-import { validationResult } from 'express-validator';
+import { validationResult, Result, ValidationError } from 'express-validator';
 import {
   sendSuccessResponse,
   sendErrorResponse,
 } from '../utils/response.handlers';
-import { ConnectorAttributes } from '../types/models.interfaces';
+import { IConnector } from '../types/models.interfaces';
 import ConnectorService from '../services/connectors.service';
 
 export default class ConnectorsController {
-  public static getAll = async (req: Request, res: Response) => {
+  public static getAll = async (
+    _req: Request,
+    res: Response,
+  ): Promise<void> => {
     try {
-      const connectors = await ConnectorService.getAllConnectors();
+      const connectors: IConnector[] =
+        await ConnectorService.getAllConnectors();
       sendSuccessResponse(res, connectors, 'Connectors retrieved successfully');
-    } catch (error: any) {
+    } catch (error: unknown) {
       sendErrorResponse(res, error);
     }
   };
 
-  public static getByName = async (req: Request, res: Response) => {
-    const name = req.params.name;
+  public static getByName = async (
+    req: Request,
+    res: Response,
+  ): Promise<void> => {
+    const name: string = req.params.name;
+
+    if (!name) {
+      sendErrorResponse(res, 'Connector not found');
+    }
 
     try {
-      const connector = await ConnectorService.getConnectorByName(name);
+      const connector: IConnector = await ConnectorService.getConnectorByName(
+        name,
+      );
       sendSuccessResponse(
         res,
         connector,
         `Connector with name ${name} retrieved successfully`,
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       sendErrorResponse(res, error);
     }
   };
 
-  public static getById = async (req: Request, res: Response) => {
-    const connectorId = req.params.id;
+  public static getById = async (
+    req: Request,
+    res: Response,
+  ): Promise<void> => {
+    const connectorId: string = req.params.id;
 
     try {
-      const connector = await ConnectorService.getConnectorById(connectorId);
+      const connector: IConnector = await ConnectorService.getConnectorById(
+        connectorId,
+      );
       sendSuccessResponse(res, connector, 'Connector retrieved successfully');
-    } catch (error: any) {
+    } catch (error: unknown) {
       sendErrorResponse(res, error);
     }
   };
 
-  public static create = async (req: Request, res: Response) => {
-    const errors = validationResult(req);
+  public static create = async (req: Request, res: Response): Promise<void> => {
+    const errors: Result<ValidationError> = validationResult(req);
     if (!errors.isEmpty()) {
       return sendErrorResponse(
         res,
         {
           message: errors
             .array()
-            .map((e) => e.msg)
+            .map((e: ValidationError) => e.msg)
             .join(', '),
         },
         400,
       );
     }
 
-    const connectorData: ConnectorAttributes = req.body;
+    const connectorData: IConnector = req.body;
 
     try {
-      const newConnector = await ConnectorService.createConnector(
-        connectorData,
-      );
+      const newConnector: IConnector | IConnector[] =
+        await ConnectorService.createConnector(connectorData);
       sendSuccessResponse(
         res,
         newConnector,
         'Connector created successfully',
         201,
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       sendErrorResponse(res, error);
     }
   };
 
-  public static updateByName = async (req: Request, res: Response) => {
-    const name = req.params.name;
-    const newData: ConnectorAttributes = req.body;
+  public static updateByName = async (
+    req: Request,
+    res: Response,
+  ): Promise<void> => {
+    const name: string = req.params.name;
+    const newData: IConnector = req.body;
 
     try {
-      const updatedConnectors = await ConnectorService.updateConnectorsByName(
-        name,
-        newData,
-      );
+      const updatedConnectors: IConnector[] =
+        await ConnectorService.updateConnectorsByName(name, newData);
       sendSuccessResponse(
         res,
         updatedConnectors,
         `Connectors with name ${name} updated successfully`,
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       sendErrorResponse(res, error);
     }
   };
 
-  public static updateById = async (req: Request, res: Response) => {
-    const connectorId = req.params.id;
-    const newData: ConnectorAttributes = req.body;
+  public static updateById = async (
+    req: Request,
+    res: Response,
+  ): Promise<void> => {
+    const connectorId: string = req.params.id;
+    const newData: IConnector = req.body;
 
     try {
-      const updatedConnector = await ConnectorService.updateConnectorById(
-        connectorId,
-        newData,
-      );
+      const updatedConnector: IConnector =
+        await ConnectorService.updateConnectorById(connectorId, newData);
       sendSuccessResponse(
         res,
         updatedConnector,
         `Connector with ID ${connectorId} updated successfully`,
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       sendErrorResponse(res, error);
     }
   };
 
-  public static deleteAll = async (req: Request, res: Response) => {
+  public static deleteAll = async (
+    _req: Request,
+    res: Response,
+  ): Promise<void> => {
     try {
       await ConnectorService.deleteAllConnectors();
       sendSuccessResponse(res, null, 'All connectors deleted successfully');
-    } catch (error: any) {
+    } catch (error: unknown) {
       sendErrorResponse(res, error);
     }
   };
 
-  public static deleteByName = async (req: Request, res: Response) => {
-    const name = req.params.name;
+  public static deleteByName = async (
+    req: Request,
+    res: Response,
+  ): Promise<void> => {
+    const name: string = req.params.name;
 
     try {
       await ConnectorService.deleteConnectorByName(name);
@@ -132,13 +157,16 @@ export default class ConnectorsController {
         null,
         `Connectors with name ${name} deleted successfully`,
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       sendErrorResponse(res, error);
     }
   };
 
-  public static deleteById = async (req: Request, res: Response) => {
-    const connectorId = req.params.id;
+  public static deleteById = async (
+    req: Request,
+    res: Response,
+  ): Promise<void> => {
+    const connectorId: string = req.params.id;
 
     try {
       await ConnectorService.deleteConnectorById(connectorId);
@@ -147,7 +175,7 @@ export default class ConnectorsController {
         null,
         `Connector with ID ${connectorId} deleted successfully`,
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       sendErrorResponse(res, error);
     }
   };

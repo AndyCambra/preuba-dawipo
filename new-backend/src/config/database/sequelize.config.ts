@@ -7,7 +7,7 @@ import { ConnectorShipment } from '../../models/pivot-tables/connector-shipment.
 
 const { DB_USER, DB_PASS, DB_HOST, DB_NAME, DB_PORT } = process.env;
 
-const sequelize = new Sequelize({
+const sequelize: Sequelize = new Sequelize({
   dialect: 'postgres',
   database: DB_NAME || 'database',
   username: DB_USER || 'username',

@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+//import newman from 'newman';
 
 interface Endpoint {
   name: string;
@@ -135,21 +136,25 @@ function createPostmanCollection(): void {
     ],
     Users: [
       { name: 'Get All Users', method: 'GET', path: '/users' },
-      { name: 'Get User by Name', method: 'GET', path: '/users/name/{{name}}' },
+      {
+        name: 'Get User by Username',
+        method: 'GET',
+        path: '/users/username/{{username}}',
+      },
       { name: 'Get User by ID', method: 'GET', path: '/users/id/{{id}}' },
       { name: 'Register User', method: 'POST', path: '/users/register' },
       { name: 'Login User', method: 'POST', path: '/users/login' },
       {
-        name: 'Update User by Name',
+        name: 'Update User by Username',
         method: 'PUT',
-        path: '/users/name/{{name}}',
+        path: '/users/username/{{username}}',
       },
       { name: 'Update User by ID', method: 'PUT', path: '/users/id/{{id}}' },
       { name: 'Delete All Users', method: 'DELETE', path: '/users/all' },
       {
-        name: 'Delete User by Name',
+        name: 'Delete User by Username',
         method: 'DELETE',
-        path: '/users/name/{{name}}',
+        path: '/users/username/{{username}}',
       },
       { name: 'Delete User by ID', method: 'DELETE', path: '/users/id/{{id}}' },
     ],
@@ -177,6 +182,24 @@ function createPostmanCollection(): void {
 
   const outputPath = path.join(__dirname, 'api_collection.json');
   fs.writeFileSync(outputPath, JSON.stringify(collection, null, 2));
+
+  // newman.run(
+  //   {
+  //     collection: require(outputPath),
+  //     reporters: ['cli', 'html'],
+  //     reporter: {
+  //       html: {
+  //         export: path.join(__dirname, 'newman_report.html'),
+  //       },
+  //     },
+  //   },
+  //   (err, summary) => {
+  //     if (err) {
+  //       throw err;
+  //     }
+  //     console.log('Newman run complete!');
+  //   },
+  // );
 }
 
 createPostmanCollection();

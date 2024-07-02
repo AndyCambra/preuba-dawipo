@@ -10,17 +10,14 @@ import {
 } from 'sequelize-typescript';
 import { Connector } from './connector.model';
 import { ConnectorShipment } from './pivot-tables/connector-shipment.model';
-import { ShipmentAttributes } from '../types/models.interfaces';
+import { IShipment } from '../types/models.interfaces';
 
 @Table({
   tableName: 'shipments',
   freezeTableName: true,
   timestamps: false,
 })
-export class Shipment
-  extends Model<ShipmentAttributes>
-  implements ShipmentAttributes
-{
+export class Shipment extends Model<IShipment> implements IShipment {
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
