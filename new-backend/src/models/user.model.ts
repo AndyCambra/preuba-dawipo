@@ -11,14 +11,14 @@ import {
 } from 'sequelize-typescript';
 import { Connector } from './connector.model';
 import { UserConnector } from './pivot-tables/user-connector.model';
-import { UserAttributes } from '../types/models.interfaces';
+import { IUser } from '../types/models.interfaces';
 
 @Table({
   tableName: 'users',
   freezeTableName: true,
   timestamps: false,
 })
-export class User extends Model<UserAttributes> implements UserAttributes {
+export class User extends Model<IUser> implements IUser {
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
@@ -28,9 +28,9 @@ export class User extends Model<UserAttributes> implements UserAttributes {
   @Column(DataType.STRING)
   name!: string;
 
-  @AllowNull(true)
+  @AllowNull(false)
   @Column(DataType.STRING)
-  lastName?: string | null;
+  lastName!: string;
 
   @AllowNull(false)
   @Unique

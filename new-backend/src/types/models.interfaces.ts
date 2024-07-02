@@ -5,24 +5,24 @@ These interfaces as well as the models and DTOs are temporarily flexible
 
 type MaybeString = string | null;
 
-export interface UserAttributes {
+export interface IUser {
   id: string;
   name: string;
-  lastName?: MaybeString;
+  lastName: string;
   email: string;
   password: string;
   avatarUrl?: MaybeString;
   rol: 'user' | 'admin';
 }
 
-export interface ConnectorAttributes {
+export interface IConnector {
   id: string;
   name: string;
   apiUrl?: MaybeString;
   apiKey?: MaybeString;
 }
 
-export interface ShipmentAttributes {
+export interface IShipment {
   id: string;
   name: string;
   trackingNumber?: MaybeString;

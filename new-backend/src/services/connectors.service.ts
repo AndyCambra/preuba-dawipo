@@ -1,122 +1,135 @@
 import { Connector } from '../models/connector.model';
-import { ConnectorAttributes } from '../types/models.interfaces';
+import { IConnector } from '../types/models.interfaces';
 
 export default class ConnectorService {
-  public static async getAllConnectors() {
+  public static async getAllConnectors(): Promise<IConnector[]> {
     try {
-      const allConnectors = await Connector.findAll();
+      const allConnectors: IConnector[] = await Connector.findAll();
       if (allConnectors.length === 0) {
         throw new Error('There are no connectors available');
       }
       return allConnectors;
-    } catch (error) {
+    } catch (error: unknown) {
       throw error;
     }
   }
 
-  public static async getConnectorByName(name: string) {
+  public static async getConnectorByName(name: string): Promise<IConnector> {
     try {
-      const connector = await Connector.findOne({ where: { name } });
+      const connector: IConnector | null = await Connector.findOne({
+        where: { name },
+      });
       if (!connector) {
         throw new Error(`Connector with name ${name} not found`);
       }
       return connector;
-    } catch (error) {
+    } catch (error: unknown) {
       throw error;
     }
   }
 
-  public static async getConnectorById(id: string) {
+  public static async getConnectorById(id: string): Promise<IConnector> {
     try {
-      const connector = await Connector.findByPk(id);
+      const connector: IConnector | null = await Connector.findByPk(id);
       if (!connector) {
         throw new Error(`Connector with ID ${id} not found`);
       }
       return connector;
-    } catch (error) {
+    } catch (error: unknown) {
       throw error;
     }
   }
 
   public static async createConnector(
-    connectorData: ConnectorAttributes | ConnectorAttributes[],
-  ): Promise<Connector | Connector[]> {
+    connectorData: IConnector | IConnector[],
+  ): Promise<IConnector | IConnector[]> {
     try {
-      const dataArray = Array.isArray(connectorData)
+      const dataArray: IConnector[] = Array.isArray(connectorData)
         ? connectorData
         : [connectorData];
 
-      const createPromises = dataArray.map(async (data) => {
-        return Connector.create(data);
-      });
-
-      const createdConnectors = await Promise.all(createPromises);
+      const createdConnectors: IConnector[] = await Promise.all(
+        dataArray.map(async (data: IConnector): Promise<IConnector> => {
+          return await Connector.create(data);
+        }),
+      );
 
       return Array.isArray(connectorData)
         ? createdConnectors
         : createdConnectors[0];
-    } catch (error) {
+    } catch (error: unknown) {
       throw error;
     }
   }
 
   public static async updateConnectorsByName(
     name: string,
-    newData: ConnectorAttributes,
-  ) {
+    newData: IConnector,
+  ): Promise<IConnector[]> {
     try {
-      const [updatedRows] = await Connector.update(newData, {
-        where: { name },
-      });
+      const [updatedRows, updatedConnectors]: [number, IConnector[]] =
+        await Connector.update(newData, {
+          where: { name },
+          returning: true,
+        });
+
       if (updatedRows === 0) {
         throw new Error(`No connectors with name ${name} found`);
       }
-      const updatedConnectors = await Connector.findAll({ where: { name } });
+
       return updatedConnectors;
-    } catch (error) {
+    } catch (error: unknown) {
       throw error;
     }
   }
 
   public static async updateConnectorById(
     id: string,
-    newData: ConnectorAttributes,
-  ) {
+    newData: IConnector,
+  ): Promise<IConnector> {
     try {
-      const [updatedRows] = await Connector.update(newData, { where: { id } });
+      const [updatedRows, [updatedConnector]]: [number, IConnector[]] =
+        await Connector.update(newData, {
+          where: { id },
+          returning: true,
+        });
+
       if (updatedRows === 0) {
         throw new Error(`Connector with ID ${id} not found`);
       }
-      const updatedConnector = await Connector.findByPk(id);
+
       return updatedConnector;
-    } catch (error) {
+    } catch (error: unknown) {
       throw error;
     }
   }
 
-  public static async deleteAllConnectors() {
+  public static async deleteAllConnectors(): Promise<void> {
     try {
       await Connector.destroy({ where: {} });
-    } catch (error) {
+    } catch (error: unknown) {
       throw error;
     }
   }
 
-  public static async deleteConnectorByName(name: string) {
+  public static async deleteConnectorByName(name: string): Promise<void> {
     try {
-      await Connector.destroy({ where: { name } });
-    } catch (error) {
+      const deletedRows: number = await Connector.destroy({ where: { name } });
+      if (deletedRows === 0) {
+        throw new Error(`No connectors with name ${name} found`);
+      }
+    } catch (error: unknown) {
       throw error;
     }
   }
 
-  public static async deleteConnectorById(id: string) {
+  public static async deleteConnectorById(id: string): Promise<void> {
     try {
-      const deletedRows = await Connector.destroy({ where: { id } });
+      const deletedRows: number = await Connector.destroy({ where: { id } });
       if (deletedRows === 0) {
         throw new Error(`Connector with ID ${id} not found`);
       }
-    } catch (error) {
+    } catch (error: unknown) {
       throw error;
     }
   }

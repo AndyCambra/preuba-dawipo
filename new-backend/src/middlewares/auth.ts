@@ -1,11 +1,20 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import { IUser } from '../types/models.interfaces';
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: IUser;
+    }
+  }
+}
 
 export const verifyToken = (
   req: Request,
   res: Response,
   next: NextFunction,
-) => {
+): void | Response<any, Record<string, any>> => {
   const token = req.headers['authorization'];
 
   if (!token) {
@@ -17,7 +26,7 @@ export const verifyToken = (
       token as string,
       process.env.JWT_SECRET as string,
     ) as { id: string; email: string };
-    (req as any).user = decoded;
+    req.user = decoded as IUser;
     next();
   } catch (error) {
     return res.status(401).json({ message: 'Invalid token' });
