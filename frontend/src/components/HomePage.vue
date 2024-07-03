@@ -51,7 +51,7 @@ const navigateToSettingconnectors = () => {
 };
 
 const navigateToDashPrueba = () => {
-router.push('/dashboard-a');
+  router.push("/dashboard-a");
 };
 
 const navigateToDashTest = () => {

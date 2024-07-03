@@ -1,9 +1,9 @@
 <script setup>
-import { ref } from 'vue';
-import { user } from '../../utils/auth'
-import MyConnections from '../Components/MyConnections.vue'
-import MyOwnConnections from '../Components/MyOwnConnections.vue'
-import ConnectionsDropContainer from '../Components/ConnectionsDropContainer.vue'
+import { ref } from "vue";
+import { user } from "../../utils/auth";
+import MyConnections from "../Components/MyConnections.vue";
+import MyOwnConnections from "../Components/MyOwnConnections.vue";
+import ConnectionsDropContainer from "../Components/ConnectionsDropContainer.vue";
 
 const droppedItems = ref([]); // Array to store dropped items
 
@@ -23,11 +23,16 @@ const handleDrop = (item) => {
 };
 
 const itemIsDropped = (item) => {
-  return droppedItems.value.some(droppedItem => droppedItem.courier === item.courier && droppedItem.img === item.img);
+  return droppedItems.value.some(
+    (droppedItem) =>
+      droppedItem.courier === item.courier && droppedItem.img === item.img,
+  );
 };
 
 const removeItem = (item) => {
-  droppedItems.value = droppedItems.value.filter(droppedItem => droppedItem !== item);
+  droppedItems.value = droppedItems.value.filter(
+    (droppedItem) => droppedItem !== item,
+  );
 };
 </script>
 
@@ -40,7 +45,11 @@ const removeItem = (item) => {
     <div class="drag-section">
       <MyConnections :itemIsDropped="itemIsDropped" :startDrag="startDrag" />
       <MyOwnConnections :itemIsDropped="itemIsDropped" :startDrag="startDrag" />
-      <ConnectionsDropContainer :droppedItems="droppedItems" :onDrop="onDrop" :removeItem="removeItem" />
+      <ConnectionsDropContainer
+        :droppedItems="droppedItems"
+        :onDrop="onDrop"
+        :removeItem="removeItem"
+      />
     </div>
     <button class="btn-continuar" v-if="droppedItems.length">Continuar</button>
   </div>
@@ -53,16 +62,16 @@ const removeItem = (item) => {
   justify-content: flex-start;
   align-items: center;
 }
-h1{
+h1 {
   margin: 0;
   font-weight: 600;
 }
-.container-title{
+.container-title {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.container-title p{
+.container-title p {
   font-size: 1.3rem;
 }
 .drag-section {
@@ -70,9 +79,9 @@ h1{
   align-items: self-start;
   gap: 3rem;
 }
-.btn-continuar{
-  background-color: rgb(0,255,206);
-  border: 1px solid rgb(0,255,206);
+.btn-continuar {
+  background-color: rgb(0, 255, 206);
+  border: 1px solid rgb(0, 255, 206);
   color: black;
   padding: 8px 16px;
   border-radius: 4px;
@@ -82,5 +91,4 @@ h1{
   transition: all 250ms;
   margin-top: 1rem;
 }
-
 </style>

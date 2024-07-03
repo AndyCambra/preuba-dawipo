@@ -2,8 +2,8 @@
 import { ref } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
-import { setUser } from '../utils/auth';
-import Logo from '../../public/Logo de Kontroll.png'
+import { setUser } from "../utils/auth";
+import Logo from "../../public/Logo de Kontroll.png";
 
 const name = ref("");
 const lastName = ref("");
@@ -38,29 +38,38 @@ const register = async () => {
   }
 };
 
-const navigateToLogin = () =>{
+const navigateToLogin = () => {
   router.push("/login");
-}
-
+};
 </script>
 
 <template>
   <div class="container">
-    <img class="img-register" :src="Logo" alt="Logo de Kontroll">
+    <img class="img-register" :src="Logo" alt="Logo de Kontroll" />
     <div class="page-container">
       <div class="form-container">
         <div class="form-title">
           <h1>Register</h1>
           <p>Enter your email to sign up for this app</p>
-      </div>
-      <form @submit.prevent="register">
+        </div>
+        <form @submit.prevent="register">
           <input type="text" v-model="name" placeholder="Name" required />
-          <input type="text" v-model="lastName" placeholder="Last Name" required />
-          <input type="email" v-model="email"  placeholder="Email" required/>
-          <input type="password" v-model="password" placeholder="Password" required />
-        <button type="submit" class="btn-register">Register</button>
-      </form>
-      <button @click="navigateToLogin" class="btn-login">Login</button>
+          <input
+            type="text"
+            v-model="lastName"
+            placeholder="Last Name"
+            required
+          />
+          <input type="email" v-model="email" placeholder="Email" required />
+          <input
+            type="password"
+            v-model="password"
+            placeholder="Password"
+            required
+          />
+          <button type="submit" class="btn-register">Register</button>
+        </form>
+        <button @click="navigateToLogin" class="btn-login">Login</button>
       </div>
     </div>
   </div>
@@ -75,9 +84,9 @@ const navigateToLogin = () =>{
   justify-content: center;
   position: relative;
 }
-.img-register{
+.img-register {
   position: absolute;
-  top: 0; 
+  top: 0;
   left: 0;
 }
 .page-container {
@@ -93,7 +102,7 @@ h1 {
   font-weight: 600;
 }
 .form-title {
-  color: #00FFCE;
+  color: #00ffce;
   text-align: center;
 }
 .form-container {
@@ -105,7 +114,8 @@ h1 {
   border: 2px solid transparent;
   border-radius: 20px;
   box-sizing: border-box;
-  background-image: linear-gradient(black, black), linear-gradient(to right, #00FFCE, transparent);
+  background-image: linear-gradient(black, black),
+    linear-gradient(to right, #00ffce, transparent);
   background-origin: border-box;
   background-clip: padding-box, border-box;
 }
@@ -149,6 +159,6 @@ input {
   transition: all 250ms;
 }
 .btn-login:hover {
-  color: #00FFCE;
+  color: #00ffce;
 }
 </style>

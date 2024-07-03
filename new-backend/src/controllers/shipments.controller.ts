@@ -6,6 +6,7 @@ import {
 } from '../utils/response.handlers';
 import { IShipment } from '../types/models.interfaces';
 import ShipmentService from '../services/shipments.service';
+import { CreateShipmentDTO, UpdateShipmentDTO } from '@/dtos/shipments.dtos';
 
 export default class ShipmentsController {
   public static getAll = async (
@@ -64,9 +65,8 @@ export default class ShipmentsController {
     const shipmentId: string = req.params.id;
 
     try {
-      const shipment: IShipment = await ShipmentService.getShipmentById(
-        shipmentId,
-      );
+      const shipment: IShipment =
+        await ShipmentService.getShipmentById(shipmentId);
       sendSuccessResponse(res, shipment, 'Shipment retrieved successfully');
     } catch (error: unknown) {
       sendErrorResponse(res, error);
@@ -88,7 +88,7 @@ export default class ShipmentsController {
       );
     }
 
-    let shipmentData: IShipment = req.body;
+    let shipmentData: CreateShipmentDTO = req.body;
 
     try {
       // Attempt to format and validate the shipment data using the AI service
@@ -115,7 +115,7 @@ export default class ShipmentsController {
     res: Response,
   ): Promise<void> => {
     const shipmentName: string = req.params.name;
-    const newData: Partial<IShipment> = req.body;
+    const newData: UpdateShipmentDTO = req.body;
 
     try {
       const updatedShipment: IShipment =
@@ -136,7 +136,7 @@ export default class ShipmentsController {
     res: Response,
   ): Promise<void> => {
     const shipmentId: string = req.params.id;
-    const newData: Partial<IShipment> = req.body;
+    const newData: UpdateShipmentDTO = req.body;
 
     try {
       const updatedShipment: IShipment =
@@ -156,7 +156,7 @@ export default class ShipmentsController {
     res: Response,
   ): Promise<void> => {
     const trackingNumber: string = req.params.trackingNumber;
-    const newData: Partial<IShipment> = req.body;
+    const newData: UpdateShipmentDTO = req.body;
 
     try {
       const updatedShipment: IShipment =

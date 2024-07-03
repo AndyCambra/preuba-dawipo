@@ -1,6 +1,7 @@
 import { Shipment } from '../models/shipment.model';
 import { IShipment } from '../types/models.interfaces';
 import axios from 'axios';
+import { CreateShipmentDTO, UpdateShipmentDTO } from '@/dtos/shipments.dtos';
 
 export default class ShipmentService {
   public static async getAllShipments(): Promise<IShipment[]> {
@@ -60,10 +61,10 @@ export default class ShipmentService {
   }
 
   public static async createShipment(
-    shipmentData: IShipment | IShipment[],
+    shipmentData: CreateShipmentDTO | CreateShipmentDTO[],
   ): Promise<IShipment[]> {
     try {
-      const dataArray: IShipment[] = Array.isArray(shipmentData)
+      const dataArray: CreateShipmentDTO[] = Array.isArray(shipmentData)
         ? shipmentData
         : [shipmentData];
 
@@ -109,7 +110,7 @@ export default class ShipmentService {
 
   public static async updateShipmentByName(
     name: string,
-    newData: Partial<IShipment>,
+    newData: UpdateShipmentDTO,
   ): Promise<IShipment> {
     try {
       const shipment: Shipment | null = await Shipment.findOne({
@@ -128,7 +129,7 @@ export default class ShipmentService {
 
   public static async updateShipmentById(
     id: string,
-    newData: Partial<IShipment>,
+    newData: UpdateShipmentDTO,
   ): Promise<IShipment> {
     try {
       const shipment: Shipment | null = await Shipment.findByPk(id);
@@ -144,7 +145,7 @@ export default class ShipmentService {
 
   public static async updateShipmentByTrackingNumber(
     trackingNumber: string,
-    newData: Partial<IShipment>,
+    newData: UpdateShipmentDTO,
   ): Promise<IShipment> {
     try {
       const shipment: Shipment | null = await Shipment.findOne({

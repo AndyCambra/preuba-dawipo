@@ -127,7 +127,7 @@ const navigateToHome = () => {
   router.push("/");
 };
 const navigateToConnectors = () => {
-  router.push('/manage-connectors');
+  router.push("/manage-connectors");
 };
 
 const selectedCount = computed(() => {
@@ -192,13 +192,8 @@ watch(dataModel, (newValue) => {
       </div>
     </div>
 
-    <button @click="navigateToHome">
-      Go to Home
-    </button>
-    <button @click="navigateToConnectors">
-      Go to Connectors
-    </button>
-
+    <button @click="navigateToHome">Go to Home</button>
+    <button @click="navigateToConnectors">Go to Connectors</button>
   </div>
 </template>
 

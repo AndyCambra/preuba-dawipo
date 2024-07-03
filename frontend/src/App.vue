@@ -2,7 +2,7 @@
 import { user, isAuthenticated } from "./utils/auth";
 import { onMounted } from "vue";
 import { useRouter } from "vue-router";
-import NavBar from './components/NavBar.vue';
+import NavBar from "./components/NavBar.vue";
 
 const router = useRouter();
 
@@ -27,5 +27,3 @@ onMounted(() => {
 <style scoped>
 /* Estilos globales */
 </style>
-
-

@@ -6,6 +6,7 @@ import {
 } from '../utils/response.handlers';
 import { IConnector } from '../types/models.interfaces';
 import ConnectorService from '../services/connectors.service';
+import { UpdateConnectorDTO } from '@/dtos/connectors.dtos';
 
 export default class ConnectorsController {
   public static getAll = async (
@@ -32,9 +33,8 @@ export default class ConnectorsController {
     }
 
     try {
-      const connector: IConnector = await ConnectorService.getConnectorByName(
-        name,
-      );
+      const connector: IConnector =
+        await ConnectorService.getConnectorByName(name);
       sendSuccessResponse(
         res,
         connector,
@@ -52,9 +52,8 @@ export default class ConnectorsController {
     const connectorId: string = req.params.id;
 
     try {
-      const connector: IConnector = await ConnectorService.getConnectorById(
-        connectorId,
-      );
+      const connector: IConnector =
+        await ConnectorService.getConnectorById(connectorId);
       sendSuccessResponse(res, connector, 'Connector retrieved successfully');
     } catch (error: unknown) {
       sendErrorResponse(res, error);
@@ -97,7 +96,7 @@ export default class ConnectorsController {
     res: Response,
   ): Promise<void> => {
     const name: string = req.params.name;
-    const newData: IConnector = req.body;
+    const newData: UpdateConnectorDTO = req.body;
 
     try {
       const updatedConnectors: IConnector[] =
@@ -117,7 +116,7 @@ export default class ConnectorsController {
     res: Response,
   ): Promise<void> => {
     const connectorId: string = req.params.id;
-    const newData: IConnector = req.body;
+    const newData: UpdateConnectorDTO = req.body;
 
     try {
       const updatedConnector: IConnector =
