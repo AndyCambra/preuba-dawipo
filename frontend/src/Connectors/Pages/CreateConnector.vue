@@ -1,6 +1,6 @@
 <script setup>
-  import CreateConnectorForm from '../Components/CreateConnectorForm.vue'; 
-  import { user } from '../../utils/auth.js'
+import CreateConnectorForm from "../Components/CreateConnectorForm.vue";
+import { user } from "../../utils/auth.js";
 </script>
 
 <template>
@@ -14,16 +14,16 @@
 </template>
 
 <style scoped>
-h1{
-  margin-bottom: 0rem
+h1 {
+  margin-bottom: 0rem;
 }
-.container-create-connector{
+.container-create-connector {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1.5rem;
 }
-.create-connector-title{
+.create-connector-title {
   text-align: center;
 }
 </style>

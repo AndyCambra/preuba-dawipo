@@ -1,15 +1,19 @@
 <script setup>
-import { ref, computed, defineProps } from 'vue'
-import DHL from '../../../public/DHL.png'
-import Maersk from '../../../public/Maersk.png'
-import MSC from '../../../public/MSC.png'
+import { ref, computed, defineProps } from "vue";
+import DHL from "../../../public/DHL.png";
+import Maersk from "../../../public/Maersk.png";
+import MSC from "../../../public/MSC.png";
 
-const props = defineProps(['itemIsDropped', 'startDrag'])
+const props = defineProps(["itemIsDropped", "startDrag"]);
 
 const dataModel = ref([
-  { img: DHL, courier: "DHL Global Fowarding", name: "DHL Global Fowarding"},
+  { img: DHL, courier: "DHL Global Fowarding", name: "DHL Global Fowarding" },
   { img: Maersk, courier: "Maersk", name: "Maersk" },
-  { img: MSC, courier: "Mediterranean Shipping Company", name: "Mediterranean Shipping Company"},
+  {
+    img: MSC,
+    courier: "Mediterranean Shipping Company",
+    name: "Mediterranean Shipping Company",
+  },
 ]);
 
 const groupedItems = computed(() => {
@@ -20,14 +24,17 @@ const groupedItems = computed(() => {
     return groups;
   }, {});
 });
-
 </script>
 
 <template>
   <div>
     <h2>Mis Conexiones</h2>
     <div class="drag-inside">
-      <div class="drag-container" v-for="(items, courier) in groupedItems" :key="courier">
+      <div
+        class="drag-container"
+        v-for="(items, courier) in groupedItems"
+        :key="courier"
+      >
         <div
           v-for="(item, index) in items"
           :key="index"
@@ -36,7 +43,7 @@ const groupedItems = computed(() => {
           :draggable="!itemIsDropped(item)"
         >
           <div class="drag-connectors">
-            <img :src="item.img" alt="">
+            <img :src="item.img" alt="" />
             <h3>{{ item.name }}</h3>
           </div>
         </div>
@@ -51,27 +58,27 @@ const groupedItems = computed(() => {
   flex-direction: column;
   flex-wrap: wrap;
   padding: 1rem;
-  border: 2px solid rgb(0,255,206);
+  border: 2px solid rgb(0, 255, 206);
   border-radius: 25px;
   min-height: 25rem;
 }
 .drag-inside h2 {
   font-weight: 600;
 }
-.drag-connectors{
+.drag-connectors {
   display: flex;
   align-items: center;
   gap: 2rem;
   width: 18rem;
 }
-.drag-connectors h3{
+.drag-connectors h3 {
   display: flex;
   align-items: center;
   gap: 2rem;
   font-weight: 500;
   font-size: 1rem;
 }
-.drag-connectors img{
+.drag-connectors img {
   width: 3.5rem;
   height: 3.5rem;
 }

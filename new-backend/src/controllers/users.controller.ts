@@ -1,10 +1,12 @@
+// users.controller.ts
+
 import { Request, Response } from 'express';
 import {
   sendSuccessResponse,
   sendErrorResponse,
 } from '../utils/response.handlers';
 import UserService from '../services/users.service';
-import { IUser } from '../types/models.interfaces';
+import { CreateUserDTO, UpdateUserDTO } from '../dtos/users.dtos'; // Importar DTOs
 
 export default class UsersController {
   public static getAll = async (
@@ -12,7 +14,7 @@ export default class UsersController {
     res: Response,
   ): Promise<void> => {
     try {
-      const users: IUser[] = await UserService.getAllUsers();
+      const users = await UserService.getAllUsers();
       sendSuccessResponse(res, users, 'Users retrieved successfully');
     } catch (error: unknown) {
       sendErrorResponse(res, error);
@@ -23,10 +25,10 @@ export default class UsersController {
     req: Request,
     res: Response,
   ): Promise<void> => {
-    const username = req.params.name as string;
+    const username = req.params.username as string;
 
     try {
-      const user: IUser = await UserService.getUserByUsername(username);
+      const user = await UserService.getUserByUsername(username);
       sendSuccessResponse(
         res,
         user,
@@ -44,7 +46,7 @@ export default class UsersController {
     const userId = req.params.id as string;
 
     try {
-      const user: IUser = await UserService.getUserById(userId);
+      const user = await UserService.getUserById(userId);
       sendSuccessResponse(res, user, 'User retrieved successfully');
     } catch (error: unknown) {
       sendErrorResponse(res, error);
@@ -55,10 +57,10 @@ export default class UsersController {
     req: Request,
     res: Response,
   ): Promise<void> => {
-    const userData: IUser = req.body;
+    const userData: CreateUserDTO = req.body;
 
     try {
-      const newUser: IUser = await UserService.registerUser(userData);
+      const newUser = await UserService.registerUser(userData);
       sendSuccessResponse(res, newUser, 'User created successfully', 201);
     } catch (error: unknown) {
       sendErrorResponse(res, error);
@@ -69,7 +71,7 @@ export default class UsersController {
     const { email, password } = req.body as { email: string; password: string };
 
     try {
-      const token: string = await UserService.login(email, password);
+      const token = await UserService.login(email, password);
       sendSuccessResponse(res, { token }, 'Login successful');
     } catch (error: unknown) {
       sendErrorResponse(res, error);
@@ -80,11 +82,11 @@ export default class UsersController {
     req: Request,
     res: Response,
   ): Promise<void> => {
-    const username = req.params.email as string;
-    const newData: Partial<IUser> = req.body;
+    const username = req.params.username as string;
+    const newData: UpdateUserDTO = req.body;
 
     try {
-      const updatedUser: IUser = await UserService.updateUserByUsername(
+      const updatedUser = await UserService.updateUserByUsername(
         username,
         newData,
       );
@@ -103,13 +105,10 @@ export default class UsersController {
     res: Response,
   ): Promise<void> => {
     const userId = req.params.id as string;
-    const newData: Partial<IUser> = req.body;
+    const newData: UpdateUserDTO = req.body;
 
     try {
-      const updatedUser: IUser = await UserService.updateUserById(
-        userId,
-        newData,
-      );
+      const updatedUser = await UserService.updateUserById(userId, newData);
       sendSuccessResponse(
         res,
         updatedUser,
@@ -136,11 +135,15 @@ export default class UsersController {
     req: Request,
     res: Response,
   ): Promise<void> => {
-    const email = req.params.email as string;
+    const username = req.params.username as string;
 
     try {
-      await UserService.deleteUserByUsername(email);
-      sendSuccessResponse(res, null, `Username ${email} deleted successfully`);
+      await UserService.deleteUserByUsername(username);
+      sendSuccessResponse(
+        res,
+        null,
+        `Username ${username} deleted successfully`,
+      );
     } catch (error: unknown) {
       sendErrorResponse(res, error);
     }

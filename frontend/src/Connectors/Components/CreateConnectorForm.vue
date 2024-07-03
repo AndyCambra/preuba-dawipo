@@ -1,12 +1,12 @@
 <script setup>
-import { ref } from 'vue';
-import CheckCreateConnector from './CheckCreateConnector.vue';
+import { ref } from "vue";
+import CheckCreateConnector from "./CheckCreateConnector.vue";
 
 const formData = ref({
   name: "",
   url: "",
   username: "",
-  apiKey: ""
+  apiKey: "",
 });
 
 const isSuccess = ref(false);
@@ -16,7 +16,7 @@ const handleResetForm = () => {
     name: "",
     url: "",
     username: "",
-    apiKey: ""
+    apiKey: "",
   };
   isSuccess.value = false;
 };
@@ -39,12 +39,14 @@ const handleSubmit = () => {
 
 <template>
   <form @submit.prevent="handleSubmit" class="container-form">
-    <input type="text" placeholder="Conection Name" v-model="formData.name">
-    <input type="text" placeholder="Url" v-model="formData.url">
-    <input type="text" placeholder="User Name" v-model="formData.username">
-    <input type="text" placeholder="ApiKey / Token" v-model="formData.apiKey">
+    <input type="text" placeholder="Conection Name" v-model="formData.name" />
+    <input type="text" placeholder="Url" v-model="formData.url" />
+    <input type="text" placeholder="User Name" v-model="formData.username" />
+    <input type="text" placeholder="ApiKey / Token" v-model="formData.apiKey" />
     <div class="btn-form-connector">
-      <button class="btn-cancel" type="button" @click="handleResetForm">Cancelar</button>
+      <button class="btn-cancel" type="button" @click="handleResetForm">
+        Cancelar
+      </button>
       <button class="btn-create-connector" type="submit">Crear</button>
     </div>
   </form>

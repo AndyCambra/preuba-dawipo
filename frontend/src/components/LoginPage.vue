@@ -2,8 +2,8 @@
 import { ref } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
-import { setUser } from '../utils/auth';
-import Logo from '../../public/Logo de Kontroll.png'
+import { setUser } from "../utils/auth";
+import Logo from "../../public/Logo de Kontroll.png";
 
 const email = ref("");
 const password = ref("");
@@ -41,31 +41,37 @@ const login = async () => {
 
 <template>
   <div class="background">
-    <img 
-          :src="Logo" 
-          alt="Kontroll">
-  <div class="container">
-    <h1>User Login</h1>
-    <form @submit.prevent="login" class="form">
-      <p class="subtitle">Complete el formulario para ingresar a la app</p>
-      <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" v-model="email" required placeholder="Email"/>
-      </div>
-      <div class="form-group">
-        <label for="password">Password:</label>
-        <input type="password" v-model="password" required placeholder="Contraseña"/>
-      </div>
-      <button type="submit" class="btn">Login</button>
-      <p class="bottom-line">Don't have an account? <router-link to="/register" class="link">Register</router-link></p>
-    </form>
+    <img :src="Logo" alt="Kontroll" />
+    <div class="container">
+      <h1>User Login</h1>
+      <form @submit.prevent="login" class="form">
+        <p class="subtitle">Complete el formulario para ingresar a la app</p>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" v-model="email" required placeholder="Email" />
+        </div>
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input
+            type="password"
+            v-model="password"
+            required
+            placeholder="Contraseña"
+          />
+        </div>
+        <button type="submit" class="btn">Login</button>
+        <p class="bottom-line">
+          Don't have an account?
+          <router-link to="/register" class="link">Register</router-link>
+        </p>
+      </form>
+    </div>
   </div>
-</div>
 </template>
 
 <style scoped>
-.background{
-  background-color: #05050C ;
+.background {
+  background-color: #05050c;
   margin: 0;
   position: absolute;
   width: 100vw;
@@ -80,8 +86,9 @@ const login = async () => {
   border: 2px solid transparent;
   border-radius: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  background-color: #05050C ;
-  background-image: linear-gradient(#05050C , #05050C ), linear-gradient(to right, #00FFCE, transparent);
+  background-color: #05050c;
+  background-image: linear-gradient(#05050c, #05050c),
+    linear-gradient(to right, #00ffce, transparent);
   background-origin: border-box;
   background-clip: padding-box, border-box;
 }
@@ -89,19 +96,17 @@ const login = async () => {
 h1 {
   text-align: center;
   margin-bottom: 0;
-  color: #00FFCE;
+  color: #00ffce;
   font-weight: 500;
 }
-.subtitle{
-  color: #00FFCE;
+.subtitle {
+  color: #00ffce;
   text-align: center;
 }
 .form {
   display: flex;
   flex-direction: column;
 }
-
-
 
 /* label {
   display: block;
@@ -117,15 +122,15 @@ input {
   border: 1px solid #ccc;
   border-radius: 8px;
 }
-:placeholder-shown{
+:placeholder-shown {
   color: #828282;
 }
 .btn {
   padding: 10px 15px;
-  border: 1px solid #00FFCE;
+  border: 1px solid #00ffce;
   border-radius: 8px;
-  background-color: #05050C;
-  color: #00FFCE;
+  background-color: #05050c;
+  color: #00ffce;
   font-weight: 700;
   font-size: 16px;
   cursor: pointer;
@@ -134,15 +139,15 @@ input {
 }
 
 .btn:hover {
-  background-color: #00FFCE;
-  color: #05050C;
+  background-color: #00ffce;
+  color: #05050c;
 }
-.bottom-line{
+.bottom-line {
   color: #828282;
   text-align: right;
 }
-.link{
-  color: #00FFCE;
+.link {
+  color: #00ffce;
   text-decoration: none;
 }
 </style>

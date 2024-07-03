@@ -1,7 +1,7 @@
 const { _getDHLproducts } = require("../controllers/_getDHLproducts");
 
 const getDHLproducts = async (req, res) => {
-  const apiKey = req.headers['dhl-api-key'];
+  const apiKey = req.headers["dhl-api-key"];
 
   console.log(req.headers);
 
@@ -16,7 +16,7 @@ const getDHLproducts = async (req, res) => {
     const allProducts = await _getDHLproducts(apiKey);
 
     res.status(201).json({
-      message: "The Products were obtained successfully",      
+      message: "The Products were obtained successfully",
       products: allProducts,
     });
   } catch (error) {

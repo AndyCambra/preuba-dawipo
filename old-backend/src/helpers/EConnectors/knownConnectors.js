@@ -1,4 +1,1 @@
-module.exports = [
-    "DHL",
-    "MSC"
-];
+module.exports = ["DHL", "MSC"];
